@@ -21,7 +21,7 @@ export async function GET() {
 
     const accountWhere = account ? { accountId: account.id } : { account: { userId } };
 
-    const [totalInvoices, paidInvoices, pendingInvoices, recentInvoices, lastMessage] = await Promise.all([
+    const [totalInvoices, paidInvoices, pendingInvoices, recentInvoices, lastMessage, recentProjects, openTickets, documentsCount] = await Promise.all([
       prisma.invoice.count({ where: accountWhere }),
       prisma.invoice.count({ where: { ...accountWhere, status: "paid" } }),
       prisma.invoice.count({ where: { ...accountWhere, NOT: { status: "paid" } } }),
@@ -38,6 +38,14 @@ export async function GET() {
         where: { userId },
         orderBy: { createdAt: "desc" },
       }),
+      prisma.portalProject.findMany({
+        where: { userId },
+        orderBy: { updatedAt: "desc" },
+        take: 5,
+        select: { id: true, title: true, status: true, progress: true },
+      }),
+      prisma.supportTicket.count({ where: { userId, status: { not: "closed" } } }),
+      prisma.portalDocument.count({ where: { userId } }),
     ]);
 
     return NextResponse.json({
@@ -46,6 +54,9 @@ export async function GET() {
       paidInvoices,
       recentInvoices,
       lastMessage,
+      recentProjects,
+      openTickets,
+      documentsCount,
     });
   } catch (e) {
     console.error("[api/portal/dashboard GET]", e);

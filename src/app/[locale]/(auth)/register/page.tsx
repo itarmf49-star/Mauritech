@@ -21,10 +21,10 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <section className="section">
+    <section className="section auth-page">
       <Container className="auth-wrap">
         <div className="auth-card">
-          <h1 className="h1">{t(locale, "authRegisterTitle")}</h1>
+          <h1 className="h1 auth-title">{t(locale, "authRegisterTitle")}</h1>
           <p className="muted">{t(locale, "authRegisterDescription")}</p>
 
           <form

@@ -33,6 +33,9 @@ export default async function PortalPage({ params }: PortalPageProps) {
     paidInvoices: number;
     recentInvoices: { id: string; amount: number; status: string; issuedAt: string }[];
     lastMessage: { content: string; createdAt: string; isAdmin: boolean } | null;
+    recentProjects: { id: string; title: string; status: string; progress: number }[];
+    openTickets: number;
+    documentsCount: number;
   };
 
   return (
@@ -54,14 +57,20 @@ export default async function PortalPage({ params }: PortalPageProps) {
         <div className="portal-card">
           <p className="portal-card-kicker">{t(locale, "portalQuickActions")}</p>
           <div className="portal-actions">
+            <Link className="btn btn-primary btn-md" href={`/${locale}/portal/projects`}>
+              My projects
+            </Link>
             <Link className="btn btn-primary btn-md" href={`/${locale}/portal/invoices`}>
               {t(locale, "portalViewInvoices")}
             </Link>
             <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/messages`}>
               {t(locale, "portalSendMessage")}
             </Link>
-            <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/invoices`}>
-              {t(locale, "portalDownloadFiles")}
+            <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/documents`}>
+              Documents
+            </Link>
+            <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/tickets`}>
+              Support tickets
             </Link>
           </div>
         </div>
@@ -97,6 +106,23 @@ export default async function PortalPage({ params }: PortalPageProps) {
           <Link className="inline-link" href={`/${locale}/portal/account`}>
             {t(locale, "portalManageAccount")}
           </Link>
+        </div>
+      </div>
+      <div className="portal-grid-3">
+        <div className="portal-card">
+          <p className="portal-card-kicker">My projects</p>
+          <strong className="portal-card-big">{data.recentProjects.length}</strong>
+          <p className="muted">Active project timeline and progress snapshots.</p>
+        </div>
+        <div className="portal-card">
+          <p className="portal-card-kicker">Open tickets</p>
+          <strong className="portal-card-big">{data.openTickets}</strong>
+          <p className="muted">Support requests currently in progress.</p>
+        </div>
+        <div className="portal-card">
+          <p className="portal-card-kicker">Documents</p>
+          <strong className="portal-card-big">{data.documentsCount}</strong>
+          <p className="muted">Files and downloadable deliverables.</p>
         </div>
       </div>
     </section>

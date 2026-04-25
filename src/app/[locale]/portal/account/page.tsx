@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
-import { getAccount, getInvoices, getMessages } from "@/lib/portal-data";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +16,14 @@ export default async function PortalAccountAuditPage({ params }: PortalAccountAu
   const userId = session?.user?.id ?? "";
   const email = session?.user?.email ?? null;
 
-  const [account, invoices, messages] = await Promise.all([getAccount(userId, email), getInvoices(), getMessages()]);
-  const invoiceCount = invoices.length;
-  const messageCount = messages.length;
+  const [user, invoiceCount, messageCount] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true, phone: true, info: true },
+    }),
+    prisma.invoice.count({ where: { account: { userId } } }),
+    prisma.message.count({ where: { userId } }),
+  ]);
 
   return (
     <section className="portal-page">
@@ -34,7 +39,7 @@ export default async function PortalAccountAuditPage({ params }: PortalAccountAu
         </div>
         <div className="portal-card">
           <p className="portal-card-kicker">{t(locale, "portalAccountStatus")}</p>
-          <strong className="portal-card-big">{account.status}</strong>
+          <strong className="portal-card-big">{user ? "ACTIVE" : "LIMITED"}</strong>
         </div>
         <div className="portal-card">
           <p className="portal-card-kicker">{t(locale, "portalTotalInvoices")}</p>
@@ -58,6 +63,11 @@ export default async function PortalAccountAuditPage({ params }: PortalAccountAu
             {t(locale, "portalMessagesToAdmin")}: {messageCount}
           </p>
         </div>
+      </div>
+      <div className="portal-card">
+        <h3 className="portal-card-title">Profile details</h3>
+        <p className="muted">Phone: {user?.phone ?? "-"}</p>
+        <p className="muted">Notes: {user?.info ?? "-"}</p>
       </div>
     </section>
   );

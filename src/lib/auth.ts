@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import type { Role } from "@/types/role";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 
 const DEMO_ADMIN_EMAIL = "mauritech@mauritech.tech";
 const DEMO_ADMIN_PASSWORD = "MauriTech@2026";
@@ -31,13 +31,20 @@ export const authOptions: NextAuthOptions = {
           };
         }
 
-        const supabase = getSupabaseAdmin();
-        if (!supabase) return null;
+        const user = await prisma.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
+            role: true,
+            passwordHash: true,
+          },
+        });
+        if (!user?.passwordHash) return null;
 
-        const { data: user, error } = await supabase.from("users").select("*").eq("email", email).maybeSingle();
-        if (error || !user?.password_hash) return null;
-
-        const ok = await bcrypt.compare(password, user.password_hash as string);
+        const ok = await bcrypt.compare(password, user.passwordHash);
         if (!ok) return null;
 
         return {

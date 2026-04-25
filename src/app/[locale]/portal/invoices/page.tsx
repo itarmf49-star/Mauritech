@@ -2,8 +2,9 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
-import { getInvoices } from "@/lib/portal-data";
 import { InvoicesTable } from "@/components/portal/invoices-table";
+import { prisma } from "@/lib/prisma";
+import type { PortalInvoiceStatus } from "@/lib/portal-data";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,20 @@ export default async function PortalInvoicesPage({ params }: PageProps) {
     redirect(`/${locale}/login?next=/${locale}/portal/invoices`);
   }
 
-  const invoices = await getInvoices();
+  const invoicesRaw = await prisma.invoice.findMany({
+    where: { account: { userId: session.user.id } },
+    orderBy: { issuedAt: "desc" },
+    include: { account: true },
+  });
+  const invoices = invoicesRaw.map((inv) => ({
+    id: inv.id,
+    date: inv.issuedAt.toISOString().slice(0, 10),
+    status: (
+      inv.status?.toUpperCase() === "PAID" ? "PAID" : inv.status?.toUpperCase() === "OVERDUE" ? "OVERDUE" : "PENDING"
+    ) as PortalInvoiceStatus,
+    amount: inv.amount,
+    currency: "MRU",
+  }));
 
   return (
     <section className="portal-page">

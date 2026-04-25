@@ -21,8 +21,11 @@ export default async function PortalLayout({ children, params }: PortalLayoutPro
 
   const links = [
     { href: `/${locale}/portal`, label: t(locale, "portalOverview") },
+    { href: `/${locale}/portal/projects`, label: "My Projects" },
     { href: `/${locale}/portal/invoices`, label: t(locale, "portalInvoices") },
     { href: `/${locale}/portal/messages`, label: t(locale, "portalMessages") },
+    { href: `/${locale}/portal/tickets`, label: "Support Tickets" },
+    { href: `/${locale}/portal/documents`, label: "Documents" },
     { href: `/${locale}/portal/account`, label: t(locale, "portalAccountAudit") },
     { href: `/${locale}/portal/settings`, label: t(locale, "portalSettings") },
   ];

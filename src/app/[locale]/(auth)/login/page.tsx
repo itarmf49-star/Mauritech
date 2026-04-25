@@ -21,10 +21,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <section className="section">
+    <section className="section auth-page">
       <Container className="auth-wrap">
         <div className="auth-card">
-          <h1 className="h1">{t(locale, "authSignInTitle")}</h1>
+          <h1 className="h1 auth-title">{t(locale, "authSignInTitle")}</h1>
           <p className="muted">{t(locale, "authSignInDescription")}</p>
 
           <form

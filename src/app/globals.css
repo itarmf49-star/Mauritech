@@ -746,6 +746,15 @@ p {
   padding: 1.25rem;
 }
 
+.auth-page {
+  padding-top: 1.2rem;
+}
+
+.auth-title {
+  margin-top: 0;
+  font-size: clamp(1.55rem, 4.2vw, 2.2rem);
+}
+
 .auth-form {
   margin-top: 1rem;
   display: grid;
@@ -886,6 +895,11 @@ p {
   background: rgba(255, 255, 255, 0.02);
 }
 
+.portal-nav-link:focus-visible,
+.portal-nav-link:hover {
+  border-color: rgba(212, 175, 55, 0.28);
+}
+
 .portal-nav-link:hover {
   border-color: rgba(212, 175, 55, 0.18);
   background: rgba(255, 255, 255, 0.05);
@@ -945,6 +959,22 @@ p {
 
 .portal-content {
   margin-top: 1rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-top: 0.65rem;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.95), rgba(242, 222, 154, 0.95));
 }
 
 .portal-page-head {
@@ -1198,6 +1228,16 @@ p {
     border-bottom: 1px solid rgba(212, 175, 55, 0.14);
   }
 
+  .portal-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .portal-nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
   .portal-grid-3,
   .portal-grid-2,
   .portal-skeleton-grid {
@@ -1230,6 +1270,34 @@ p {
   .btn-md {
     height: 42px;
     font-size: 0.9rem;
+  }
+
+  .auth-card {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .auth-title {
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+
+  .portal-main {
+    padding: 0.8rem 0.75rem;
+  }
+
+  .portal-topbar {
+    padding: 0.75rem;
+  }
+
+  .portal-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-panel,
+  .ai-panel {
+    width: min(400px, calc(100vw - 1rem));
   }
 
   .chat-dock,

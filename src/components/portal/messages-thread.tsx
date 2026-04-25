@@ -59,10 +59,10 @@ export function MessagesThread({ initial, labels }: MessagesThreadProps) {
           setMessages((prev) => [...prev, optimistic]);
           setDraft("");
 
-          const res = await fetch("/api/messages", {
+          const res = await fetch("/api/portal/messages", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ content: text }),
+            body: JSON.stringify({ body: text }),
           });
           if (!res.ok) {
             // rollback optimistic message on failure

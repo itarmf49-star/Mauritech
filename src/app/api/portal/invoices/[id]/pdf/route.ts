@@ -2,7 +2,7 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { getInvoices } from "@/lib/portal-data";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
@@ -11,10 +11,12 @@ type RouteParams = { params: Promise<{ id: string }> };
 export async function GET(_req: Request, { params }: RouteParams) {
   const { id } = await params;
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const userId = session?.user?.id;
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const invoices = await getInvoices();
-  const invoice = invoices.find((i) => i.id === id);
+  const invoice = await prisma.invoice.findFirst({
+    where: { id, account: { userId } },
+  });
   if (!invoice) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const pdf = await PDFDocument.create();
@@ -29,9 +31,9 @@ export async function GET(_req: Request, { params }: RouteParams) {
 
   write("MauriTech — Invoice (Portal)", 18);
   write(`Invoice ID: ${invoice.id}`);
-  write(`Date: ${invoice.date}`);
+  write(`Date: ${invoice.issuedAt.toISOString().slice(0, 10)}`);
   write(`Status: ${invoice.status}`);
-  write(`Amount: ${invoice.amount} ${invoice.currency}`);
+  write(`Amount: ${invoice.amount} MRU`);
   y -= 8;
   write("This is a portal mock PDF.", 12);
 
