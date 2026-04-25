@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 function isNonEmptyString(v: unknown): v is string {
@@ -27,7 +29,8 @@ export async function POST(req: Request, { params }: RouteParams) {
     });
     return NextResponse.json({ image }, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error("[api/admin/projects/[id]/images POST]", e);
+    return databaseUnavailableResponse();
   }
 }
 

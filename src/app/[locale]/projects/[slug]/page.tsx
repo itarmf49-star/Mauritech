@@ -6,52 +6,68 @@ import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/
 import { prisma } from "@/lib/prisma";
 import type { ProjectImage, ProjectTranslation } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 type ProjectPageProps = {
   params: { locale: string; slug: string };
 };
 
 export async function generateStaticParams() {
-  const slugs = await prisma.project.findMany({
-    where: { isPublished: true },
-    select: { slug: true },
-    take: 500,
-  });
-  return locales.flatMap((locale) => slugs.map((p: { slug: string }) => ({ locale, slug: p.slug })));
+  try {
+    const slugs = await prisma.project.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
+      take: 500,
+    });
+    return locales.flatMap((locale) => slugs.map((p: { slug: string }) => ({ locale, slug: p.slug })));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug, locale: raw } = params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
-  const project = await prisma.project.findUnique({
-    where: { slug },
-    include: { translations: true },
-  });
+  try {
+    const project = await prisma.project.findUnique({
+      where: { slug },
+      include: { translations: true },
+    });
 
-  if (!project) {
-    return { title: t(locale, "project.notFound") };
+    if (!project) {
+      return { title: t(locale, "project.notFound") };
+    }
+
+    const tr =
+      (project.translations as ProjectTranslation[]).find((x: ProjectTranslation) => x.locale === locale) ??
+      (project.translations as ProjectTranslation[]).find((x: ProjectTranslation) => x.locale === "en") ??
+      null;
+
+    return {
+      title: tr?.title ?? project.title ?? project.slug,
+      description: tr?.description ?? project.description ?? "",
+    };
+  } catch {
+    return { title: t(locale, "navProjects"), description: t(locale, "metaDescription") };
   }
-
-  const tr =
-    (project.translations as ProjectTranslation[]).find((x: ProjectTranslation) => x.locale === locale) ??
-    (project.translations as ProjectTranslation[]).find((x: ProjectTranslation) => x.locale === "en") ??
-    null;
-
-  return {
-    title: tr?.title ?? project.title ?? project.slug,
-    description: tr?.description ?? project.description ?? "",
-  };
 }
 
 export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const { slug, locale: raw } = params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
-  const project = await prisma.project.findUnique({
-    where: { slug },
-    include: {
-      translations: true,
-      images: { orderBy: { createdAt: "desc" } },
-    },
-  });
+
+  let project: Awaited<ReturnType<typeof prisma.project.findUnique>>;
+  try {
+    project = await prisma.project.findUnique({
+      where: { slug },
+      include: {
+        translations: true,
+        images: { orderBy: { createdAt: "desc" } },
+      },
+    });
+  } catch {
+    project = null;
+  }
 
   if (!project) {
     return (

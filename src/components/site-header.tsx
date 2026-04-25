@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/lib/i18n";
 
@@ -48,7 +48,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
 
   useEffect(() => {
     // close mobile menu on route change
-    setOpen(false);
+    startTransition(() => setOpen(false));
   }, [pathname]);
 
   const isRtl = locale === "ar";

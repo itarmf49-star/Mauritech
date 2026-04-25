@@ -1,4 +1,8 @@
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -16,17 +20,22 @@ type CreateUserBody = {
 };
 
 export async function GET() {
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
-  return Response.json(users);
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return Response.json(users);
+  } catch (e) {
+    console.error("[api/users GET]", e);
+    return databaseUnavailableResponse();
+  }
 }
 
 export async function POST(req: Request) {
@@ -43,21 +52,25 @@ export async function POST(req: Request) {
     return new Response("Email is required", { status: 400 });
   }
 
-  const user = await prisma.user.create({
-    data: {
-      email: email.trim().toLowerCase(),
-      name: isNonEmptyString(name) ? name.trim() : undefined,
-      ...(isRoleInput(role) ? { role } : {}),
-    },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
-    },
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email: email.trim().toLowerCase(),
+        name: isNonEmptyString(name) ? name.trim() : undefined,
+        ...(isRoleInput(role) ? { role } : {}),
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true,
+      },
+    });
 
-  return Response.json(user, { status: 201 });
+    return Response.json(user, { status: 201 });
+  } catch (e) {
+    console.error("[api/users POST]", e);
+    return databaseUnavailableResponse();
+  }
 }
-

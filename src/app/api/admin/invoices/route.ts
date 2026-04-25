@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const ItemSchema = z.object({
@@ -34,7 +36,8 @@ export async function GET() {
 
     return NextResponse.json({ invoices });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error("[api/admin/invoices GET]", e);
+    return databaseUnavailableResponse();
   }
 }
 
@@ -84,7 +87,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ invoice }, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: "Invoice creation failed" }, { status: 500 });
+  } catch (e) {
+    console.error("[api/admin/invoices POST]", e);
+    return databaseUnavailableResponse();
   }
 }

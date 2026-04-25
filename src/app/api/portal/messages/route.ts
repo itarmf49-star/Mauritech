@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 type Body = {
@@ -12,22 +14,29 @@ type Body = {
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
+  const userId = session?.user?.id;
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const messages = await prisma.message.findMany({
-    where: { email: session.user.email },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  });
+  try {
+    const messages = await prisma.message.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    });
 
-  return NextResponse.json({ messages });
+    return NextResponse.json({ messages });
+  } catch (e) {
+    console.error("[api/portal/messages GET]", e);
+    return databaseUnavailableResponse();
+  }
 }
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
+  const userId = session?.user?.id;
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -39,14 +48,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Message body is required" }, { status: 400 });
   }
 
-  const created = await prisma.message.create({
-    data: {
-      name: session.user.name?.trim() || "Customer",
-      email: session.user.email,
-      subject,
-      body,
-    },
-  });
+  const content = `${subject}\n\n${body}`;
 
-  return NextResponse.json({ message: created }, { status: 201 });
+  try {
+    const created = await prisma.message.create({
+      data: {
+        userId,
+        content,
+        isAdmin: false,
+      },
+    });
+
+    return NextResponse.json({ message: created }, { status: 201 });
+  } catch (e) {
+    console.error("[api/portal/messages POST]", e);
+    return databaseUnavailableResponse();
+  }
 }

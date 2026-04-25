@@ -4,19 +4,26 @@ import { prisma } from "@/lib/prisma";
 import type { ProjectImage, ProjectTranslation } from "@prisma/client";
 import { ProjectForm } from "@/components/admin/project-form";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = { params: Promise<{ locale: string; id: string }> };
 
 export default async function AdminEditProjectPage({ params }: PageProps) {
   const { locale: raw, id } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
-  const project = await prisma.project.findUnique({
-    where: { id },
-    include: {
-      translations: true,
-      images: { orderBy: { createdAt: "desc" } },
-    },
-  });
+  let project: Awaited<ReturnType<typeof prisma.project.findUnique>>;
+  try {
+    project = await prisma.project.findUnique({
+      where: { id },
+      include: {
+        translations: true,
+        images: { orderBy: { createdAt: "desc" } },
+      },
+    });
+  } catch {
+    project = null;
+  }
 
   if (!project) {
     return (

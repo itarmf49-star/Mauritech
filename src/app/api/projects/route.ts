@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET() {
   try {
@@ -10,6 +14,7 @@ export async function GET() {
     });
     return NextResponse.json({ data, count: data.length }, { status: 200 });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error("[api/projects GET]", e);
+    return databaseUnavailableResponse();
   }
 }

@@ -4,6 +4,8 @@ import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import type { ProjectImage, ProjectTranslation } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 type ProjectsPageProps = {
   params: Promise<{ locale: string }>;
 };
@@ -21,15 +23,20 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
-  const rows = await prisma.project.findMany({
-    where: { isPublished: true },
-    orderBy: { updatedAt: "desc" },
-    include: {
-      translations: true,
-      images: { orderBy: { createdAt: "desc" }, take: 1 },
-    },
-    take: 200,
-  });
+  let rows: Awaited<ReturnType<typeof prisma.project.findMany>> = [];
+  try {
+    rows = await prisma.project.findMany({
+      where: { isPublished: true },
+      orderBy: { updatedAt: "desc" },
+      include: {
+        translations: true,
+        images: { orderBy: { createdAt: "desc" }, take: 1 },
+      },
+      take: 200,
+    });
+  } catch {
+    rows = [];
+  }
 
   const items = rows.map(
     (p: {

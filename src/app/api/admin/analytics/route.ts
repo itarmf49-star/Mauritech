@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function GET() {
@@ -30,6 +32,7 @@ export async function GET() {
       chatMessages7d,
     });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error("[api/admin/analytics GET]", e);
+    return databaseUnavailableResponse();
   }
 }
