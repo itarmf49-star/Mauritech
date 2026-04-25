@@ -1,25 +1,39 @@
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
-function createPrismaClient() {
+function isAccelerateUrl(url: string): boolean {
+  return url.startsWith("prisma://") || url.startsWith("prisma+postgres://");
+}
+
+function isDirectPostgresUrl(url: string): boolean {
+  const u = url.toLowerCase();
+  return u.startsWith("postgres://") || u.startsWith("postgresql://");
+}
+
+function createPrismaClient(): PrismaClient {
   const url = process.env.DATABASE_URL?.trim();
   if (!url) {
     throw new Error("DATABASE_URL is not set");
   }
 
-  if (!(url.startsWith("prisma://") || url.startsWith("prisma+postgres://"))) {
-    throw new Error(
-      "DATABASE_URL must be a Prisma Accelerate URL starting with `prisma://` or `prisma+postgres://`. " +
-        "Use DIRECT_DATABASE_URL for migrations/studio via prisma.config.ts.",
-    );
+  if (isAccelerateUrl(url)) {
+    return new PrismaClient({
+      accelerateUrl: url,
+    }).$extends(withAccelerate()) as unknown as PrismaClient;
   }
 
-  return new PrismaClient({
-    accelerateUrl: url,
-  }).$extends(withAccelerate());
+  if (isDirectPostgresUrl(url)) {
+    const adapter = new PrismaPg(url);
+    return new PrismaClient({ adapter });
+  }
+
+  throw new Error(
+    "DATABASE_URL must be a PostgreSQL URL (postgres://, postgresql://) or Prisma Accelerate (prisma://, prisma+postgres://).",
+  );
 }
 
-export type PrismaClientSingleton = ReturnType<typeof createPrismaClient>;
+export type PrismaClientSingleton = PrismaClient;
 
 const globalForPrisma = globalThis as unknown as {
   __mauritech_prisma?: PrismaClientSingleton;

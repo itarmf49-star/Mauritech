@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import type { Prisma } from "@prisma/client";
 import { VideoEmbed } from "@/components/sections/video-embed";
 import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import type { ProjectImage, ProjectTranslation } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
+
+const projectMetaInclude = { translations: true } satisfies Prisma.ProjectInclude;
+type ProjectMetaPayload = Prisma.ProjectGetPayload<{ include: typeof projectMetaInclude }>;
+
+const projectDetailInclude = {
+  translations: true,
+  images: { orderBy: { createdAt: "desc" as const } },
+} satisfies Prisma.ProjectInclude;
+type ProjectDetailPayload = Prisma.ProjectGetPayload<{ include: typeof projectDetailInclude }>;
 
 type ProjectPageProps = {
   params: { locale: string; slug: string };
@@ -29,9 +39,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   const { slug, locale: raw } = params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
   try {
-    const project = await prisma.project.findUnique({
+    const project: ProjectMetaPayload | null = await prisma.project.findUnique({
       where: { slug },
-      include: { translations: true },
+      include: projectMetaInclude,
     });
 
     if (!project) {
@@ -56,14 +66,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const { slug, locale: raw } = params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
-  let project: Awaited<ReturnType<typeof prisma.project.findUnique>>;
+  let project: ProjectDetailPayload | null;
   try {
     project = await prisma.project.findUnique({
       where: { slug },
-      include: {
-        translations: true,
-        images: { orderBy: { createdAt: "desc" } },
-      },
+      include: projectDetailInclude,
     });
   } catch {
     project = null;
