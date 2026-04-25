@@ -5,8 +5,10 @@
   "navHome": "Accueil",
   "navProjects": "Projets",
   "navServices": "Services",
+  "navIndustries": "Secteurs",
+  "navAbout": "À propos",
   "navContactLink": "Contact",
-  "navPortal": "Portail",
+  "navPortal": "Portail Client",
   "navLogin": "Connexion",
   "navQuote": "Demander un devis",
   "footerTagline": "Deploiements technologiques modernes et securises pour les entreprises et institutions.",
@@ -228,3 +230,6 @@
   "aiThinking": "Reflexion...",
   "aiAsk": "Demander"
 }
+
+
+

@@ -1,6 +1,8 @@
+import Link from "next/link";
 import type { Service } from "@/types/content";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
+import { BriefcaseBusiness, Building2, LifeBuoy, Network, Server, Shield } from "lucide-react";
 
 type ServicesGridProps = {
   items: Service[];
@@ -8,6 +10,15 @@ type ServicesGridProps = {
 };
 
 export function ServicesGrid({ items, locale }: ServicesGridProps) {
+  const iconMap = {
+    Network,
+    Server,
+    Shield,
+    Building2,
+    BriefcaseBusiness,
+    LifeBuoy,
+  };
+
   return (
     <section className="container mx-auto px-6 py-20" aria-labelledby="services-title">
       
@@ -24,14 +35,19 @@ export function ServicesGrid({ items, locale }: ServicesGridProps) {
       {/* Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {items.map((item, i) => (
-          <div
+          <Link
             key={item.id ?? i}
+            href={`/${locale}${item.href}`}
             className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur"
           >
+            {(() => {
+              const Icon = iconMap[item.icon as keyof typeof iconMap] ?? Network;
+              return <Icon className="h-5 w-5 text-[#F5C542]" />;
+            })()}
             <div className="text-sm text-gray-400">#{i + 1}</div>
             <h3 className="mt-2 text-xl font-semibold text-white">{item.title}</h3>
             <p className="mt-3 text-gray-300">{item.description}</p>
-          </div>
+          </Link>
         ))}
       </div>
 

@@ -37,6 +37,25 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
       template: `%s | ${BRAND_NAME}`,
     },
     description: t(locale, "metaDescription", { brand: BRAND_NAME }),
+    openGraph: {
+      title: t(locale, "metaTitle", { brand: BRAND_NAME }),
+      description: t(locale, "metaDescription", { brand: BRAND_NAME }),
+      url: `${siteConfig.siteUrl}/${locale}`,
+      siteName: BRAND_NAME,
+      images: [{ url: "/images/hero-en.svg", width: 1200, height: 630, alt: `${BRAND_NAME} preview` }],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t(locale, "metaTitle", { brand: BRAND_NAME }),
+      description: t(locale, "metaDescription", { brand: BRAND_NAME }),
+      images: ["/images/hero-en.svg"],
+    },
+    icons: {
+      icon: "/icon.svg",
+      shortcut: "/icon.svg",
+      apple: "/icon.svg",
+    },
     robots: {
       index: true,
       follow: true,
@@ -57,6 +76,16 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
   const dir = getDirection(locale);
   const fontClass = locale === "ar" ? cairo.variable : inter.variable;
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: BRAND_NAME,
+    url: siteConfig.siteUrl,
+    email: siteConfig.email,
+    telephone: siteConfig.phone,
+    areaServed: ["Mauritania", "West Africa"],
+    sameAs: [siteConfig.siteUrl],
+  };
 
   return (
     <html lang={locale} dir={dir} className={`${inter.variable} ${cairo.variable} ${fontClass}`}>
@@ -69,6 +98,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           <SiteHeader locale={locale} />
           <main id="main-content">{children}</main>
           <SiteFooter locale={locale} />
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
           <ChatDock locale={locale} />
           <AiAssistant locale={locale} />
         </AppProviders>

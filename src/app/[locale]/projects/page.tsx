@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { Prisma } from "@prisma/client";
 import { ProjectsGrid } from "@/components/sections/projects-grid";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
+import { projects as fallbackProjects } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import type { ProjectTranslation } from "@prisma/client";
 
@@ -43,7 +44,7 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
     rows = [];
   }
 
-  const items = rows.map(
+  const dbItems = rows.map(
     (p: ProjectListRow) => {
     const tr =
       p.translations.find((x: ProjectTranslation) => x.locale === locale) ??
@@ -54,11 +55,27 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
       slug: p.slug,
       title: tr?.title ?? p.title ?? p.slug,
       description: tr?.description ?? p.description ?? "",
+      summary: tr?.description ?? p.description ?? "",
+      overview: tr?.description ?? p.description ?? "",
+      problem: "",
+      solution: "",
+      technologies: [],
+      scope: [],
+      outcome: "",
+      gallery: [],
       image: p.images[0]?.url ?? p.imageUrl ?? "/images/hero-en.svg",
       youtubeId: p.videoUrl ?? "",
       category: p.category ?? "project",
     };
   });
+  const bySlug = new Map<string, (typeof fallbackProjects)[number]>();
+  for (const item of fallbackProjects) bySlug.set(item.slug, item);
+  for (const item of dbItems) {
+    if (!bySlug.has(item.slug)) {
+      bySlug.set(item.slug, item as (typeof fallbackProjects)[number]);
+    }
+  }
+  const items = Array.from(bySlug.values());
 
   return (
     <>

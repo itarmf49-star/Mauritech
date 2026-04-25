@@ -27,12 +27,13 @@ export function HomeHero({ locale }: HomeHeroProps) {
           <p className="eyebrow">{t(locale, "heroEyebrow")}</p>
           <h1 className="h1">
             {BRAND_NAME}
-            <span className="h1-accent">{t(locale, "heroTitleAccent")}</span> and secure digital platforms.
+            <span className="h1-accent">{t(locale, "heroTitleAccent")}</span> for resilient business growth.
           </h1>
           <p className="lead">{t(locale, "heroLead")}</p>
+          <p className="muted">Networking • Infrastructure • Automation • Security</p>
           <div className="hero-actions">
             <LinkButton href={`/${locale}/projects`}>{t(locale, "heroViewShowcase")}</LinkButton>
-            <LinkButton href="#contact" variant="ghost">
+            <LinkButton href={`/${locale}/contact`} variant="ghost">
               {t(locale, "heroContactSales")}
             </LinkButton>
             <EcommerceProductsButton />

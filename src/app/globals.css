@@ -539,6 +539,26 @@ p {
   opacity: 1;
 }
 
+.featured-project-card {
+  grid-column: span 2;
+  border-color: rgba(212, 175, 55, 0.4);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.12), rgba(255, 255, 255, 0.04));
+}
+
+.project-badge {
+  display: inline-flex;
+  margin: 0.2rem 0 0.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 222, 154, 0.45);
+  background: rgba(212, 175, 55, 0.16);
+  color: rgba(242, 222, 154, 0.95);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.6rem;
+}
+
 .card img {
   width: 100%;
   height: auto;
@@ -1111,6 +1131,46 @@ p {
 }
 
 @media (max-width: 900px) {
+  .hero-grid,
+  .slider-slide,
+  .cta-glass {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 3.2rem 0 1.75rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .camera-wave-card {
+    min-width: 220px;
+  }
+
+  .site-footer .footer-grid {
+    gap: 1.25rem;
+  }
+
+  .portal-topbar,
+  .portal-topbar-right {
+    flex-wrap: wrap;
+  }
+
+  .portal-topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-project-card {
+    grid-column: span 1;
+  }
+
   .admin-shell {
     grid-template-columns: 1fr;
   }
@@ -1150,6 +1210,31 @@ p {
 
   .eco-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    width: min(1120px, calc(100% - 1.1rem));
+  }
+
+  .h1 {
+    font-size: 1.85rem;
+    line-height: 1.15;
+  }
+
+  .h2 {
+    font-size: 1.3rem;
+  }
+
+  .btn-md {
+    height: 42px;
+    font-size: 0.9rem;
+  }
+
+  .chat-dock,
+  .ai-dock {
+    bottom: 0.6rem;
   }
 }
 

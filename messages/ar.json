@@ -5,6 +5,8 @@
   "navHome": "الرئيسية",
   "navProjects": "المشاريع",
   "navServices": "الخدمات",
+  "navIndustries": "القطاعات",
+  "navAbout": "من نحن",
   "navContactLink": "تواصل",
   "navPortal": "البوابة",
   "navLogin": "تسجيل الدخول",
@@ -228,3 +230,6 @@
   "aiThinking": "جار التفكير...",
   "aiAsk": "اسال"
 }
+
+
+

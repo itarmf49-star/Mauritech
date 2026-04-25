@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { VideoEmbed } from "@/components/sections/video-embed";
 import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/lib/i18n";
+import { getProjectBySlug } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import type { ProjectImage, ProjectTranslation } from "@prisma/client";
 
@@ -77,6 +78,92 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   }
 
   if (!project) {
+    const fallback = getProjectBySlug(slug);
+    if (fallback) {
+      const isIpbx = fallback.slug === "enterprise-ipbx-office-voip-deployment";
+      const projectSchema = {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        name: fallback.title,
+        description: fallback.description,
+        image: fallback.image,
+        about: fallback.category,
+      };
+      return (
+        <article className="container section">
+          <section className="section" style={{ paddingTop: 0 }} aria-labelledby="project-hero">
+            <p className="eyebrow">{fallback.category}</p>
+            {fallback.badge ? <p className="project-badge">{fallback.badge}</p> : null}
+            <h1 id="project-hero" className="h1">
+              {fallback.title}
+            </h1>
+            <p className="muted">{fallback.overview}</p>
+          </section>
+          <section className="section" style={{ paddingTop: 0 }}>
+            <div className="card-grid">
+              {fallback.gallery.map((src) => (
+                <div key={src} className="card">
+                  <Image src={src} alt={fallback.title} width={1200} height={700} sizes="(max-width: 1200px) 100vw, 1200px" />
+                </div>
+              ))}
+            </div>
+          </section>
+          <section className="section" style={{ paddingTop: 0 }}>
+            <div className="card-grid">
+              <article className="card">
+                <h2 className="h2">Project overview</h2>
+                <p>{fallback.overview}</p>
+              </article>
+              <article className="card">
+                <h2 className="h2">Problem</h2>
+                <p>{fallback.problem}</p>
+              </article>
+              <article className="card">
+                <h2 className="h2">Solution</h2>
+                <p>{fallback.solution}</p>
+              </article>
+              <article className="card">
+                <h2 className="h2">Technologies used</h2>
+                <p>{fallback.technologies.join(" • ")}</p>
+              </article>
+              <article className="card">
+                <h2 className="h2">Deployment scope</h2>
+                <p>{fallback.scope.join(" • ")}</p>
+              </article>
+              <article className="card">
+                <h2 className="h2">Results and outcome</h2>
+                <p>{fallback.outcome}</p>
+              </article>
+            </div>
+            <div className="hero-actions" style={{ marginTop: "1rem" }}>
+              <Link className="btn btn-primary btn-md" href={`/${locale}/contact`}>
+                {isIpbx ? "Request IPBX Consultation" : "Start a similar project"}
+              </Link>
+              <Link className="btn btn-ghost btn-md" href={localePath(locale, "/projects")}>
+                Back to projects
+              </Link>
+            </div>
+            {isIpbx ? (
+              <div className="cta-glass" style={{ marginTop: "1rem" }}>
+                <div>
+                  <h2 className="h2">Deploy modern business telephony with MauriTech</h2>
+                  <p className="muted">
+                    From office desk phones and internal routing to secure SIP and IPBX management, MauriTech delivers
+                    complete enterprise telephony infrastructure.
+                  </p>
+                </div>
+                <div className="cta-actions">
+                  <Link className="btn btn-primary btn-md" href={`/${locale}/contact`}>
+                    Request IPBX Consultation
+                  </Link>
+                </div>
+              </div>
+            ) : null}
+          </section>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }} />
+        </article>
+      );
+    }
     return (
       <article className="container section">
         <h1 className="h1">{t(locale, "project.notFound")}</h1>
@@ -103,6 +190,14 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const videoHref = `${localePath(locale, `/projects/${project.slug}`)}${videoHash}`;
   const youtubeId = project.videoUrl ?? "";
   const videoThumbnail = youtubeId ? `https://i.ytimg.com/vi_webp/${youtubeId}/maxresdefault.webp` : null;
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: title,
+    description,
+    image: galleryImages[0] ?? videoThumbnail ?? undefined,
+    about: t(locale, "project.title"),
+  };
 
   return (
     <article className="container section">
@@ -157,10 +252,20 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       </section>
 
       <section className="section" aria-labelledby="project-content" style={{ paddingTop: 0 }}>
-        <h2 id="project-content" className="h2">
-          {t(locale, "project.description")}
-        </h2>
-        <p className="muted">{description}</p>
+        <div className="card-grid">
+          <article className="card">
+            <h2 className="h2">Overview</h2>
+            <p className="muted">{description}</p>
+          </article>
+          <article className="card">
+            <h2 className="h2">Problem</h2>
+            <p className="muted">Operational and security constraints required a robust and scalable deployment model.</p>
+          </article>
+          <article className="card">
+            <h2 className="h2">Solution</h2>
+            <p className="muted">MauriTech delivered a production-grade architecture with secure rollout and monitoring workflows.</p>
+          </article>
+        </div>
       </section>
 
       <section className="section" aria-labelledby="project-video" style={{ paddingTop: 0 }}>
@@ -173,6 +278,23 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </>
         ) : null}
       </section>
+      <section className="section" style={{ paddingTop: 0 }}>
+        <div className="cta-glass">
+          <div>
+            <h2 className="h2">Need a similar deployment?</h2>
+            <p className="muted">MauriTech designs and executes secure infrastructure programs from planning to go-live support.</p>
+          </div>
+          <div className="cta-actions">
+            <Link className="btn btn-primary btn-md" href={`/${locale}/contact`}>
+              Contact MauriTech
+            </Link>
+            <Link className="btn btn-ghost btn-md" href={`/${locale}/projects`}>
+              View more projects
+            </Link>
+          </div>
+        </div>
+      </section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }} />
     </article>
   );
 }

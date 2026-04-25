@@ -6,6 +6,6 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="700" fill="url(#bg)"/>
-  <text x="80" y="260" fill="#D4AF37" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">IT NORD</text>
+  <text x="80" y="260" fill="#D4AF37" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">MauriTech</text>
   <text x="80" y="330" fill="#F2DE9A" font-family="Inter, Arial, sans-serif" font-size="34">Infrastructure intelligente et securite</text>
 </svg>

@@ -88,7 +88,7 @@ CREATE TABLE "Message" (
 -- CreateTable
 CREATE TABLE "SiteSettings" (
     "id" TEXT NOT NULL,
-    "siteName" TEXT NOT NULL DEFAULT 'IT NORD',
+    "siteName" TEXT NOT NULL DEFAULT 'MauriTech',
     "seoTitle" TEXT,
     "seoDesc" TEXT,
     "ogImage" TEXT,

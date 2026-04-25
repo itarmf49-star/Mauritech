@@ -4,8 +4,8 @@ import bcrypt from "bcrypt";
 import type { Role } from "@/types/role";
 import { getSupabaseAdmin } from "@/lib/supabase/server";
 
-const DEMO_ADMIN_EMAIL = "itnord@outlook.fr";
-const DEMO_ADMIN_PASSWORD = "ITNORD@2026";
+const DEMO_ADMIN_EMAIL = "mauritech@mauritech.tech";
+const DEMO_ADMIN_PASSWORD = "MauriTech@2026";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },

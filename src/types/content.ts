@@ -1,8 +1,10 @@
 export type Service = {
   id: string;
   title: string;
+  icon: string;
   description: string;
   image: string;
+  href: string;
 };
 
 export type Project = {
@@ -10,9 +12,20 @@ export type Project = {
   slug: string;
   title: string;
   category: string;
+  badge?: string;
+  featured?: boolean;
   description: string;
   image: string;
-  youtubeId: string;
+  youtubeId?: string;
+  summary: string;
+  overview: string;
+  problem: string;
+  solution: string;
+  technologies: string[];
+  scope: string[];
+  outcome: string;
+  gallery: string[];
+  tags?: string[];
 };
 
 export type Testimonial = {

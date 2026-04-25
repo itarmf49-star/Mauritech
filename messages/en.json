@@ -1,12 +1,14 @@
 {
-  "metaTitle": "{brand} | Smart Infrastructure and Security Solutions",
-  "metaDescription": "Professional technology services in Mauritania: networks, surveillance, smart building automation, and secure server infrastructure.",
+  "metaTitle": "{brand} | Infrastructure, Security and Smart Systems",
+  "metaDescription": "MauriTech delivers secure infrastructure, networking, surveillance, cloud systems, and smart automation across Mauritania and West Africa.",
   "skipToContent": "Skip to main content",
   "navHome": "Home",
   "navProjects": "Projects",
   "navServices": "Services",
+  "navIndustries": "Industries",
+  "navAbout": "About",
   "navContactLink": "Contact",
-  "navPortal": "Portal",
+  "navPortal": "Client Portal",
   "navLogin": "Login",
   "navQuote": "Get a Quote",
   "footerTagline": "Secure and modern technology deployments for businesses and institutions.",
@@ -22,7 +24,7 @@
   "heroContactSales": "Contact sales",
   "servicesTitle": "Core Services",
   "projectsTitle": "Recent Projects",
-  "projectViewDetails": "View details",
+  "projectViewDetails": "View Project",
   "projectVideo": "Project video",
   "project.title": "Project",
   "project.description": "Description",
@@ -228,3 +230,4 @@
   "aiThinking": "Thinking...",
   "aiAsk": "Ask"
 }
+

@@ -4,6 +4,7 @@ import { ContactCta } from "@/components/sections/home/contact-cta";
 import { HomeHero } from "@/components/sections/home/hero";
 import { ProjectsGrid } from "@/components/sections/projects-grid";
 import { ServicesGrid } from "@/components/sections/services-grid";
+import { BrandExpansion } from "@/components/sections/home/brand-expansion";
 import { projects, services } from "@/lib/content";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 
@@ -66,6 +67,7 @@ export default async function HomePage({ params }: HomePageProps) {
         ]}
       />
       <ServicesGrid items={services} locale={locale} />
+      <BrandExpansion locale={locale} projects={projects} />
       <ProjectsGrid items={projects} locale={locale} />
       <ContactCta locale={locale} />
     </>

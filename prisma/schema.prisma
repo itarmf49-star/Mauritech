@@ -152,7 +152,7 @@ model ContactMessage {
 
 model SiteSettings {
   id        String  @id @default(cuid())
-  siteName  String  @default("IT NORD")
+  siteName  String  @default("MauriTech")
   seoTitle  String?
   seoDesc   String?
   ogImage   String?

@@ -57,8 +57,11 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
   const navLinks = useMemo(
     () => [
       { key: "navHome" as const, href: localePath(locale, "/") },
+      { key: "navServices" as const, href: localePath(locale, "/services") },
       { key: "navProjects" as const, href: localePath(locale, "/projects") },
-      { key: "navServices" as const, href: localePath(locale, "/#services") },
+      { key: "navIndustries" as const, href: localePath(locale, "/industries") },
+      { key: "navAbout" as const, href: localePath(locale, "/about") },
+      { key: "navPortal" as const, href: localePath(locale, "/portal-access") },
       { key: "navContactLink" as const, href: localePath(locale, "/contact") },
     ],
     [locale],
@@ -104,14 +107,14 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
             <div className={["flex items-center gap-6", isRtl ? "flex-row-reverse" : ""].join(" ")}>
               {navLinks.map((l) => (
                 <Link
                   key={l.key}
                   href={l.href}
-                  className={[
-                    "text-sm font-semibold transition-colors pb-1 border-b-2",
+                className={[
+                    "text-sm font-semibold transition-all pb-1 border-b-2",
                     isActiveLink(l.href)
                       ? "text-[#F5C542] border-[#F5C542]/70"
                       : "text-white/80 border-transparent hover:text-white hover:border-white/20",
@@ -144,10 +147,10 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
 
             {/* CTA */}
             <Link
-              href={localePath(locale, "/contact")}
+              href={localePath(locale, "/portal-access")}
               className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
             >
-              {t(locale, "navQuote")}
+              {t(locale, "navPortal")}
             </Link>
           </nav>
 
@@ -217,10 +220,10 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
               </div>
 
               <Link
-                href={localePath(locale, "/contact")}
+                href={localePath(locale, "/portal-access")}
                 className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
               >
-                {t(locale, "navQuote")}
+                {t(locale, "navPortal")}
               </Link>
             </div>
           </div>
