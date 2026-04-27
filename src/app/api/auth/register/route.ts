@@ -30,12 +30,12 @@ export async function POST(req: Request) {
     });
     if (existing) return NextResponse.json({ error: "Email already used" }, { status: 409 });
 
-    const passwordHash = await bcrypt.hash(parsed.data.password, 12);
+    const hashed = await bcrypt.hash(parsed.data.password, 12);
     const user = await prisma.user.create({
       data: {
         name: parsed.data.name.trim(),
         email,
-        passwordHash,
+        password: hashed,
         role: "CUSTOMER",
       },
       select: { id: true },

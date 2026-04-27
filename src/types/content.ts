@@ -25,6 +25,10 @@ export type Project = {
   scope: string[];
   outcome: string;
   gallery: string[];
+  /** Optional caption per gallery image (same length as gallery when used). */
+  galleryCaptions?: string[];
+  /** Short callout about MauriTech crews on site (branded apparel, commissioning discipline). */
+  teamHighlight?: string;
   tags?: string[];
 };
 

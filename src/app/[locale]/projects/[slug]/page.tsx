@@ -98,12 +98,32 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               {fallback.title}
             </h1>
             <p className="muted">{fallback.overview}</p>
+            <p style={{ marginTop: "0.75rem", fontSize: "1.05rem", maxWidth: "52rem", lineHeight: 1.55 }}>
+              {fallback.summary}
+            </p>
           </section>
-          <section className="section" style={{ paddingTop: 0 }}>
+          {fallback.teamHighlight ? (
+            <section className="section" style={{ paddingTop: 0 }}>
+              <div className="project-team-highlight">
+                <p style={{ margin: 0, lineHeight: 1.55 }}>{fallback.teamHighlight}</p>
+              </div>
+            </section>
+          ) : null}
+          <section className="section" style={{ paddingTop: 0 }} aria-labelledby="project-site-photos">
+            <h2 id="project-site-photos" className="h2">
+              Site photography
+            </h2>
             <div className="card-grid">
-              {fallback.gallery.map((src) => (
-                <div key={src} className="card">
+              {fallback.gallery.map((src, idx) => (
+                <div
+                  key={src}
+                  className="card project-gallery-item"
+                  style={{ animationDelay: `${Math.min(idx * 0.055, 0.95)}s` }}
+                >
                   <Image src={src} alt={fallback.title} width={1200} height={700} sizes="(max-width: 1200px) 100vw, 1200px" />
+                  {fallback.galleryCaptions?.[idx] ? (
+                    <p className="project-gallery-caption">{fallback.galleryCaptions[idx]}</p>
+                  ) : null}
                 </div>
               ))}
             </div>

@@ -13,6 +13,9 @@ dotenv.config({ path: ".env" });
 const migrateUrl =
   process.env["DIRECT_DATABASE_URL"] ?? process.env["DATABASE_URL"];
 
+/** Optional dedicated Postgres DB for `prisma migrate diff --from-migrations ...` shadow applies (CI validation). */
+const shadowDatabaseUrl = process.env["SHADOW_DATABASE_URL"]?.trim();
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
@@ -20,5 +23,6 @@ export default defineConfig({
   },
   datasource: {
     url: migrateUrl,
+    ...(shadowDatabaseUrl ? { shadowDatabaseUrl } : {}),
   },
 });

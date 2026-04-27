@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { startTransition, useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/lib/i18n";
 
@@ -20,6 +21,7 @@ function stripLocaleFromPathname(pathname: string) {
 }
 
 export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
+  const { status } = useSession();
   const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -145,13 +147,30 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
               ))}
             </div>
 
-            {/* CTA */}
-            <Link
-              href={localePath(locale, "/portal-access")}
-              className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
-            >
-              {t(locale, "navPortal")}
-            </Link>
+            <div className="flex items-center gap-3">
+              {status === "unauthenticated" ? (
+                <>
+                  <Link
+                    href={localePath(locale, "/login")}
+                    className="text-sm font-semibold text-white/85 hover:text-white transition-colors"
+                  >
+                    {t(locale, "navLogin")}
+                  </Link>
+                  <Link
+                    href={localePath(locale, "/register")}
+                    className="text-sm font-semibold text-[#F5C542] hover:text-[#FFD25A] transition-colors"
+                  >
+                    {t(locale, "authCreateAccount")}
+                  </Link>
+                </>
+              ) : null}
+              <Link
+                href={localePath(locale, "/portal-access")}
+                className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
+              >
+                {t(locale, "navPortal")}
+              </Link>
+            </div>
           </nav>
 
           {/* Mobile controls */}
@@ -219,12 +238,30 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                 ))}
               </div>
 
-              <Link
-                href={localePath(locale, "/portal-access")}
-                className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
-              >
-                {t(locale, "navPortal")}
-              </Link>
+              <div className="flex flex-col gap-2 items-stretch">
+                {status === "unauthenticated" ? (
+                  <div className="flex gap-2 justify-end">
+                    <Link
+                      href={localePath(locale, "/login")}
+                      className="rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-white/90 hover:bg-white/10"
+                    >
+                      {t(locale, "navLogin")}
+                    </Link>
+                    <Link
+                      href={localePath(locale, "/register")}
+                      className="rounded-xl border border-[#F5C542]/40 px-3 py-2 text-sm font-semibold text-[#F5C542]"
+                    >
+                      {t(locale, "authCreateAccount")}
+                    </Link>
+                  </div>
+                ) : null}
+                <Link
+                  href={localePath(locale, "/portal-access")}
+                  className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
+                >
+                  {t(locale, "navPortal")}
+                </Link>
+              </div>
             </div>
           </div>
         </div>

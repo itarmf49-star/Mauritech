@@ -1,10 +1,9 @@
 import OpenAI from "openai";
-import { randomUUID } from "node:crypto";
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
@@ -24,7 +23,7 @@ function sse(data: unknown) {
 
 export async function POST(req: Request) {
   const ip = clientKeyFromRequest(req);
-  if (!rateLimit(`ai:assist:${ip}`, 20, 60_000)) {
+  if (!rateLimit(`ai:assist:${ip}`, 30, 60_000)) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
@@ -47,7 +46,7 @@ export async function POST(req: Request) {
       let assembled = "";
       try {
         const completionStream = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
+          model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
           temperature: 0.2,
           stream: true,
           messages: [
@@ -66,29 +65,31 @@ export async function POST(req: Request) {
 
         const approxTokens = Math.min(32_000, Math.ceil((prompt.length + assembled.length) / 4));
 
-        const supabase = getSupabaseAdmin();
-        if (supabase) {
-          try {
-            await supabase.from("ai_usage").insert({
-              id: randomUUID(),
-              user_id: session?.user?.id ?? null,
-              model: "gpt-4o-mini",
+        try {
+          await prisma.aiUsage.create({
+            data: {
+              userId: session?.user?.id ?? null,
+              model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
               tokens: approxTokens,
-            });
-          } catch {
-            // ignore
-          }
+            },
+          });
+        } catch (e) {
+          console.warn("[api/ai/assist] AiUsage logging failed", e);
+        }
 
-          try {
-            await supabase.from("audit_logs").insert({
-              id: randomUUID(),
-              actor_id: session?.user?.id ?? null,
+        try {
+          await prisma.auditLog.create({
+            data: {
+              actorId: session?.user?.id ?? null,
               action: "ai.assist",
-              metadata: { promptLength: prompt.length, answerLength: assembled.length },
-            });
-          } catch {
-            // ignore
-          }
+              metadata: {
+                promptLength: prompt.length,
+                answerLength: assembled.length,
+              },
+            },
+          });
+        } catch (e) {
+          console.warn("[api/ai/assist] AuditLog failed", e);
         }
 
         controller.enqueue(encoder.encode(sse({ type: "done" })));

@@ -32,9 +32,15 @@ export default async function PortalAccessPage({ params }: Props) {
           <p>Single control point for account activity, messages, and service interactions.</p>
         </article>
       </div>
-      <div className="hero-actions" style={{ marginTop: "1rem" }}>
+      <div className="hero-actions" style={{ marginTop: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
+        <Link className="btn btn-primary btn-md" href={`/${locale}/register`}>
+          Create account
+        </Link>
         <Link className="btn btn-primary btn-md" href={`/${locale}/login?next=/${locale}/portal`}>
           Portal login
+        </Link>
+        <Link className="btn btn-ghost btn-md" href={`/${locale}/forgot-password`}>
+          Reset password
         </Link>
         <Link className="btn btn-ghost btn-md" href={`/${locale}/portal`}>
           Open dashboard

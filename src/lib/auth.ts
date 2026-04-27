@@ -7,6 +7,10 @@ import { prisma } from "@/lib/prisma";
 const DEMO_ADMIN_EMAIL = "mauritech@mauritech.tech";
 const DEMO_ADMIN_PASSWORD = "MauriTech@2026";
 
+function isDemoAdminLoginAllowed() {
+  return process.env.NODE_ENV !== "production" || process.env.DEMO_ADMIN_LOGIN === "true";
+}
+
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   providers: [
@@ -21,8 +25,7 @@ export const authOptions: NextAuthOptions = {
         const password = credentials?.password ?? "";
         if (!email || !password) return null;
 
-        // Beginner-friendly fallback admin account for control panel access.
-        if (email === DEMO_ADMIN_EMAIL && password === DEMO_ADMIN_PASSWORD) {
+        if (isDemoAdminLoginAllowed() && email === DEMO_ADMIN_EMAIL && password === DEMO_ADMIN_PASSWORD) {
           return {
             id: "demo-admin",
             email: DEMO_ADMIN_EMAIL,
@@ -39,12 +42,12 @@ export const authOptions: NextAuthOptions = {
             name: true,
             image: true,
             role: true,
-            passwordHash: true,
+            password: true,
           },
         });
-        if (!user?.passwordHash) return null;
+        if (!user?.password) return null;
 
-        const ok = await bcrypt.compare(password, user.passwordHash);
+        const ok = await bcrypt.compare(password, user.password);
         if (!ok) return null;
 
         return {

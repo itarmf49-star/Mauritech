@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
@@ -49,12 +50,12 @@ export default async function PortalAccountAuditPage({ params }: PortalAccountAu
 
       <div className="portal-grid-2">
         <div className="portal-card">
-          <h3 className="portal-card-title">{t(locale, "portalChangePassword")}</h3>
+          <h3 className="portal-card-title">{t(locale, "portalManageAccount")}</h3>
           <p className="muted">{t(locale, "portalChangePasswordHint")}</p>
           <div className="portal-actions" style={{ marginTop: "0.75rem" }}>
-            <button type="button" className="btn btn-ghost btn-md" disabled>
-              {t(locale, "portalChangePassword")}
-            </button>
+            <Link className="btn btn-primary btn-md" href={`/${locale}/portal/settings`}>
+              {t(locale, "portal.settings")}
+            </Link>
           </div>
         </div>
         <div className="portal-card">

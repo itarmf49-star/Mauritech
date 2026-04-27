@@ -72,6 +72,12 @@ export default function LoginPage() {
             </Button>
           </form>
 
+          <p className="muted" style={{ marginTop: "0.75rem" }}>
+            <Link className="inline-link" href={`/${locale}/forgot-password`}>
+              {t(locale, "authForgotPassword")}
+            </Link>
+          </p>
+
           <p className="muted" style={{ marginTop: "1rem" }}>
             {t(locale, "authNewHere")}{" "}
             <Link className="inline-link" href={`/${locale}/register`}>

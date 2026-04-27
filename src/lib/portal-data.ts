@@ -58,7 +58,7 @@ export async function getMessages(): Promise<PortalMessage[]> {
 }
 
 export async function getAccount(userId: string, email: string | null): Promise<PortalAccount> {
-  return { userId, email, status: "ACTIVE" };
+  return { userId, email, status: email ? "ACTIVE" : "LIMITED" };
 }
 
 export type PortalDashboardResponse = {

@@ -1,18 +1,20 @@
-import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
+import { ContactForm } from "@/components/contact/contact-form";
 import { siteConfig } from "@/lib/content";
+import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export default async function ContactPage({ params }: Props) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
-  void locale;
 
   return (
     <section className="container section">
       <p className="eyebrow">Contact MauriTech</p>
-      <h1 className="h1">Let us design your next infrastructure deployment</h1>
-      <div className="card-grid" style={{ marginTop: "1rem" }}>
+      <h1 className="h1">{t(locale, "contactFormTitle")}</h1>
+      <p className="muted">{siteConfig.description}</p>
+
+      <div className="card-grid" style={{ marginTop: "1.25rem", alignItems: "start", gap: "1rem" }}>
         <article className="card">
           <h2 className="h2">Company info</h2>
           <p>
@@ -23,14 +25,14 @@ export default async function ContactPage({ params }: Props) {
           </p>
           <p>
             Website:{" "}
-            <a className="inline-link" href="https://mauritech.tech">
+            <a className="inline-link" href={siteConfig.siteUrl}>
               mauritech.tech
             </a>
           </p>
           <p>
             Phone:{" "}
-            <a className="inline-link" href="tel:+22247774141">
-              +222 47 77 41 41
+            <a className="inline-link" href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}>
+              {siteConfig.phone}
             </a>
           </p>
         </article>
@@ -39,14 +41,18 @@ export default async function ContactPage({ params }: Props) {
           <p>Office hours: {siteConfig.officeHours}</p>
           <p>Availability: {siteConfig.availability}</p>
           <p>Response time: {siteConfig.responseTime}</p>
-          <p>Support promise: Critical incidents are triaged immediately with clear communication windows.</p>
         </article>
       </div>
-      <div className="hero-actions" style={{ marginTop: "1rem" }}>
+
+      <div style={{ marginTop: "2rem" }}>
+        <ContactForm locale={locale} />
+      </div>
+
+      <div className="hero-actions" style={{ marginTop: "2rem" }}>
         <a className="btn btn-primary btn-md" href={`mailto:${siteConfig.email}`}>
           Send email
         </a>
-        <a className="btn btn-ghost btn-md" href="tel:+22247774141">
+        <a className="btn btn-ghost btn-md" href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}>
           Call now
         </a>
       </div>
