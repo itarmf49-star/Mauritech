@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { Button, LinkButton } from "@/components/ui/button";
-import { FloorPlanViewer } from "@/components/coverage/floor-plan-viewer";
+import { NetworkDesignViewer } from "@/components/coverage/network-design-viewer";
 import type { CoverageResult } from "@/lib/coverage-types";
 import { defaultLocale, coverageQualityLabel, isLocale, t, type Locale } from "@/lib/i18n";
 
@@ -145,7 +145,7 @@ export default function CoverageCalculatorPage() {
 
         {result ? (
           <div className="grid gap-4" style={{ marginTop: "1rem" }}>
-            <FloorPlanViewer locale={locale} floorPlans={result.floorPlans} quality={result.coverageQuality} />
+            <NetworkDesignViewer locale={locale} floorPlans={result.floorPlans} quality={result.coverageQuality} />
 
             <div className="auth-card">
               <p className="field-label">{t(locale, "coverageResultsTitle")}</p>

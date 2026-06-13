@@ -145,72 +145,6 @@ const projectEntries = [
     youtubeId: "n2v0Jv7pRp8"
   },
   {
-    id: "2",
-    slug: "enterprise-cctv-smart-surveillance-deployment",
-    title: "Enterprise CCTV and Smart Surveillance Deployment",
-    category: "Security / Surveillance",
-    badge: "Field proven",
-    description:
-      "See the real installs: bullet, dome, and twin-perimeter builds from MauriTech crews — clean conduit, weatherproof boxes, and optics tuned for day/night clarity.",
-    summary:
-      "Real site photography from recent CCTV rollouts: HiLook, Hikvision, Dahua, Skyworth and more — mounted by MauriTech technicians who commission every lens by hand.",
-    overview:
-      "This portfolio strip shows how we execute on live sites: branded MauriTech field engineers in uniform, disciplined cable dressing, junction boxes sealed for desert heat and coastal humidity, and overlapping camera geometry that eliminates blind spots. From boutique ceilings to fence-line perimeter pairs, every frame is about workmanship you can trust.",
-    problem:
-      "Most rollouts fail quietly — loose anchors, moisture ingress, IR hotspots on walls, and nobody accountable on site. Customers deserve proof of craft, not stock imagery.",
-    solution:
-      "We pair enterprise-grade hardware with repeatable mounting standards: sealed entries, labeled homeruns, validated angles, and documented hand-over packs so your security team owns the story end-to-end.",
-    technologies: [
-      "HiLook / Hikvision / Dahua IP cameras",
-      "Weatherproof junction engineering",
-      "Perimeter twin-mount patterns",
-      "Night IR balancing",
-      "NVR & remote monitoring integration",
-    ],
-    scope: ["Residential & commercial façades", "Retail ceilings", "Industrial decks", "Fence & mast elevations"],
-    outcome:
-      "Sharper evidence capture, fewer truck rolls after commissioning, and stakeholders who actually recognize the quality difference on a walkthrough.",
-    image: "/images/projects/surveillance/cctv-01.png",
-    gallery: [
-      "/images/projects/surveillance/crew-01.png",
-      "/images/projects/surveillance/crew-02.png",
-      "/images/projects/surveillance/crew-03.png",
-      "/images/projects/surveillance/cctv-01.png",
-      "/images/projects/surveillance/cctv-02.png",
-      "/images/projects/surveillance/cctv-03.png",
-      "/images/projects/surveillance/cctv-04.png",
-      "/images/projects/surveillance/cctv-05.png",
-      "/images/projects/surveillance/cctv-06.png",
-      "/images/projects/surveillance/cctv-07.png",
-      "/images/projects/surveillance/cctv-08.png",
-      "/images/projects/surveillance/cctv-09.png",
-      "/images/projects/surveillance/cctv-10.png",
-      "/images/projects/surveillance/cctv-11.png",
-      "/images/projects/surveillance/cctv-12.png",
-    ],
-    galleryCaptions: [
-      "MauriTech technicians on site — coordinated commissioning in branded apparel so every visitor knows who owns quality on your campus.",
-      "Close coordination during installation: lenses aimed, cables dressed, and punch-list items closed before we energize PoE.",
-      "Team discipline — structured cabling, torque-checked anchors, and respectful site etiquette from arrival to sign-off.",
-      "Twin perimeter sweep — dual bullets on a weatherproof mast for overlapping exterior coverage left & right.",
-      "HiLook bullet clarity — UV-stable housing, sealed gland entries, and leads that stay serviceable for years.",
-      "Ornate ceiling dome — Hikvision discreet optics blended into boutique interiors without compromising IR reach.",
-      "Dahua outdoor precision — junction depth for surge paths and thermal breathing room under harsh sun.",
-      "Skyworth dual-light 3MP pair — mirrored mounts on architectural corners for ingress control with zero blind wedge.",
-      "Elevated mast reach — bullet on extension arm for yards, docks, or fence lines that demand height.",
-      "Industrial backbone — Hikvision on corrugated deck with bundled drops aligned to maintenance aisles.",
-      "HiLook active heartbeat — status LED confirms sensor power while PoE stays sealed behind the gasket.",
-      "Exterior corner geometry — drip loops, clipped runs, and flush junction boxes squared to stucco planes.",
-      "Commercial conduit spine — PVC homeruns across ceilings with bend radii that protect copper and fiber hauls.",
-      "Night perimeter duo — symmetric IR fill across pedestrian lanes and vehicle gates.",
-      "Minimal interior dome — security that disappears architecturally yet delivers forensic-grade streams.",
-    ],
-    teamHighlight:
-      "Spot our crews in MauriTech-branded uniforms on live sites — we wear the logo because we stand behind every anchor, gasket, and aim angle. Ask for the same squad on your renewal wave.",
-    youtubeId: "D6Ac5JpCHmI",
-    tags: ["cctv", "surveillance", "nvr", "remote monitoring", "perimeter analytics", "security"],
-  },
-  {
     id: "3",
     slug: "smart-building-automation-access-control",
     title: "Smart Building Automation and Access Control",
@@ -354,24 +288,24 @@ const projectEntries = [
   },
   {
     id: "8",
-    slug: "retail-security-monitoring",
-    title: "Retail Security Monitoring",
-    category: "Security",
-    description: "Retail security monitoring with centralized event visibility and evidence indexing.",
-    summary: "Multi-branch security intelligence for retail operations.",
-    overview: "Security analytics and monitoring were standardized across retail locations.",
-    problem: "Fragmented monitoring delayed incident response and reporting.",
-    solution: "Consolidated monitoring center with camera analytics and policy alerts.",
-    technologies: ["CCTV Analytics", "Centralized Monitoring", "Alert Workflows"],
-    scope: ["14 stores", "Control room setup"],
-    outcome: "Improved incident response time and stronger operational visibility.",
-    image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1400",
+    slug: "retail-wifi-coverage-rollout",
+    title: "Retail Wi-Fi Coverage Rollout",
+    category: "Wireless / Retail",
+    description: "Multi-branch Wi-Fi coverage with heatmap validation, guest segmentation, and centralized monitoring.",
+    summary: "Predictable in-store connectivity for POS, staff devices, and guest access.",
+    overview: "MauriTech standardized Wi-Fi design across retail branches with structured cabling back to each store network cabinet.",
+    problem: "Fragmented wireless left dead zones in aisles and unreliable POS connectivity during peak hours.",
+    solution: "Site surveys, UniFi access points, VLAN guest networks, and monitoring dashboards per branch.",
+    technologies: ["Wi-Fi 6 Access Points", "Structured Cabling", "Guest VLAN", "Central Monitoring"],
+    scope: ["14 stores", "Back-office network cabinets"],
+    outcome: "Full-floor coverage with measurable roam performance and fewer connectivity incidents.",
+    image: "/images/projects/wifi-rf-backbone/wifi-02.png",
     gallery: [
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1400",
-      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=1400",
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400"
+      "/images/projects/wifi-rf-backbone/wifi-01.png",
+      "/images/projects/wifi-rf-backbone/wifi-03.png",
+      "/images/projects/wifi-rf-backbone/wifi-05.png"
     ],
-    tags: ["retail", "security monitoring", "cctv analytics"]
+    tags: ["retail", "wifi", "coverage", "structured cabling"]
   },
   {
     id: "9",

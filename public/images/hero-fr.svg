@@ -28,12 +28,20 @@
     <line x1="1050" y1="0" x2="1050" y2="700"/>
   </g>
   <path d="M80 620 C200 580, 350 540, 500 500 S800 420, 1120 360" fill="none" stroke="#33B8FF" stroke-width="3" stroke-dasharray="8 6" opacity="0.7"/>
+  <g>
+    <rect x="548" y="248" width="104" height="140" rx="6" fill="rgba(10,20,35,0.9)" stroke="#33B8FF" stroke-width="2"/>
+    <rect x="560" y="262" width="80" height="8" rx="1" fill="rgba(51,184,255,0.35)"/>
+    <rect x="560" y="290" width="80" height="8" rx="1" fill="rgba(245,197,66,0.35)"/>
+    <circle cx="572" cy="266" r="2" fill="#33B8FF"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></circle>
+  </g>
   <circle cx="600" cy="320" r="80" fill="url(#goldGlow)"/>
   <rect x="560" y="280" width="80" height="80" rx="12" fill="rgba(212,175,55,0.15)" stroke="#D4AF37" stroke-width="2"/>
   <circle cx="600" cy="320" r="18" fill="#F5C542" filter="url(#glow)"/>
   <rect x="120" y="420" width="90" height="70" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
   <polygon points="120,420 165,380 210,420" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
-  <circle cx="165" cy="455" r="45" fill="url(#wifiGlow)"/>
+  <circle cx="165" cy="455" r="45" fill="url(#wifiGlow)">
+    <animate attributeName="r" values="38;52;38" dur="3s" repeatCount="indefinite"/>
+  </circle>
   <rect x="720" y="180" width="120" height="140" rx="2" fill="rgba(255,255,255,0.05)" stroke="#D4AF37" stroke-width="1.5"/>
   <rect x="380" y="160" width="100" height="160" rx="2" fill="rgba(255,255,255,0.05)" stroke="#D4AF37" stroke-width="1.5"/>
   <text x="80" y="80" fill="#D4AF37" font-family="Inter,Arial,sans-serif" font-size="28" font-weight="700">MauriTech</text>

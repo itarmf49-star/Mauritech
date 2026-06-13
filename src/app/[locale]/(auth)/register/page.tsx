@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -11,14 +12,24 @@ import { defaultLocale, isLocale, t } from "@/lib/i18n";
 export default function RegisterPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const rawLocale = typeof params?.locale === "string" ? params.locale : defaultLocale;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
+  const nextPath = searchParams?.get("next") ?? `/${locale}/portal`;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  function validateClient() {
+    const trimmedName = name.trim();
+    if (trimmedName.length < 2) return t(locale, "authNameMin");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return t(locale, "authEmailInvalid");
+    if (password.length < 8) return t(locale, "authPasswordMin");
+    return null;
+  }
 
   return (
     <section className="section auth-page">
@@ -31,25 +42,45 @@ export default function RegisterPage() {
             className="auth-form"
             onSubmit={async (e) => {
               e.preventDefault();
-              setLoading(true);
               setError(null);
+              const clientError = validateClient();
+              if (clientError) {
+                setError(clientError);
+                return;
+              }
+
+              setLoading(true);
               const res = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name: name.trim(), email: email.trim(), password }),
               });
-              setLoading(false);
               if (!res.ok) {
-                const body = await res.json().catch(() => null);
-                setError((body as { error?: string } | null)?.error ?? t(locale, "authRegistrationFailed"));
+                const body = (await res.json().catch(() => null)) as { error?: string } | null;
+                setLoading(false);
+                setError(body?.error ?? t(locale, "authRegistrationFailed"));
                 return;
               }
-              router.push(`/${locale}/login`);
+
+              const signInResult = await signIn("credentials", {
+                email: email.trim().toLowerCase(),
+                password,
+                redirect: false,
+              });
+              setLoading(false);
+
+              if (signInResult?.error) {
+                router.push(`/${locale}/login?next=${encodeURIComponent(nextPath)}`);
+                return;
+              }
+
+              router.push(nextPath);
+              router.refresh();
             }}
           >
             <label className="field">
               <span className="field-label">{t(locale, "authName")}</span>
-              <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
+              <input className="input" value={name} onChange={(e) => setName(e.target.value)} required minLength={2} />
             </label>
             <label className="field">
               <span className="field-label">{t(locale, "authEmail")}</span>
@@ -71,6 +102,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={8}
               />
             </label>
             {error ? <p className="auth-error">{error}</p> : null}

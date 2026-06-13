@@ -31,6 +31,18 @@
   <!-- Fiber backbone -->
   <path d="M80 620 C200 580, 350 540, 500 500 S800 420, 1120 360" fill="none" stroke="#33B8FF" stroke-width="3" stroke-dasharray="8 6" opacity="0.7"/>
   <path d="M80 640 C220 600, 400 560, 600 520 S900 460, 1120 400" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.5"/>
+  <!-- Network cabinet -->
+  <g>
+    <rect x="548" y="248" width="104" height="140" rx="6" fill="rgba(10,20,35,0.9)" stroke="#33B8FF" stroke-width="2"/>
+    <rect x="560" y="262" width="80" height="8" rx="1" fill="rgba(51,184,255,0.35)"/>
+    <rect x="560" y="276" width="80" height="8" rx="1" fill="rgba(51,184,255,0.25)"/>
+    <rect x="560" y="290" width="80" height="8" rx="1" fill="rgba(245,197,66,0.35)"/>
+    <rect x="560" y="304" width="80" height="8" rx="1" fill="rgba(51,184,255,0.2)"/>
+    <circle cx="572" cy="266" r="2" fill="#33B8FF"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></circle>
+    <circle cx="572" cy="294" r="2" fill="#F5C542"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle>
+    <text x="600" y="405" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Inter,Arial,sans-serif" font-size="10">NETWORK CABINET</text>
+    <line x1="600" y1="248" x2="600" y2="220" stroke="#33B8FF" stroke-width="2" opacity="0.6"/>
+  </g>
   <!-- Central hub -->
   <circle cx="600" cy="320" r="80" fill="url(#goldGlow)"/>
   <rect x="560" y="280" width="80" height="80" rx="12" fill="rgba(212,175,55,0.15)" stroke="#D4AF37" stroke-width="2"/>
@@ -40,7 +52,9 @@
   <g>
     <rect x="120" y="420" width="90" height="70" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
     <polygon points="120,420 165,380 210,420" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
-    <circle cx="165" cy="455" r="45" fill="url(#wifiGlow)"/>
+    <circle cx="165" cy="455" r="45" fill="url(#wifiGlow)">
+      <animate attributeName="r" values="38;52;38" dur="3s" repeatCount="indefinite"/>
+    </circle>
     <path d="M165 440 Q165 420 165 400" fill="none" stroke="#33B8FF" stroke-width="2" opacity="0.8"/>
     <path d="M150 445 Q165 425 180 445" fill="none" stroke="#33B8FF" stroke-width="2" opacity="0.6"/>
     <path d="M140 450 Q165 430 190 450" fill="none" stroke="#33B8FF" stroke-width="2" opacity="0.4"/>
@@ -49,13 +63,17 @@
   <g>
     <rect x="280" y="440" width="80" height="60" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
     <polygon points="280,440 320,405 360,440" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
-    <circle cx="320" cy="470" r="40" fill="url(#wifiGlow)"/>
+    <circle cx="320" cy="470" r="40" fill="url(#wifiGlow)">
+      <animate attributeName="r" values="34;48;34" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
     <line x1="320" y1="470" x2="600" y2="320" stroke="#33B8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.35"/>
   </g>
   <g>
     <rect x="820" y="430" width="95" height="65" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
     <polygon points="820,430 867.5,388 915,430" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
-    <circle cx="867" cy="462" r="42" fill="url(#wifiGlow)"/>
+    <circle cx="867" cy="462" r="42" fill="url(#wifiGlow)">
+      <animate attributeName="r" values="36;50;36" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
     <line x1="867" y1="462" x2="600" y2="320" stroke="#33B8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.35"/>
   </g>
   <!-- Government building -->

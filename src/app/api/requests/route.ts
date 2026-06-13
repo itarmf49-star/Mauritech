@@ -1,5 +1,7 @@
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
@@ -28,16 +30,19 @@ export async function POST(req: Request) {
   const parsed = BodySchema.safeParse(json);
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
+  const session = await getServerSession(authOptions);
+
   try {
     const request = await prisma.serviceRequest.create({
       data: {
         type: parsed.data.type,
         name: parsed.data.name,
-        email: parsed.data.email || null,
+        email: parsed.data.email || session?.user?.email || null,
         phone: parsed.data.phone || null,
         address: parsed.data.address || null,
         notes: parsed.data.notes || null,
         estimateId: parsed.data.estimateId || null,
+        userId: session?.user?.id ?? null,
         metadata: parsed.data.metadata ?? undefined,
       },
     });

@@ -5,9 +5,9 @@ import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
 import { prisma } from "@/lib/prisma";
 
 const RegisterSchema = z.object({
-  name: z.string().min(2).max(80),
-  email: z.string().email(),
-  password: z.string().min(8).max(200),
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(80),
+  email: z.string().trim().email("Enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters").max(200),
 });
 
 export async function POST(req: Request) {
@@ -19,7 +19,10 @@ export async function POST(req: Request) {
   const data = await req.json().catch(() => null);
   const parsed = RegisterSchema.safeParse(data);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    const firstError =
+      fieldErrors.name?.[0] ?? fieldErrors.email?.[0] ?? fieldErrors.password?.[0] ?? "Invalid input";
+    return NextResponse.json({ error: firstError, fields: fieldErrors }, { status: 400 });
   }
 
   const email = parsed.data.email.toLowerCase().trim();
@@ -31,19 +34,19 @@ export async function POST(req: Request) {
     if (existing) return NextResponse.json({ error: "Email already used" }, { status: 409 });
 
     const hashed = await bcrypt.hash(parsed.data.password, 12);
-    const user = await prisma.user.create({
-      data: {
-        name: parsed.data.name.trim(),
-        email,
-        password: hashed,
-        role: "CUSTOMER",
-      },
-      select: { id: true },
-    });
-    await prisma.clientAccount.upsert({
-      where: { userId: user.id },
-      update: {},
-      create: { userId: user.id },
+    await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          name: parsed.data.name.trim(),
+          email,
+          password: hashed,
+          role: "CUSTOMER",
+        },
+        select: { id: true },
+      });
+      await tx.clientAccount.create({
+        data: { userId: user.id },
+      });
     });
   } catch (error) {
     console.error("[api/auth/register]", error);

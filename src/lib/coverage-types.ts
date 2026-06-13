@@ -9,6 +9,8 @@ export type CoverageInput = {
   deviceCount: number;
 };
 
+export type RoomKind = "room" | "hallway" | "tech" | "storage";
+
 export type RoomRect = {
   id: string;
   x: number;
@@ -16,9 +18,12 @@ export type RoomRect = {
   width: number;
   height: number;
   label: string;
+  kind: RoomKind;
 };
 
-export type ApPlacement = {
+export type DeviceKind = "ROUTER" | "ACCESS_POINT" | "MESH_NODE" | "SWITCH";
+
+export type DevicePlacement = {
   id: string;
   floor: number;
   x: number;
@@ -26,6 +31,35 @@ export type ApPlacement = {
   radius: number;
   equipmentId: string;
   equipmentName: string;
+  deviceType: DeviceKind;
+};
+
+/** @deprecated Use DevicePlacement */
+export type ApPlacement = DevicePlacement;
+
+export type CableRun = {
+  id: string;
+  floor: number;
+  points: { x: number; y: number }[];
+  label?: string;
+};
+
+export type HeatmapGrid = {
+  cols: number;
+  rows: number;
+  /** Normalized signal strength 0–1 per cell, row-major */
+  values: number[];
+};
+
+export type FloorPlan = {
+  width: number;
+  height: number;
+  rooms: RoomRect[];
+  devices: DevicePlacement[];
+  cables: CableRun[];
+  heatmap: HeatmapGrid;
+  /** @deprecated */
+  aps?: DevicePlacement[];
 };
 
 export type EquipmentRecommendation = {
@@ -38,13 +72,6 @@ export type EquipmentRecommendation = {
   totalPrice: number;
   coverageRadiusM: number;
   maxUsers: number;
-};
-
-export type FloorPlan = {
-  width: number;
-  height: number;
-  rooms: RoomRect[];
-  aps: ApPlacement[];
 };
 
 export type CoverageResult = {

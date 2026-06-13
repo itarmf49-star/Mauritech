@@ -31,8 +31,8 @@ export async function GET() {
           },
           {
             userId,
-            title: "Enterprise CCTV and Smart Surveillance Deployment",
-            summary: "Security monitoring modernization with remote operations access.",
+            title: "Multi-Site Wi-Fi & RF Backbone",
+            summary: "Tower lifts, UniFi deployment, and backbone cabling across branch locations.",
             status: "active",
             progress: 64,
           },

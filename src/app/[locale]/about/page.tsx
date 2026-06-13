@@ -12,14 +12,14 @@ export default async function AboutPage({ params }: Props) {
       <p className="eyebrow">About MauriTech</p>
       <h1 className="h1">Infrastructure-first technology company</h1>
       <p className="muted">
-        MauriTech is a technology engineering company focused on secure digital infrastructure in Mauritania and West
-        Africa. We deliver network systems, cloud infrastructure, surveillance, and smart building automation with
-        enterprise-grade execution standards.
+        MauriTech is a technology engineering company focused on Internet distribution, Wi-Fi deployment, and network
+        infrastructure in Mauritania and West Africa. We deliver residential internet, fiber optic backbones, structured
+        cabling, and enterprise networking with field-proven execution standards.
       </p>
       <div className="card-grid" style={{ marginTop: "1rem" }}>
         <article className="card">
           <h2 className="h2">Who we are</h2>
-          <p>A multidisciplinary deployment team covering networking, cloud, cybersecurity, and automation.</p>
+          <p>A multidisciplinary deployment team covering fiber, Wi-Fi, structured cabling, and enterprise networking.</p>
         </article>
         <article className="card">
           <h2 className="h2">What we do</h2>

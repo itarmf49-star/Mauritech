@@ -36,6 +36,8 @@ export default async function PortalPage({ params }: PortalPageProps) {
     recentProjects: { id: string; title: string; status: string; progress: number }[];
     openTickets: number;
     documentsCount: number;
+    savedPlansCount: number;
+    recentRequests: { id: string; type: string; status: string; createdAt: string }[];
   };
 
   return (
@@ -68,6 +70,12 @@ export default async function PortalPage({ params }: PortalPageProps) {
             </Link>
             <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/documents`}>
               Documents
+            </Link>
+            <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/coverage`}>
+              {t(locale, "portalCoveragePlans")}
+            </Link>
+            <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/requests`}>
+              {t(locale, "portalServiceRequests")}
             </Link>
             <Link className="btn btn-ghost btn-md" href={`/${locale}/portal/tickets`}>
               Support tickets
@@ -118,6 +126,19 @@ export default async function PortalPage({ params }: PortalPageProps) {
           <p className="portal-card-kicker">Open tickets</p>
           <strong className="portal-card-big">{data.openTickets}</strong>
           <p className="muted">Support requests currently in progress.</p>
+        </div>
+        <div className="portal-card">
+          <p className="portal-card-kicker">{t(locale, "portalCoveragePlans")}</p>
+          <strong className="portal-card-big">{data.savedPlansCount}</strong>
+          <p className="muted">{t(locale, "coverageYourSavedPlans")}</p>
+          <Link className="inline-link" href={`/${locale}/portal/coverage`}>
+            {t(locale, "portalViewPlan")}
+          </Link>
+        </div>
+        <div className="portal-card">
+          <p className="portal-card-kicker">{t(locale, "portalServiceRequests")}</p>
+          <strong className="portal-card-big">{data.recentRequests.length}</strong>
+          <p className="muted">{t(locale, "portalServiceRequestsHint")}</p>
         </div>
         <div className="portal-card">
           <p className="portal-card-kicker">Documents</p>

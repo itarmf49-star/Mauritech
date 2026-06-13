@@ -81,7 +81,7 @@ export function ProjectsGrid({ items, locale }: ProjectsGridProps) {
         ))}
       </div>
       {filtered.length === 0 ? (
-        <p className="muted">No results found. Try searching by IPBX, CCTV, data center, VoIP, VLAN, or automation.</p>
+        <p className="muted">No results found. Try searching by Wi-Fi, fiber, VLAN, backbone, or structured cabling.</p>
       ) : null}
     </section>
   );
