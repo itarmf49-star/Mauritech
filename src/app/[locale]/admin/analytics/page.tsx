@@ -28,9 +28,11 @@ export default async function AdminAnalyticsPage({ params }: AdminAnalyticsPageP
   let views: { path: string; createdAt: Date }[] = [];
   let aiUsage7d = 0;
   let chatMessages7d = 0;
+  let serviceRequests7d = 0;
+  let coveragePlans7d = 0;
 
   try {
-    const [pv, ai, cm] = await Promise.all([
+    const [pv, ai, cm, sr, cp] = await Promise.all([
       prisma.pageView.findMany({
         where: { createdAt: { gte: since } },
         select: { path: true, createdAt: true },
@@ -38,10 +40,14 @@ export default async function AdminAnalyticsPage({ params }: AdminAnalyticsPageP
       }),
       prisma.aiUsage.count({ where: { createdAt: { gte: since } } }),
       prisma.chatMessage.count({ where: { createdAt: { gte: since } } }),
+      prisma.serviceRequest.count({ where: { createdAt: { gte: since } } }).catch(() => 0),
+      prisma.coveragePlan.count({ where: { createdAt: { gte: since } } }).catch(() => 0),
     ]);
     views = pv;
     aiUsage7d = ai;
     chatMessages7d = cm;
+    serviceRequests7d = sr;
+    coveragePlans7d = cp;
   } catch {
     views = [];
     aiUsage7d = 0;
@@ -88,6 +94,18 @@ export default async function AdminAnalyticsPage({ params }: AdminAnalyticsPageP
             {t(locale, "analyticsChatMessages7d")}
           </p>
           <strong>{chatMessages7d}</strong>
+        </div>
+        <div className="admin-kpi">
+          <p className="muted" style={{ margin: "0 0 0.35rem" }}>
+            Service requests (7d)
+          </p>
+          <strong>{serviceRequests7d}</strong>
+        </div>
+        <div className="admin-kpi">
+          <p className="muted" style={{ margin: "0 0 0.35rem" }}>
+            Coverage plans saved (7d)
+          </p>
+          <strong>{coveragePlans7d}</strong>
         </div>
       </div>
 

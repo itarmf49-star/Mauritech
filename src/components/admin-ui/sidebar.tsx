@@ -10,6 +10,10 @@ import {
   Users,
   Settings,
   X,
+  Router,
+  BarChart3,
+  ClipboardList,
+  DollarSign,
 } from "lucide-react";
 import { localePath, t, type Locale } from "@/lib/i18n";
 
@@ -38,10 +42,14 @@ export function AdminSidebar({
 
   const items: Item[] = [
     { key: "dashboard", href: localePath(locale, "/admin"), label: t(locale, "adminOverview"), Icon: LayoutDashboard },
+    { key: "equipment", href: localePath(locale, "/admin/equipment"), label: t(locale, "adminEquipment"), Icon: Router },
+    { key: "pricing", href: localePath(locale, "/admin/pricing"), label: t(locale, "adminPricing"), Icon: DollarSign },
+    { key: "requests", href: localePath(locale, "/admin/requests"), label: t(locale, "adminRequests"), Icon: ClipboardList },
     { key: "projects", href: localePath(locale, "/admin/projects"), label: t(locale, "adminProjects"), Icon: FolderKanban },
     { key: "messages", href: localePath(locale, "/admin/messages"), label: t(locale, "adminMessages"), Icon: MessageSquare },
     { key: "invoices", href: localePath(locale, "/admin/invoices"), label: t(locale, "adminInvoices"), Icon: Receipt },
     { key: "customers", href: localePath(locale, "/admin/customers"), label: t(locale, "adminCustomers"), Icon: Users },
+    { key: "analytics", href: localePath(locale, "/admin/analytics"), label: t(locale, "adminAnalytics"), Icon: BarChart3 },
     { key: "settings", href: localePath(locale, "/admin/settings"), label: t(locale, "adminSettings"), Icon: Settings },
   ];
 

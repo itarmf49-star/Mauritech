@@ -6,10 +6,6 @@ import { Container } from "@/components/ui/container";
 import { LinkButton } from "@/components/ui/button";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
-import { CameraWave } from "@/components/sections/home/camera-wave";
-import { ActivityRings } from "@/components/sections/home/activity-rings";
-import { EcommerceProductsButton } from "@/components/sections/home/ecommerce-products";
-import { BRAND_NAME } from "@/lib/config";
 
 type HomeHeroProps = {
   locale: Locale;
@@ -25,22 +21,14 @@ export function HomeHero({ locale }: HomeHeroProps) {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <p className="eyebrow">{t(locale, "heroEyebrow")}</p>
-          <h1 className="h1">
-            {BRAND_NAME}
-            <span className="h1-accent">{t(locale, "heroTitleAccent")}</span> for resilient business growth.
-          </h1>
-          <p className="lead">{t(locale, "heroLead")}</p>
-          <p className="muted">Networking • Infrastructure • Automation • Security</p>
+          <h1 className="h1">{t(locale, "heroHeadline")}</h1>
+          <p className="lead">{t(locale, "heroSubheadline")}</p>
+          <p className="muted">{t(locale, "heroTagline")}</p>
           <div className="hero-actions">
-            <LinkButton href={`/${locale}/projects`}>{t(locale, "heroViewShowcase")}</LinkButton>
-            <LinkButton href={`/${locale}/contact`} variant="ghost">
-              {t(locale, "heroContactSales")}
+            <LinkButton href={`/${locale}/coverage`}>{t(locale, "heroCalculateCoverage")}</LinkButton>
+            <LinkButton href={`/${locale}/contact?intent=consultation`} variant="ghost">
+              {t(locale, "heroFreeConsultation")}
             </LinkButton>
-            <EcommerceProductsButton />
-          </div>
-
-          <div style={{ marginTop: "1.25rem" }}>
-            <ActivityRings />
           </div>
         </motion.div>
 
@@ -73,18 +61,16 @@ export function HomeHero({ locale }: HomeHeroProps) {
               <p className="metric-value">99.9%</p>
             </div>
             <div className="hero-metric">
-              <p className="metric-label">{t(locale, "heroMetricSecurity")}</p>
-              <p className="metric-value">CSP / HSTS</p>
+              <p className="metric-label">{t(locale, "heroMetricCoverage")}</p>
+              <p className="metric-value">Wi-Fi 6</p>
             </div>
             <div className="hero-metric">
-              <p className="metric-label">{t(locale, "heroMetricPerformance")}</p>
-              <p className="metric-value">WebP / Lazy</p>
+              <p className="metric-label">{t(locale, "heroMetricResponse")}</p>
+              <p className="metric-value">&lt; 60m</p>
             </div>
           </div>
         </motion.div>
       </Container>
-
-      <CameraWave />
     </section>
   );
 }

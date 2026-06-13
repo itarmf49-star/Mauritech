@@ -4,8 +4,93 @@
       <stop offset="0%" stop-color="#0B0F14"/>
       <stop offset="100%" stop-color="#142235"/>
     </linearGradient>
+    <radialGradient id="wifiGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#33B8FF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#33B8FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="goldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F5C542" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#F5C542" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
   <rect width="1200" height="700" fill="url(#bg)"/>
-  <text x="80" y="260" fill="#D4AF37" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">MauriTech</text>
-  <text x="80" y="330" fill="#F2DE9A" font-family="Inter, Arial, sans-serif" font-size="34">Smart Infrastructure &amp; Security</text>
+  <!-- Grid -->
+  <g stroke="rgba(212,175,55,0.08)" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100"/><line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/><line x1="0" y1="600" x2="1200" y2="600"/>
+    <line x1="150" y1="0" x2="150" y2="700"/><line x1="300" y1="0" x2="300" y2="700"/>
+    <line x1="450" y1="0" x2="450" y2="700"/><line x1="600" y1="0" x2="600" y2="700"/>
+    <line x1="750" y1="0" x2="750" y2="700"/><line x1="900" y1="0" x2="900" y2="700"/>
+    <line x1="1050" y1="0" x2="1050" y2="700"/>
+  </g>
+  <!-- Fiber backbone -->
+  <path d="M80 620 C200 580, 350 540, 500 500 S800 420, 1120 360" fill="none" stroke="#33B8FF" stroke-width="3" stroke-dasharray="8 6" opacity="0.7"/>
+  <path d="M80 640 C220 600, 400 560, 600 520 S900 460, 1120 400" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.5"/>
+  <!-- Central hub -->
+  <circle cx="600" cy="320" r="80" fill="url(#goldGlow)"/>
+  <rect x="560" y="280" width="80" height="80" rx="12" fill="rgba(212,175,55,0.15)" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="600" cy="320" r="18" fill="#F5C542" filter="url(#glow)"/>
+  <text x="600" y="390" text-anchor="middle" fill="#F2DE9A" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600">CORE NETWORK</text>
+  <!-- Residential homes -->
+  <g>
+    <rect x="120" y="420" width="90" height="70" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
+    <polygon points="120,420 165,380 210,420" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
+    <circle cx="165" cy="455" r="45" fill="url(#wifiGlow)"/>
+    <path d="M165 440 Q165 420 165 400" fill="none" stroke="#33B8FF" stroke-width="2" opacity="0.8"/>
+    <path d="M150 445 Q165 425 180 445" fill="none" stroke="#33B8FF" stroke-width="2" opacity="0.6"/>
+    <path d="M140 450 Q165 430 190 450" fill="none" stroke="#33B8FF" stroke-width="2" opacity="0.4"/>
+    <line x1="165" y1="455" x2="600" y2="320" stroke="#33B8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+  </g>
+  <g>
+    <rect x="280" y="440" width="80" height="60" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
+    <polygon points="280,440 320,405 360,440" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
+    <circle cx="320" cy="470" r="40" fill="url(#wifiGlow)"/>
+    <line x1="320" y1="470" x2="600" y2="320" stroke="#33B8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.35"/>
+  </g>
+  <g>
+    <rect x="820" y="430" width="95" height="65" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.3)" stroke-width="1.5"/>
+    <polygon points="820,430 867.5,388 915,430" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="1"/>
+    <circle cx="867" cy="462" r="42" fill="url(#wifiGlow)"/>
+    <line x1="867" y1="462" x2="600" y2="320" stroke="#33B8FF" stroke-width="1" stroke-dasharray="4 4" opacity="0.35"/>
+  </g>
+  <!-- Government building -->
+  <g>
+    <rect x="720" y="180" width="120" height="140" rx="2" fill="rgba(255,255,255,0.05)" stroke="#D4AF37" stroke-width="1.5"/>
+    <rect x="740" y="200" width="20" height="25" fill="rgba(51,184,255,0.3)"/>
+    <rect x="770" y="200" width="20" height="25" fill="rgba(51,184,255,0.3)"/>
+    <rect x="800" y="200" width="20" height="25" fill="rgba(51,184,255,0.3)"/>
+    <rect x="755" y="250" width="50" height="70" fill="rgba(212,175,55,0.1)" stroke="#D4AF37"/>
+    <line x1="780" y1="180" x2="600" y2="320" stroke="#F5C542" stroke-width="1.5" opacity="0.5"/>
+    <text x="780" y="340" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Inter,Arial,sans-serif" font-size="10">GOVERNMENT</text>
+  </g>
+  <!-- Business building -->
+  <g>
+    <rect x="380" y="160" width="100" height="160" rx="2" fill="rgba(255,255,255,0.05)" stroke="#D4AF37" stroke-width="1.5"/>
+    <rect x="395" y="175" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="415" y="175" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="435" y="175" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="455" y="175" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="395" y="195" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="415" y="195" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="435" y="195" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <rect x="455" y="195" width="15" height="12" fill="rgba(51,184,255,0.25)"/>
+    <line x1="430" y1="160" x2="600" y2="320" stroke="#F5C542" stroke-width="1.5" opacity="0.5"/>
+    <text x="430" y="340" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Inter,Arial,sans-serif" font-size="10">BUSINESS</text>
+  </g>
+  <!-- Technician -->
+  <g>
+    <circle cx="520" cy="520" r="12" fill="#F5C542"/>
+    <rect x="508" y="532" width="24" height="35" rx="4" fill="rgba(212,175,55,0.3)" stroke="#D4AF37"/>
+    <rect x="500" y="545" width="40" height="8" rx="2" fill="rgba(51,184,255,0.4)" stroke="#33B8FF"/>
+    <circle cx="545" cy="548" r="6" fill="#33B8FF" filter="url(#glow)"/>
+    <text x="520" y="580" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="Inter,Arial,sans-serif" font-size="9">TECHNICIAN</text>
+  </g>
+  <!-- Title -->
+  <text x="80" y="80" fill="#D4AF37" font-family="Inter,Arial,sans-serif" font-size="28" font-weight="700">MauriTech</text>
+  <text x="80" y="115" fill="#F2DE9A" font-family="Inter,Arial,sans-serif" font-size="18">Internet • Wi-Fi • Network Infrastructure</text>
 </svg>

@@ -1,4 +1,5 @@
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
+import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +21,9 @@ type CreateUserBody = {
 };
 
 export async function GET() {
+  const staff = await getStaffSession();
+  if (!staff.ok) return staff.response;
+
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -39,6 +43,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const staff = await getStaffSession();
+  if (!staff.ok) return staff.response;
+
   let body: unknown;
   try {
     body = await req.json();

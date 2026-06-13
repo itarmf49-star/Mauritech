@@ -3,9 +3,9 @@
 export const siteConfig = {
   name: "MauriTech",
   siteUrl: "https://mauritech.tech",
-  title: "MauriTech | Infrastructure, Security and Smart Systems",
+  title: "MauriTech | Internet, Wi-Fi & Network Infrastructure",
   description:
-    "MauriTech designs and deploys secure, scalable infrastructure across Mauritania and West Africa: networking, cloud, surveillance, automation, and enterprise support.",
+    "MauriTech delivers residential internet, professional Wi-Fi, fiber optic installation, and enterprise network infrastructure across Mauritania.",
   phone: "+222 47 77 41 41",
   email: "mauritech@mauritech.tech",
   officeHours: "Mon-Sat, 08:30-19:00 GMT",
@@ -15,54 +15,60 @@ export const siteConfig = {
 
 export const services: Service[] = [
   {
-    id: "networks",
-    title: "Network Infrastructure",
-    icon: "Network",
-    description: "Enterprise LAN/WAN, structured cabling, switching, and resilient Wi-Fi architecture.",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200",
-    href: "/services#network-infrastructure",
+    id: "residential-internet",
+    title: "Residential Internet Solutions",
+    icon: "Home",
+    description: "Reliable home internet with optimized routing, speed tiers, and professional installation.",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200",
+    href: "/services/residential-internet",
   },
   {
-    id: "cloud",
-    title: "Server and Cloud Deployment",
-    icon: "Server",
-    description: "Hybrid cloud, backup policies, virtualization, and hardened server rollouts.",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200",
-    href: "/services#server-cloud-deployment",
+    id: "home-wifi",
+    title: "Home Wi-Fi Coverage",
+    icon: "Wifi",
+    description: "Whole-home Wi-Fi design, mesh systems, and coverage planning for every room.",
+    image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200",
+    href: "/services/home-wifi",
   },
   {
-    id: "cctv",
-    title: "CCTV and Surveillance",
-    icon: "Shield",
-    description: "Modern camera systems with secure remote viewing, alerts, retention, and evidence workflows.",
-    image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=1200",
-    href: "/services#cctv-surveillance",
-  },
-  {
-    id: "automation",
-    title: "Smart Building Automation",
+    id: "business-networks",
+    title: "Business Network Solutions",
     icon: "Building2",
-    description: "IoT automation for access, lighting, HVAC, and energy analytics.",
-    image: "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=1200",
-    href: "/services#smart-building-automation",
+    description: "Secure office LAN/WAN, guest networks, VLAN segmentation, and business-grade connectivity.",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200",
+    href: "/services/business-networks",
   },
   {
-    id: "consulting",
-    title: "Enterprise IT Consulting",
-    icon: "BriefcaseBusiness",
-    description: "Technical audits, roadmap design, governance, and digital transformation strategy.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200",
-    href: "/services#enterprise-it-consulting",
+    id: "infrastructure",
+    title: "Network Infrastructure Deployment",
+    icon: "Network",
+    description: "Structured cabling, switching, routing, and backbone design for campuses and institutions.",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200",
+    href: "/services/infrastructure",
   },
   {
-    id: "support",
-    title: "Maintenance and Support",
+    id: "fiber-optic",
+    title: "Fiber Optic Installation",
+    icon: "Cable",
+    description: "Fiber runs, splicing, termination, and high-capacity links for homes and enterprises.",
+    image: "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?w=1200",
+    href: "/services/fiber-optic",
+  },
+  {
+    id: "maintenance",
+    title: "Network Maintenance & Technical Support",
     icon: "LifeBuoy",
     description: "Preventive maintenance, remote diagnostics, on-site intervention, and SLA-backed support.",
     image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200",
-    href: "/services#maintenance-support",
+    href: "/services/maintenance",
   },
 ];
+
+const NETWORKING_PROJECT_SLUGS = new Set([
+  "enterprise-network-deployment",
+  "multi-site-wifi-infrastructure",
+  "structured-enterprise-network-infrastructure",
+]);
 
 const projectEntries = [
   {
@@ -393,24 +399,28 @@ const projectEntries = [
 
 export const projects: Project[] = projectEntries as unknown as Project[];
 
+export const networkingProjects: Project[] = projects.filter((p) => NETWORKING_PROJECT_SLUGS.has(p.slug));
+
+export const networkingProjectSlugs = NETWORKING_PROJECT_SLUGS;
+
 export const testimonials: Testimonial[] = [
   {
     id: "1",
     name: "Ahmed Mohamed",
     role: "Operations Manager",
-    quote: "MauriTech delivered a stable infrastructure with excellent execution quality.",
+    quote: "MauriTech delivered stable Wi-Fi and fiber connectivity with excellent execution quality.",
   },
   {
     id: "2",
     name: "Sara Aldakhil",
     role: "Facility Director",
-    quote: "The team modernized our security stack without downtime and with clear documentation.",
+    quote: "Our whole-building network was modernized without downtime and with clear documentation.",
   },
   {
     id: "3",
     name: "Fatimetou Sidi",
     role: "CIO, Logistics Group",
-    quote: "Execution was fast, structured, and aligned with enterprise governance standards.",
+    quote: "Structured cabling and backbone deployment were fast, structured, and enterprise-grade.",
   },
 ];
 

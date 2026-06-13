@@ -60,10 +60,9 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
     () => [
       { key: "navHome" as const, href: localePath(locale, "/") },
       { key: "navServices" as const, href: localePath(locale, "/services") },
+      { key: "navCoverage" as const, href: localePath(locale, "/coverage") },
       { key: "navProjects" as const, href: localePath(locale, "/projects") },
-      { key: "navIndustries" as const, href: localePath(locale, "/industries") },
       { key: "navAbout" as const, href: localePath(locale, "/about") },
-      { key: "navPortal" as const, href: localePath(locale, "/portal-access") },
       { key: "navContactLink" as const, href: localePath(locale, "/contact") },
     ],
     [locale],

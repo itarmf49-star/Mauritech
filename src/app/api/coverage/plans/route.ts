@@ -1,10 +1,10 @@
-import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 
 export const runtime = "nodejs";
 
@@ -14,6 +14,17 @@ const BodySchema = z.object({
   wallLossDb: z.number().int().min(0).max(40),
   recommendedAps: z.number().int().min(1).max(256),
   recommendedSwitches: z.number().int().min(1).max(256),
+  rooms: z.number().int().min(1).max(200).optional(),
+  wallType: z.string().optional(),
+  desiredSpeedMbps: z.number().int().optional(),
+  deviceCount: z.number().int().optional(),
+  recommendedOutlets: z.number().int().optional(),
+  floorPlanJson: z.unknown().optional(),
+  recommendationsJson: z.unknown().optional(),
+  equipmentCost: z.number().int().optional(),
+  installCost: z.number().int().optional(),
+  totalCost: z.number().int().optional(),
+  coverageQuality: z.string().optional(),
 });
 
 export async function GET() {
@@ -25,29 +36,17 @@ export async function GET() {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 503 });
-
-  const { data: plans, error } = await supabase
-    .from("coverage_plans")
-    .select("*")
-    .eq("user_id", session.user.id)
-    .order("created_at", { ascending: false })
-    .limit(50);
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-  const mapped = (plans ?? []).map((p) => ({
-    id: p.id,
-    areaSqm: p.area_sqm,
-    floors: p.floors,
-    wallLossDb: p.wall_loss_db,
-    recommendedAps: p.recommended_aps,
-    recommendedSwitches: p.recommended_switches,
-    createdAt: p.created_at,
-  }));
-
-  return NextResponse.json({ plans: mapped });
+  try {
+    const plans = await prisma.coveragePlan.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+    return NextResponse.json({ plans });
+  } catch (e) {
+    console.error("[api/coverage/plans GET]", e);
+    return databaseUnavailableResponse();
+  }
 }
 
 export async function POST(req: Request) {
@@ -59,25 +58,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 503 });
-
   const json = await req.json().catch(() => null);
   const parsed = BodySchema.safeParse(json);
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
-  const row = {
-    id: randomUUID(),
-    user_id: session.user.id,
-    area_sqm: parsed.data.areaSqm,
-    floors: parsed.data.floors,
-    wall_loss_db: parsed.data.wallLossDb,
-    recommended_aps: parsed.data.recommendedAps,
-    recommended_switches: parsed.data.recommendedSwitches,
-  };
-
-  const { data: plan, error } = await supabase.from("coverage_plans").insert(row).select().single();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ plan }, { status: 201 });
+  try {
+    const plan = await prisma.coveragePlan.create({
+      data: {
+        userId: session.user.id,
+        areaSqm: parsed.data.areaSqm,
+        floors: parsed.data.floors,
+        wallLossDb: parsed.data.wallLossDb,
+        recommendedAps: parsed.data.recommendedAps,
+        recommendedSwitches: parsed.data.recommendedSwitches,
+        rooms: parsed.data.rooms,
+        wallType: parsed.data.wallType,
+        desiredSpeedMbps: parsed.data.desiredSpeedMbps,
+        deviceCount: parsed.data.deviceCount,
+        recommendedOutlets: parsed.data.recommendedOutlets,
+        floorPlanJson: parsed.data.floorPlanJson ?? undefined,
+        recommendationsJson: parsed.data.recommendationsJson ?? undefined,
+        equipmentCost: parsed.data.equipmentCost,
+        installCost: parsed.data.installCost,
+        totalCost: parsed.data.totalCost,
+        coverageQuality: parsed.data.coverageQuality,
+      },
+    });
+    return NextResponse.json({ plan }, { status: 201 });
+  } catch (e) {
+    console.error("[api/coverage/plans POST]", e);
+    return databaseUnavailableResponse();
+  }
 }

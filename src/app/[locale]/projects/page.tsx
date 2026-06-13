@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Prisma } from "@prisma/client";
 import { ProjectsGrid } from "@/components/sections/projects-grid";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
-import { projects as fallbackProjects } from "@/lib/content";
+import { projects as fallbackProjects, networkingProjects, networkingProjectSlugs } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import type { ProjectTranslation } from "@prisma/client";
 
@@ -69,9 +69,9 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
     };
   });
   const bySlug = new Map<string, (typeof fallbackProjects)[number]>();
-  for (const item of fallbackProjects) bySlug.set(item.slug, item);
+  for (const item of networkingProjects) bySlug.set(item.slug, item);
   for (const item of dbItems) {
-    if (!bySlug.has(item.slug)) {
+    if (networkingProjectSlugs.has(item.slug) && !bySlug.has(item.slug)) {
       bySlug.set(item.slug, item as (typeof fallbackProjects)[number]);
     }
   }

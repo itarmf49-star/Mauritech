@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { prisma } from "@/lib/prisma";
 import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
+import { databaseUnavailableResponse } from "@/lib/api-db-response";
 
 export const runtime = "nodejs";
 
@@ -30,53 +31,47 @@ export async function POST(req: Request) {
   const parsed = BodySchema.safeParse(json);
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 503 });
-
   const { serviceSlug, quantity } = parsed.data;
 
-  const { data: service, error: sErr } = await supabase
-    .from("service_products")
-    .select("*")
-    .eq("slug", serviceSlug)
-    .eq("is_active", true)
-    .maybeSingle();
+  try {
+    const service = await prisma.serviceProduct.findFirst({
+      where: { slug: serviceSlug, isActive: true },
+    });
+    if (!service) return NextResponse.json({ error: "Unknown service" }, { status: 404 });
 
-  if (sErr || !service) return NextResponse.json({ error: "Unknown service" }, { status: 404 });
+    const rules = await prisma.pricingRule.findMany({
+      where: { isActive: true },
+      orderBy: { priority: "desc" },
+    });
 
-  const { data: rulesRaw } = await supabase
-    .from("pricing_rules")
-    .select("*")
-    .eq("is_active", true)
-    .order("priority", { ascending: false });
+    let unitPrice = service.basePrice;
+    let currency = service.currency;
 
-  const rules = rulesRaw ?? [];
+    for (const rule of rules) {
+      const match = rule.match as RuleMatch;
+      if (!ruleApplies(match, quantity)) continue;
 
-  let unitPrice = service.base_price as number;
-  let currency = service.currency as string;
-
-  for (const rule of rules) {
-    const match = rule.match as RuleMatch;
-    if (!ruleApplies(match, quantity)) continue;
-
-    if (match.kind === "qtyGte") {
-      if (typeof match.price === "number") unitPrice = match.price;
-      if (typeof match.discountPercent === "number") {
-        unitPrice = Math.round(unitPrice * (1 - match.discountPercent / 100));
+      if (match.kind === "qtyGte") {
+        if (typeof match.price === "number") unitPrice = match.price;
+        if (typeof match.discountPercent === "number") {
+          unitPrice = Math.round(unitPrice * (1 - match.discountPercent / 100));
+        }
+        currency = rule.currency;
       }
-      currency = rule.currency as string;
+      break;
     }
 
-    break;
+    const subtotal = unitPrice * quantity;
+
+    return NextResponse.json({
+      serviceSlug,
+      quantity,
+      currency,
+      unitPrice,
+      subtotal,
+    });
+  } catch (e) {
+    console.error("[api/pricing/quote POST]", e);
+    return databaseUnavailableResponse();
   }
-
-  const subtotal = unitPrice * quantity;
-
-  return NextResponse.json({
-    serviceSlug,
-    quantity,
-    currency,
-    unitPrice,
-    subtotal,
-  });
 }

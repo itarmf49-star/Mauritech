@@ -11,6 +11,8 @@ import { AppProviders } from "@/components/providers/app-providers";
 import { ChatDock } from "@/components/chat/chat-dock";
 import { AiAssistant } from "@/components/chat/ai-assistant";
 
+
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -102,6 +104,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           <ChatDock locale={locale} />
           <AiAssistant locale={locale} />
         </AppProviders>
+        
       </body>
     </html>
   );

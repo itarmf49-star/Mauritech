@@ -15,7 +15,7 @@ type ProjectsGridProps = {
 export function ProjectsGrid({ items, locale }: ProjectsGridProps) {
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
-  const filters = ["all", "ip telephony", "security", "networking", "automation", "data center"];
+  const filters = ["all", "networking", "wifi", "fiber"];
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((project) => {

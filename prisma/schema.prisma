@@ -379,17 +379,101 @@ model AuditLog {
 }
 
 model CoveragePlan {
-  id                    String   @id @default(cuid())
-  userId                String?
-  user                  User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  areaSqm               Int
-  floors                Int
-  wallLossDb            Int
+  id                  String   @id @default(cuid())
+  userId              String?
+  user                User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  areaSqm             Int
+  floors              Int
+  wallLossDb          Int
+  rooms               Int?
+  wallType            String?
+  desiredSpeedMbps    Int?
+  deviceCount         Int?
   recommendedAps      Int
-  recommendedSwitches   Int
-  createdAt             DateTime @default(now())
+  recommendedSwitches Int
+  recommendedOutlets  Int?
+  floorPlanJson       Json?
+  recommendationsJson Json?
+  equipmentCost       Int?
+  installCost         Int?
+  totalCost           Int?
+  coverageQuality     String?
+  createdAt           DateTime @default(now())
 
   @@index([userId])
+  @@index([createdAt])
+}
+
+enum EquipmentType {
+  ROUTER
+  ACCESS_POINT
+  MESH_NODE
+}
+
+model NetworkEquipment {
+  id              String        @id @default(cuid())
+  name            String
+  manufacturer    String
+  deviceType      EquipmentType
+  price           Int
+  coverageRadiusM Float
+  maxUsers        Int
+  imageUrl        String?
+  specs           Json?
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([isActive])
+  @@index([deviceType])
+}
+
+model InstallationPricing {
+  id        String   @id @default(cuid())
+  name      String
+  unit      String
+  basePrice Int
+  currency  String   @default("MRU")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([unit])
+}
+
+enum RequestType {
+  SITE_SURVEY
+  INSTALLATION
+  CONSULTATION
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model ServiceRequest {
+  id         String        @id @default(cuid())
+  type       RequestType
+  status     RequestStatus @default(NEW)
+  name       String
+  email      String?
+  phone      String?
+  address    String?
+  notes      String?
+  estimateId String?
+  userId     String?
+  metadata   Json?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([type])
+  @@index([status])
   @@index([createdAt])
 }
 
