@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
+import { optionalInputJsonSchema } from "@/lib/prisma-json";
 
 export const runtime = "nodejs";
 
@@ -19,8 +20,8 @@ const BodySchema = z.object({
   desiredSpeedMbps: z.number().int().optional(),
   deviceCount: z.number().int().optional(),
   recommendedOutlets: z.number().int().optional(),
-  floorPlanJson: z.unknown().optional(),
-  recommendationsJson: z.unknown().optional(),
+  floorPlanJson: optionalInputJsonSchema,
+  recommendationsJson: optionalInputJsonSchema,
   equipmentCost: z.number().int().optional(),
   installCost: z.number().int().optional(),
   totalCost: z.number().int().optional(),

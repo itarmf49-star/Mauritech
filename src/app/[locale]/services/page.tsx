@@ -1,17 +1,9 @@
 import Link from "next/link";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
+import { getServiceI18n } from "@/lib/service-i18n";
 import { services } from "@/lib/content";
 
 type Props = { params: Promise<{ locale: string }> };
-
-const SERVICE_I18N: Record<string, { title: string; description: string }> = {
-  "residential-internet": { title: "serviceResidentialTitle", description: "serviceResidentialDesc" },
-  "home-wifi": { title: "serviceHomeWifiTitle", description: "serviceHomeWifiDesc" },
-  "business-networks": { title: "serviceBusinessTitle", description: "serviceBusinessDesc" },
-  infrastructure: { title: "serviceInfrastructureTitle", description: "serviceInfrastructureDesc" },
-  "fiber-optic": { title: "serviceFiberTitle", description: "serviceFiberDesc" },
-  maintenance: { title: "serviceMaintenanceTitle", description: "serviceMaintenanceDesc" },
-};
 
 export default async function ServicesPage({ params }: Props) {
   const { locale: raw } = await params;
@@ -20,7 +12,12 @@ export default async function ServicesPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Service",
     provider: { "@type": "Organization", name: "MauriTech", url: "https://mauritech.tech" },
-    serviceType: services.map((service) => t(locale, SERVICE_I18N[service.id]?.title ?? "servicesTitle")).join(", "),
+    serviceType: services
+      .map((service) => {
+        const i18n = getServiceI18n(service.id);
+        return i18n ? t(locale, i18n.title) : service.title;
+      })
+      .join(", "),
     areaServed: ["Mauritania"],
   };
 
@@ -31,7 +28,7 @@ export default async function ServicesPage({ params }: Props) {
       <p className="muted">{t(locale, "servicesSubtitle")}</p>
       <div className="card-grid" style={{ marginTop: "1rem" }}>
         {services.map((service) => {
-          const i18n = SERVICE_I18N[service.id];
+          const i18n = getServiceI18n(service.id);
           return (
             <article className="card" key={service.id}>
               <p className="eyebrow">{service.icon}</p>

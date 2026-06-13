@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import type { CoverageResult, FloorPlan } from "@/lib/coverage-types";
-import type { Locale } from "@/lib/i18n";
-import { t } from "@/lib/i18n";
+import { coverageQualityLabel, type Locale, t } from "@/lib/i18n";
 
 type FloorPlanViewerProps = {
   locale: Locale;
@@ -33,7 +32,7 @@ export function FloorPlanViewer({ locale, floorPlans, quality }: FloorPlanViewer
           ))}
         </div>
         <span className={["pill", quality === "excellent" ? "pill-active" : ""].join(" ")}>
-          {t(locale, `coverageQuality_${quality}`)}
+          {coverageQualityLabel(locale, quality)}
         </span>
       </div>
       <svg viewBox={`0 0 ${plan.width} ${plan.height}`} className="w-full h-auto rounded-xl bg-[#0B0F14]" role="img" aria-label={t(locale, "coverageFloorPlan")}>

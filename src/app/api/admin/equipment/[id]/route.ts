@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
+import { optionalInputJsonSchema } from "@/lib/prisma-json";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
 
@@ -15,7 +16,7 @@ const UpdateSchema = z.object({
   coverageRadiusM: z.number().positive().max(500).optional(),
   maxUsers: z.number().int().positive().max(10_000).optional(),
   imageUrl: z.string().trim().max(2000).nullable().optional(),
-  specs: z.record(z.string(), z.unknown()).optional(),
+  specs: optionalInputJsonSchema,
   isActive: z.boolean().optional(),
 });
 

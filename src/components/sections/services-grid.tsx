@@ -2,20 +2,12 @@ import Link from "next/link";
 import type { Service } from "@/types/content";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
+import { getServiceI18n } from "@/lib/service-i18n";
 import { Building2, Cable, Home, LifeBuoy, Network, Wifi } from "lucide-react";
 
 type ServicesGridProps = {
   items: Service[];
   locale: Locale;
-};
-
-const SERVICE_I18N: Record<string, { title: string; description: string }> = {
-  "residential-internet": { title: "serviceResidentialTitle", description: "serviceResidentialDesc" },
-  "home-wifi": { title: "serviceHomeWifiTitle", description: "serviceHomeWifiDesc" },
-  "business-networks": { title: "serviceBusinessTitle", description: "serviceBusinessDesc" },
-  infrastructure: { title: "serviceInfrastructureTitle", description: "serviceInfrastructureDesc" },
-  "fiber-optic": { title: "serviceFiberTitle", description: "serviceFiberDesc" },
-  maintenance: { title: "serviceMaintenanceTitle", description: "serviceMaintenanceDesc" },
 };
 
 export function ServicesGrid({ items, locale }: ServicesGridProps) {
@@ -39,7 +31,7 @@ export function ServicesGrid({ items, locale }: ServicesGridProps) {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {items.map((item, i) => {
-          const i18n = SERVICE_I18N[item.id];
+          const i18n = getServiceI18n(item.id);
           const title = i18n ? t(locale, i18n.title) : item.title;
           const description = i18n ? t(locale, i18n.description) : item.description;
           const Icon = iconMap[item.icon as keyof typeof iconMap] ?? Network;

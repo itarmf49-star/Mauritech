@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/container";
 import { Button, LinkButton } from "@/components/ui/button";
 import { FloorPlanViewer } from "@/components/coverage/floor-plan-viewer";
 import type { CoverageResult } from "@/lib/coverage-types";
-import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
+import { defaultLocale, coverageQualityLabel, isLocale, t, type Locale } from "@/lib/i18n";
 
 export default function CoverageCalculatorPage() {
   const params = useParams();
@@ -153,7 +153,7 @@ export default function CoverageCalculatorPage() {
                 <li>{t(locale, "coverageAps")}: <strong style={{ color: "#F5C542" }}>{result.recommendedAps}</strong></li>
                 <li>{t(locale, "coverageSwitches")}: <strong style={{ color: "#33B8FF" }}>{result.recommendedSwitches}</strong></li>
                 <li>{t(locale, "coverageOutlets")}: {result.recommendedOutlets}</li>
-                <li>{t(locale, "coverageQuality")}: {t(locale, `coverageQuality_${result.coverageQuality}`)}</li>
+                <li>{t(locale, "coverageQuality")}: {coverageQualityLabel(locale, result.coverageQuality)}</li>
                 <li>{t(locale, "coverageEquipmentCost")}: {result.equipmentCost.toLocaleString()} {result.currency}</li>
                 <li>{t(locale, "coverageInstallCost")}: {result.installCost.toLocaleString()} {result.currency}</li>
                 <li>{t(locale, "coverageTotalCost")}: <strong style={{ color: "#F5C542" }}>{result.totalCost.toLocaleString()} {result.currency}</strong></li>

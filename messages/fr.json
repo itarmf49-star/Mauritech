@@ -18,18 +18,12 @@
   "heroHeadline": "Apporter un Internet fiable dans chaque coin",
   "heroSubheadline": "Solutions completes d'Internet, Wi-Fi et infrastructure reseau pour foyers, entreprises et institutions en Mauritanie.",
   "heroTagline": "Internet residentiel • Wi-Fi domestique • Fibre optique • Reseaux entreprise",
-  "heroTitleAccent": " construit une connectivite premium",
-  "heroLead": "Ingenierie reseau professionnelle, deploiement Wi-Fi, installation fibre et projets d'infrastructure avec execution de niveau corporate.",
   "heroImageAlt": "Visuel connectivite {brand}",
   "heroMetricUptime": "Disponibilite reseau",
   "heroMetricCoverage": "Standard Wi-Fi",
   "heroMetricResponse": "Premiere reponse",
-  "heroMetricSecurity": "Renforcement securite",
-  "heroMetricPerformance": "Performance",
   "heroCalculateCoverage": "Calculer ma couverture",
   "heroFreeConsultation": "Demander une consultation gratuite",
-  "heroViewShowcase": "Voir les projets",
-  "heroContactSales": "Contacter les ventes",
   "servicesTitle": "Services principaux",
   "servicesSubtitle": "Distribution Internet, deploiement Wi-Fi et infrastructure reseau specialisee pour chaque environnement.",
   "serviceResidentialTitle": "Solutions Internet residentielles",
@@ -77,9 +71,6 @@
   "project.videoAlt": "Apercu video du projet",
   "project.gallery": "Galerie",
   "common.backToHome": "Retour a l'accueil",
-  "sliderEyebrow": "Vitrine",
-  "sliderAriaLabel": "Carrousel vitrine",
-  "sliderNavAria": "Navigation du carrousel",
   "announcementsAriaLabel": "Annonces",
   "ctaEyebrow": "Construisons votre plateforme",
   "ctaTitle": "Demandez une installation professionnelle ou une consultation.",
@@ -307,10 +298,6 @@
   "coverageInstallCost": "Estimation installation",
   "coverageTotalCost": "Estimation totale",
   "coverageRequestSent": "Demande envoyee. Notre equipe vous contactera.",
-  "coverageWallLoss": "Perte estimee murs/obstacles (dB)",
-  "coverageRecommendedStart": "Point de depart recommande",
-  "coverageRecommendedText": "points d'acces interieurs (classe Wi-Fi 6) et",
-  "coverageRecommendedSwitchesText": "switches d'agregation PoE (classe 24 ports).",
   "coverageExportPrint": "Exporter / imprimer",
   "coverageCouldNotSave": "Impossible d'enregistrer le plan.",
   "coverageSaved": "Plan enregistre dans votre compte.",
@@ -338,6 +325,3 @@
   "aiThinking": "Reflexion...",
   "aiAsk": "Demander"
 }
-
-
-

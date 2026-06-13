@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { clientKeyFromRequest, rateLimit } from "@/lib/rate-limit";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
+import { optionalInputJsonSchema } from "@/lib/prisma-json";
 
 export const runtime = "nodejs";
 
@@ -14,7 +15,7 @@ const BodySchema = z.object({
   address: z.string().trim().max(500).optional(),
   notes: z.string().trim().max(5000).optional(),
   estimateId: z.string().optional(),
-  metadata: z.unknown().optional(),
+  metadata: optionalInputJsonSchema,
 });
 
 export async function POST(req: Request) {

@@ -18,18 +18,12 @@
   "heroHeadline": "إنترنت موثوق في كل زاوية",
   "heroSubheadline": "حلول متكاملة للإنترنت والواي فاي والبنية التحتية للشبكات للمنازل والشركات والمؤسسات في موريتانيا.",
   "heroTagline": "إنترنت منزلي • واي فاي • ألياف بصرية • شبكات مؤسسية",
-  "heroTitleAccent": " تبني اتصالا متميزا",
-  "heroLead": "هندسة شبكات احترافية ونشر واي فاي وتركيب ألياف ومشاريع بنية تحتية بمعايير عالية.",
   "heroImageAlt": "صورة الاتصال ل {brand}",
   "heroMetricUptime": "جاهزية الشبكة",
   "heroMetricCoverage": "معيار الواي فاي",
   "heroMetricResponse": "أول استجابة",
-  "heroMetricSecurity": "تعزيز الامن",
-  "heroMetricPerformance": "الاداء",
   "heroCalculateCoverage": "احسب تغطيتي",
   "heroFreeConsultation": "اطلب استشارة مجانية",
-  "heroViewShowcase": "عرض المشاريع",
-  "heroContactSales": "تواصل مع المبيعات",
   "servicesTitle": "الخدمات الاساسية",
   "servicesSubtitle": "توزيع إنترنت ونشر واي فاي وبنية تحتية شبكية متخصصة لكل بيئة.",
   "serviceResidentialTitle": "حلول الإنترنت المنزلي",
@@ -77,9 +71,6 @@
   "project.videoAlt": "معاينة فيديو المشروع",
   "project.gallery": "المعرض",
   "common.backToHome": "العودة للرئيسية",
-  "sliderEyebrow": "عرض",
-  "sliderAriaLabel": "عارض المشاريع",
-  "sliderNavAria": "تنقل الشرائح",
   "announcementsAriaLabel": "الاعلانات",
   "ctaEyebrow": "لنقم ببناء منصتك",
   "ctaTitle": "اطلب تركيبا احترافيا او استشارة.",
@@ -307,10 +298,6 @@
   "coverageInstallCost": "تقدير التركيب",
   "coverageTotalCost": "التقدير الإجمالي",
   "coverageRequestSent": "تم إرسال طلب الاستشارة. سيتواصل معك فريقنا قريباً.",
-  "coverageWallLoss": "خسارة الجدران/العوائق التقديرية (dB)",
-  "coverageRecommendedStart": "نقطة البداية المقترحة",
-  "coverageRecommendedText": "نقاط وصول داخلية (فئة Wi-Fi 6) و",
-  "coverageRecommendedSwitchesText": "محولات تجميع PoE (فئة 24 منفذا).",
   "coverageExportPrint": "تصدير / طباعة",
   "coverageCouldNotSave": "تعذر حفظ الخطة.",
   "coverageSaved": "تم حفظ الخطة في حسابك.",
@@ -338,6 +325,3 @@
   "aiThinking": "جار التفكير...",
   "aiAsk": "اسال"
 }
-
-
-
