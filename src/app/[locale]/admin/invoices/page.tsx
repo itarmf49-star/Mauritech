@@ -10,14 +10,18 @@ export default async function AdminInvoicesPage({ params }: PageProps) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
-  let customers: { id: string; email: string | null; name: string | null }[] = [];
+  let customers: {
+  id: number;
+  email: string | null;
+  name: string | null;
+}[] = [];
   let invoices: {
-    id: string;
-    amount: number;
-    status: string;
-    issuedAt: Date;
-    account: { userId: string; company: string | null };
-  }[] = [];
+  id: string;
+  amount: number;
+  status: string;
+  issuedAt: Date;
+  account: { userId: number; company: string | null };
+}[] = [];
 
   try {
     const [c, inv] = await Promise.all([
