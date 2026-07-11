@@ -18,30 +18,18 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  /// Bcrypt hash of the account password; maps to legacy column `passwordHash`.
-  password      String?   @map("passwordHash")
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(CUSTOMER)
-  phone         String?
-  info          String?
+  id       Int      @id @default(autoincrement())
+  name     String?
+  email    String   @unique
+  password String
+  role     Role     @default(CUSTOMER)
 
   accounts Account[]
   sessions Session[]
 
-  // Billing invoices (staff->customer)
   billingInvoices BillingInvoice[]
-
-  // Portal invoices (simple portal demo)
   clientAccounts ClientAccount[]
-
-  // Portal support messages (admin/client thread)
   messages Message[]
-
-  // AI / Chat
   chatMessages ChatMessage[]
   aiConversations AiConversation[]
   coveragePlans CoveragePlan[]
@@ -49,13 +37,14 @@ model User {
   supportTickets SupportTicket[]
   portalDocuments PortalDocument[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
 }
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -76,7 +65,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
