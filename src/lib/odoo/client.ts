@@ -1,28 +1,25 @@
-const ODOO_URL = process.env.ODOO_URL!;
+import { odooRequest } from "@/lib/odoo/client";
 
-export async function odooRequest(
-  model: string,
-  method: string,
-  args: any[] = []
-) {
-  const response = await fetch(`${ODOO_URL}/jsonrpc`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      jsonrpc: "2.0",
-      method: "call",
-      params: {
-        model,
-        method,
-        args,
-      },
-      id: 1,
-    }),
-  });
+export async function GET() {
+  try {
+    const partners = await odooRequest(
+      "res.partner",
+      "search_read",
+      [
+        [],
+        ["id", "name", "email"]
+      ]
+    );
 
-  const data = await response.json();
+    return Response.json({
+      success: true,
+      partners
+    });
 
-  return data.result;
+  } catch (error: any) {
+    return Response.json({
+      success: false,
+      error: error.message
+    });
+  }
 }
