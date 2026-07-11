@@ -35,8 +35,11 @@ export async function odooRequest(
   const data = await response.json();
 
   if (data.error) {
-    throw new Error(data.error.message);
-  }
+  console.error("ODOO ERROR:", JSON.stringify(data.error, null, 2));
 
-  return data.result;
+  throw new Error(
+    data.error.data?.message ||
+    data.error.message ||
+    "Odoo Server Error"
+  );
 }
