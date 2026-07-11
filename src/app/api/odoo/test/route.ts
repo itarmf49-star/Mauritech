@@ -7,10 +7,9 @@ export async function GET() {
       "search_read",
       [
         [],
-        {
-          fields: ["name"],
-          limit: 5,
-        },
+        ["name"],
+        0,
+        5
       ]
     );
 
