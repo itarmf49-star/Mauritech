@@ -19,6 +19,9 @@ model User {
   password String
   role     Role     @default(CUSTOMER)
 
+  phone    String?
+  info     String?
+
   accounts Account[]
   sessions Session[]
 
