@@ -15,8 +15,6 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
     id: string;
     email: string | null;
     name: string | null;
-    phone: string | null;
-    info: string | null;
     createdAt: Date;
   }[] = [];
 
@@ -25,7 +23,12 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
       where: { role: "CUSTOMER" },
       orderBy: { createdAt: "desc" },
       take: 100,
-      select: { id: true, email: true, name: true, phone: true, info: true, createdAt: true },
+    select: {
+  id: true,
+  email: true,
+  name: true,
+  createdAt: true,
+},
     });
   } catch {
     customers = [];
@@ -35,15 +38,12 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
     <section className="admin-page">
       <h1 className="h1">{t(locale, "adminCustomers")}</h1>
       <p className="muted">{t(locale, "adminRegisteredCustomers")}</p>
-
-      <div className="admin-table-wrap">
+       <div className="admin-table-wrap">
         <table className="admin-table">
           <thead>
             <tr>
               <th>{t(locale, "authName")}</th>
               <th>{t(locale, "authEmail")}</th>
-              <th>Phone</th>
-              <th>Info</th>
               <th>{t(locale, "adminCreated")}</th>
               <th>Edit</th>
             </tr>
@@ -53,10 +53,6 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
               <tr key={c.id}>
                 <td>{c.name ?? "-"}</td>
                 <td>{c.email ?? "-"}</td>
-                <td>{c.phone ?? "-"}</td>
-                <td style={{ maxWidth: 320, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {c.info ?? "-"}
-                </td>
                 <td>{c.createdAt.toISOString().slice(0, 10)}</td>
                 <td>
                   <Link className="inline-link" href={`/${locale}/admin/customers/${c.id}`}>
@@ -67,7 +63,7 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
             ))}
             {customers.length === 0 ? (
               <tr>
-                <td colSpan={6} className="muted">
+                <td colSpan={4} className="muted">
                   {t(locale, "adminNoCustomers")}
                 </td>
               </tr>
