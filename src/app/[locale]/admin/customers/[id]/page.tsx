@@ -11,7 +11,7 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
   let user = null;
   try {
     user = await prisma.user.findUnique({
-      where: { id },
+  where: { id: Number(id) },
       include: {
         clientAccounts: { include: { invoices: { take: 10, orderBy: { issuedAt: "desc" } } } },
         coveragePlans: { take: 10, orderBy: { createdAt: "desc" } },
