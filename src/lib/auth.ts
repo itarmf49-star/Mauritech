@@ -1,6 +1,5 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
 import type { Role } from "@/types/role";
 import { prisma } from "@/lib/prisma";
 
@@ -12,20 +11,39 @@ function isDemoAdminLoginAllowed() {
 }
 
 export const authOptions: NextAuthOptions = {
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+  },
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
+
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: {
+          label: "Email",
+          type: "email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
+
       async authorize(credentials) {
         const email = credentials?.email?.toLowerCase().trim();
         const password = credentials?.password ?? "";
-        if (!email || !password) return null;
 
-        if (isDemoAdminLoginAllowed() && email === DEMO_ADMIN_EMAIL && password === DEMO_ADMIN_PASSWORD) {
+        if (!email || !password) {
+          return null;
+        }
+
+        // Demo Admin (اختياري للتجربة)
+        if (
+          isDemoAdminLoginAllowed() &&
+          email === DEMO_ADMIN_EMAIL &&
+          password === DEMO_ADMIN_PASSWORD
+        ) {
           return {
             id: "demo-admin",
             email: DEMO_ADMIN_EMAIL,
@@ -34,8 +52,12 @@ export const authOptions: NextAuthOptions = {
           };
         }
 
+        // البحث عن المستخدم في Neon عبر Prisma
         const user = await prisma.user.findUnique({
-          where: { email },
+          where: {
+            email,
+          },
+
           select: {
             id: true,
             email: true,
@@ -45,36 +67,44 @@ export const authOptions: NextAuthOptions = {
             password: true,
           },
         });
-        if (!user?.password) return null;
 
-        const ok = await bcrypt.compare(password, user.password);
-        if (!ok) return null;
+        if (!user) {
+          return null;
+        }
+
+        // مقارنة كلمة السر مباشرة بدون تشفير
+        if (password !== user.password) {
+          return null;
+        }
 
         return {
-          id: user.id as string,
-          email: (user.email as string) ?? undefined,
-          name: (user.name as string) ?? undefined,
-          image: (user.image as string) ?? undefined,
-          role: user.role as Role,
+          id: String(user.id),
+          email: user.email ?? undefined,
+          name: user.name ?? undefined,
+          image: user.image ?? undefined,
+          role: (user.role as Role) ?? "CUSTOMER",
         };
       },
     }),
   ],
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user.role as Role) ?? "CUSTOMER";
+        token.role = user.role ?? "CUSTOMER";
+        token.id = user.id;
       }
+
       return token;
     },
+
     async session({ session, token }) {
       if (session.user) {
-        session.user.role = (token.role as Role) ?? "CUSTOMER";
-        if (token.sub) {
-          session.user.id = token.sub;
-        }
+        session.user.id = token.id as string;
+        session.user.role = token.role as Role;
       }
+
       return session;
     },
   },
-};
+};;
