@@ -8,11 +8,14 @@ type AdminCustomersPageProps = {
   params: Promise<{ locale: string }>;
 };
 
-export default async function AdminCustomersPage({ params }: AdminCustomersPageProps) {
+export default async function AdminCustomersPage({
+  params,
+}: AdminCustomersPageProps) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
+
   let customers: {
-    id: string;
+    id: number;
     email: string | null;
     name: string | null;
     createdAt: Date;
@@ -20,15 +23,19 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
 
   try {
     customers = await prisma.user.findMany({
-      where: { role: "CUSTOMER" },
-      orderBy: { createdAt: "desc" },
+      where: {
+        role: "CUSTOMER",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
       take: 100,
-    select: {
-  id: true,
-  email: true,
-  name: true,
-  createdAt: true,
-},
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+      },
     });
   } catch {
     customers = [];
@@ -37,8 +44,12 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
   return (
     <section className="admin-page">
       <h1 className="h1">{t(locale, "adminCustomers")}</h1>
-      <p className="muted">{t(locale, "adminRegisteredCustomers")}</p>
-       <div className="admin-table-wrap">
+
+      <p className="muted">
+        {t(locale, "adminRegisteredCustomers")}
+      </p>
+
+      <div className="admin-table-wrap">
         <table className="admin-table">
           <thead>
             <tr>
@@ -48,6 +59,7 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
               <th>Edit</th>
             </tr>
           </thead>
+
           <tbody>
             {customers.map((c) => (
               <tr key={c.id}>
@@ -55,12 +67,16 @@ export default async function AdminCustomersPage({ params }: AdminCustomersPageP
                 <td>{c.email ?? "-"}</td>
                 <td>{c.createdAt.toISOString().slice(0, 10)}</td>
                 <td>
-                  <Link className="inline-link" href={`/${locale}/admin/customers/${c.id}`}>
+                  <Link
+                    className="inline-link"
+                    href={`/${locale}/admin/customers/${c.id}`}
+                  >
                     Edit
                   </Link>
                 </td>
               </tr>
             ))}
+
             {customers.length === 0 ? (
               <tr>
                 <td colSpan={4} className="muted">
