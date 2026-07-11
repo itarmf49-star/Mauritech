@@ -8,7 +8,7 @@ export async function GET() {
       [
         [],
         {
-          fields: ["name", "email"],
+          fields: ["name"],
           limit: 5,
         },
       ]
@@ -16,13 +16,13 @@ export async function GET() {
 
     return Response.json({
       success: true,
-      data: result,
+      result,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     return Response.json({
       success: false,
-      error: error.message,
+      error: String(error),
     });
   }
 }
