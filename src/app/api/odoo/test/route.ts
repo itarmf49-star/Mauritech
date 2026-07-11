@@ -1,27 +1,42 @@
-import { odooRequest } from "@/lib/odoo/client";
+const ODOO_URL = process.env.ODOO_URL!;
+const ODOO_DB = process.env.ODOO_DB!;
+const ODOO_USERNAME = process.env.ODOO_USERNAME!;
+const ODOO_PASSWORD = process.env.ODOO_PASSWORD!;
 
-export async function GET() {
-  try {
-    const result = await odooRequest(
-      "res.partner",
-      "search_read",
-      [
-        [],
-        ["name"],
-        0,
-        5
-      ]
-    );
+export async function odooRequest(
+  model: string,
+  method: string,
+  args: any[] = []
+) {
+  const response = await fetch(`${ODOO_URL}/jsonrpc`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      method: "call",
+      params: {
+        service: "object",
+        method: "execute_kw",
+        args: [
+          ODOO_DB,
+          2,
+          ODOO_PASSWORD,
+          model,
+          method,
+          args,
+        ],
+      },
+      id: Date.now(),
+    }),
+  });
 
-    return Response.json({
-      success: true,
-      result,
-    });
+  const data = await response.json();
 
-  } catch (error) {
-    return Response.json({
-      success: false,
-      error: String(error),
-    });
+  if (data.error) {
+    throw new Error(data.error.message);
   }
+
+  return data.result;
 }
