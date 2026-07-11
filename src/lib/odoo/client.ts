@@ -1,4 +1,6 @@
 const ODOO_URL = process.env.ODOO_URL!;
+const ODOO_DB = process.env.ODOO_DB!;
+const ODOO_PASSWORD = process.env.ODOO_PASSWORD!;
 
 export async function odooRequest(
   model: string,
@@ -17,22 +19,31 @@ export async function odooRequest(
         service: "object",
         method: "execute_kw",
         args: [
-          process.env.ODOO_DB,
-          Number(process.env.ODOO_UID),
-          process.env.ODOO_PASSWORD,
+          ODOO_DB,
+          2,
+          ODOO_PASSWORD,
           model,
           method,
           args,
         ],
       },
-      id: 1,
+      id: Date.now(),
     }),
   });
 
   const data = await response.json();
 
   if (data.error) {
-    throw new Error(data.error.message);
+    console.error(
+      "ODOO ERROR:",
+      JSON.stringify(data.error, null, 2)
+    );
+
+    throw new Error(
+      data.error.data?.message ||
+      data.error.message ||
+      "Odoo Server Error"
+    );
   }
 
   return data.result;
