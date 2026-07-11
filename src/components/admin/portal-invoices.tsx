@@ -3,13 +3,17 @@
 import { useMemo, useState } from "react";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 
-type Customer = { id: string; email: string | null; name: string | null };
+type Customer = {
+  id: number;
+  email: string | null;
+  name: string | null;
+};
 type Invoice = {
   id: string;
   amount: number;
   status: string;
   issuedAt: string | Date;
-  account: { userId: string; company: string | null };
+  account: { userId: number; company: string | null
 };
 
 export function AdminPortalInvoices({
@@ -26,7 +30,7 @@ export function AdminPortalInvoices({
   const [customers] = useState(initialCustomers);
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
 
-  const [userId, setUserId] = useState(customers[0]?.id ?? "");
+  const [userId, setUserId] = useState<number>(customers[0]?.id ?? 0);
   const [company, setCompany] = useState("");
   const [status, setStatus] = useState("pending");
   const [amount, setAmount] = useState<number>(0);
