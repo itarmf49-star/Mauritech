@@ -59,13 +59,12 @@ export const authOptions: NextAuthOptions = {
           },
 
           select: {
-            id: true,
-            email: true,
-            name: true,
-            image: true,
-            role: true,
-            password: true,
-          },
+  id: true,
+  email: true,
+  name: true,
+  role: true,
+  password: true,
+},
         });
 
         if (!user) {
@@ -78,17 +77,16 @@ export const authOptions: NextAuthOptions = {
         }
 
         return {
-          id: String(user.id),
-          email: user.email ?? undefined,
-          name: user.name ?? undefined,
-          image: user.image ?? undefined,
-          role: (user.role as Role) ?? "CUSTOMER",
-        };
+  id: String(user.id),
+  email: user.email ?? undefined,
+  name: user.name ?? undefined,
+  role: (user.role as Role) ?? "CUSTOMER",
+};
       },
     }),
   ],
 
-  callbacks: {
+   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role ?? "CUSTOMER";
@@ -107,4 +105,4 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-};;
+};
