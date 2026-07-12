@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { defaultLocale, isLocale } from "@/lib/i18n";
-import { getNextAuthSecret } from "@/lib/auth";
+
+const locales = ["en", "fr", "ar"] as const;
+const defaultLocale = "en" as const;
+
+function isLocale(value: string): value is (typeof locales)[number] {
+  return locales.includes(value as (typeof locales)[number]);
+}
 
 const adminPaths = ["/admin"];
 
@@ -32,25 +37,17 @@ export async function middleware(req: NextRequest) {
   const first = segments[0];
   const locale = first && isLocale(first) ? first : defaultLocale;
 
-  const isAdminRoute =
+  const isProtectedRoute =
     pathname.startsWith(`/${locale}/admin`) ||
-    adminPaths.some((p) => pathname.startsWith(p));
+    adminPaths.some((p) => pathname.startsWith(p)) ||
+    pathname.includes("/portal");
 
-  const isPortalRoute = pathname.includes("/portal");
+  if (isProtectedRoute) {
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || "dev-secret-change-me",
+    });
 
-  if (isAdminRoute) {
-    const token = await getToken({ req, secret: getNextAuthSecret() });
-    const role = token?.role;
-    if (!token || (role !== "ADMIN" && role !== "EDITOR")) {
-      const url = req.nextUrl.clone();
-      url.pathname = `/${locale}/login`;
-      url.searchParams.set("next", pathname);
-      return NextResponse.redirect(url);
-    }
-  }
-
-  if (isPortalRoute) {
-    const token = await getToken({ req, secret: getNextAuthSecret() });
     if (!token) {
       const url = req.nextUrl.clone();
       url.pathname = `/${locale}/login`;
