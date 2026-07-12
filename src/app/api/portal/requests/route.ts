@@ -15,7 +15,7 @@ export async function GET() {
 
   try {
     const requests = await prisma.serviceRequest.findMany({
-      where: { userId: String(uid) },
+      where: { userId: uid },
       orderBy: { createdAt: "desc" },
       take: 50,
       select: {

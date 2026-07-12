@@ -31,6 +31,8 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
   const session = await getServerSession(authOptions);
+  const rawUserId = session?.user?.id;
+  const uid = rawUserId ? (typeof rawUserId === "string" ? Number(rawUserId) : (rawUserId as number)) : null;
 
   try {
     const request = await prisma.serviceRequest.create({
@@ -42,7 +44,7 @@ export async function POST(req: Request) {
         address: parsed.data.address || null,
         notes: parsed.data.notes || null,
         estimateId: parsed.data.estimateId || null,
-        userId: session?.user?.id ?? null,
+        userId: uid,
         metadata: parsed.data.metadata ?? undefined,
       },
     });

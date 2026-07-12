@@ -52,7 +52,7 @@ export async function POST(req: Request) {
         priority: body.priority?.trim() || "normal",
         updates: {
           create: {
-            authorId: String(uid),
+            authorId: uid,
             message: "Ticket created from client portal.",
           },
         },

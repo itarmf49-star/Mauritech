@@ -49,7 +49,7 @@ export async function GET() {
       prisma.portalDocument.count({ where: { userId: uid } }),
       prisma.coveragePlan.count({ where: { userId: uid } }),
       prisma.serviceRequest.findMany({
-        where: { userId: String(uid) },
+        where: { userId: uid },
         orderBy: { createdAt: "desc" },
         take: 3,
         select: { id: true, type: true, status: true, createdAt: true },

@@ -13,7 +13,7 @@ type Invoice = {
   amount: number;
   status: string;
   issuedAt: string | Date;
-  account: { userId: number; company: string | null
+  account: { userId: number; company: string | null };
 };
 
 export function AdminPortalInvoices({
@@ -101,7 +101,7 @@ export function AdminPortalInvoices({
         <div className="admin-form-grid">
           <label className="admin-field">
             <span className="admin-label">Customer</span>
-            <select className="admin-input" value={userId} onChange={(e) => setUserId(e.target.value)}>
+            <select className="admin-input" value={userId} onChange={(e) => setUserId(Number(e.target.value))}>
               {customers.map((c) => (
                 <option key={c.id} value={c.id}>
                   {(c.name ?? "Customer") + " — " + (c.email ?? "-")}
