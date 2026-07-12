@@ -11,9 +11,10 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
   try {
     let docs = await prisma.portalDocument.findMany({
-      where: { userId },
+      where: { userId: uid },
       orderBy: { createdAt: "desc" },
       take: 100,
     });
@@ -21,14 +22,14 @@ export async function GET() {
       await prisma.portalDocument.createMany({
         data: [
           {
-            userId,
+            userId: uid,
             title: "Project Scope and Timeline",
             fileType: "PDF",
             url: "/api/portal/invoices",
             sizeBytes: 1240000,
           },
           {
-            userId,
+            userId: uid,
             title: "Infrastructure Handover Checklist",
             fileType: "PDF",
             url: "/api/portal/messages",
@@ -37,7 +38,7 @@ export async function GET() {
         ],
       });
       docs = await prisma.portalDocument.findMany({
-        where: { userId },
+        where: { userId: uid },
         orderBy: { createdAt: "desc" },
         take: 100,
       });

@@ -19,9 +19,11 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
+
   try {
     const messages = await prisma.message.findMany({
-      where: { userId },
+      where: { userId: uid },
       orderBy: { createdAt: "desc" },
       take: 100,
     });
@@ -40,6 +42,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
+
   const json = (await req.json().catch(() => ({}))) as Body;
   const subject = json.subject?.trim() || "Customer portal message";
   const body = json.body?.trim();
@@ -53,7 +57,7 @@ export async function POST(req: Request) {
   try {
     const created = await prisma.message.create({
       data: {
-        userId,
+        userId: uid,
         content,
         isAdmin: false,
       },

@@ -21,8 +21,10 @@ export default async function PortalInvoicesPage({ params }: PageProps) {
     redirect(`/${locale}/login?next=/${locale}/portal/invoices`);
   }
 
+  const uid = typeof session.user.id === "string" ? Number(session.user.id) : session.user.id;
+
   const invoicesRaw = await prisma.invoice.findMany({
-    where: { account: { userId: session.user.id } },
+    where: { account: { userId: uid } },
     orderBy: { issuedAt: "desc" },
     include: { account: true },
   });

@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         try {
           await prisma.aiUsage.create({
             data: {
-              userId: session?.user?.id ?? null,
+              userId: session?.user?.id ? Number(session.user.id) : null,
               model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
               tokens: approxTokens,
             },
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
         try {
           await prisma.auditLog.create({
             data: {
-              actorId: session?.user?.id ?? null,
+              actorId: session?.user?.id ? Number(session.user.id) : null,
               action: "ai.assist",
               metadata: {
                 promptLength: prompt.length,

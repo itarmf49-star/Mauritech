@@ -70,7 +70,7 @@ export async function POST(req: Request) {
 
     const messageUserId =
       user.role === "ADMIN" && isNonEmptyString(targetUserId)
-        ? targetUserId
+        ? Number(targetUserId)
         : user.id;
 
     const message = await prisma.message.create({

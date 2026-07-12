@@ -11,10 +11,11 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
 
   try {
     let rows = await prisma.portalProject.findMany({
-      where: { userId },
+      where: { userId: uid },
       orderBy: { updatedAt: "desc" },
       take: 50,
     });
@@ -23,14 +24,14 @@ export async function GET() {
       await prisma.portalProject.createMany({
         data: [
           {
-            userId,
+            userId: uid,
             title: "Enterprise IPBX and Office VoIP Deployment",
             summary: "Telephony platform rollout with SIP and centralized administration.",
             status: "in-progress",
             progress: 82,
           },
           {
-            userId,
+            userId: uid,
             title: "Multi-Site Wi-Fi & RF Backbone",
             summary: "Tower lifts, UniFi deployment, and backbone cabling across branch locations.",
             status: "active",
@@ -39,7 +40,7 @@ export async function GET() {
         ],
       });
       rows = await prisma.portalProject.findMany({
-        where: { userId },
+        where: { userId: uid },
         orderBy: { updatedAt: "desc" },
         take: 50,
       });

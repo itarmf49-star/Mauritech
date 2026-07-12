@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     });
 
     await prisma.auditLog.create({
-      data: { actorId: staff.session.user.id, action: "serviceProduct.create", metadata: { id: created.id } },
+      data: { actorId: Number(staff.session.user.id), action: "serviceProduct.create", metadata: { id: created.id } },
     });
 
     return NextResponse.json({ product: created }, { status: 201 });

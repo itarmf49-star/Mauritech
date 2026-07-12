@@ -24,7 +24,7 @@ export async function GET(_req: Request, { params }: RouteParams) {
 
     if (!invoice) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    const isOwner = invoice.userId === session.user.id;
+    const isOwner = invoice.userId === Number(session.user.id);
     const isStaff = session.user.role === "ADMIN" || session.user.role === "EDITOR";
     if (!isOwner && !isStaff) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 

@@ -46,7 +46,7 @@ export async function GET() {
   }
   try {
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: Number(userId) },
       select: { id: true, name: true, email: true, phone: true, info: true, role: true },
     });
     if (!user) return NextResponse.json({ error: "Account not found" }, { status: 404 });
@@ -75,7 +75,7 @@ export async function PATCH(req: Request) {
 
   try {
     const existing = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: Number(userId) },
       select: { id: true, email: true, password: true },
     });
     if (!existing) return NextResponse.json({ error: "Account not found" }, { status: 404 });
@@ -97,7 +97,7 @@ export async function PATCH(req: Request) {
           where: { email: nextEmail },
           select: { id: true },
         });
-        if (taken && taken.id !== userId) {
+        if (taken && taken.id !== Number(userId)) {
           return NextResponse.json({ error: "This email is already in use" }, { status: 409 });
         }
       }
@@ -106,7 +106,7 @@ export async function PATCH(req: Request) {
     const hashed = body.newPassword ? await bcrypt.hash(body.newPassword, 12) : undefined;
 
     const user = await prisma.user.update({
-      where: { id: userId },
+      where: { id: Number(userId) },
       data: {
         ...(body.name !== undefined ? { name: body.name.trim() } : {}),
         ...(body.email !== undefined ? { email: body.email.toLowerCase().trim() } : {}),

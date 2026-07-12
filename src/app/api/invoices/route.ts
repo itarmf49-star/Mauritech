@@ -87,18 +87,18 @@ export async function POST(req: Request) {
 
     const { userId, company, amount, status, items, requestNote } = (body ?? {}) as CreatePortalInvoiceBody;
 
-    if (!isNonEmptyString(userId)) return new Response("userId is required", { status: 400 });
+    if (!isFiniteNumber(userId)) return new Response("userId is required", { status: 400 });
     if (!isFiniteNumber(amount) || amount <= 0) return new Response("amount must be > 0", { status: 400 });
     if (status != null && !isNonEmptyString(status)) return new Response("status must be a string", { status: 400 });
     if (items != null && !Array.isArray(items)) return new Response("items must be an array", { status: 400 });
 
     const clientAccount = await prisma.clientAccount.upsert({
-      where: { userId },
+      where: { userId: Number(userId) },
       update: {
         company: isNonEmptyString(company) ? company.trim() : undefined,
       },
       create: {
-        userId,
+        userId: Number(userId),
         company: isNonEmptyString(company) ? company.trim() : undefined,
       },
       select: { id: true },
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
     if (isNonEmptyString(requestNote)) {
       await prisma.message.create({
         data: {
-          userId,
+          userId: Number(userId),
           content: `Invoice created: ${invoice.id}\n\nRequest update:\n${requestNote.trim()}`,
           isAdmin: true,
         },

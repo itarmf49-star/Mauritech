@@ -17,13 +17,14 @@ export default async function PortalAccountAuditPage({ params }: PortalAccountAu
   const userId = session?.user?.id ?? "";
   const email = session?.user?.email ?? null;
 
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
   const [user, invoiceCount, messageCount] = await Promise.all([
     prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: uid },
       select: { role: true, phone: true, info: true },
     }),
-    prisma.invoice.count({ where: { account: { userId } } }),
-    prisma.message.count({ where: { userId } }),
+    prisma.invoice.count({ where: { account: { userId: uid } } }),
+    prisma.message.count({ where: { userId: uid } }),
   ]);
 
   return (

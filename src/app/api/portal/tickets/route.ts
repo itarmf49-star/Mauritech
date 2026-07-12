@@ -17,9 +17,10 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
   try {
     const tickets = await prisma.supportTicket.findMany({
-      where: { userId },
+      where: { userId: uid },
       orderBy: { createdAt: "desc" },
       take: 100,
       include: { updates: { orderBy: { createdAt: "asc" } } },
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
   const body = (await req.json().catch(() => ({}))) as Body;
   const title = body.title?.trim();
   const description = body.description?.trim();
@@ -44,13 +46,13 @@ export async function POST(req: Request) {
   try {
     const ticket = await prisma.supportTicket.create({
       data: {
-        userId,
+        userId: uid,
         title,
         description,
         priority: body.priority?.trim() || "normal",
         updates: {
           create: {
-            authorId: userId,
+            authorId: String(uid),
             message: "Ticket created from client portal.",
           },
         },

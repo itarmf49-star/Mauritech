@@ -11,15 +11,16 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const uid = typeof userId === "string" ? Number(userId) : (userId as number);
 
   try {
     const account = await prisma.clientAccount.findFirst({
-      where: { userId },
+      where: { userId: uid },
       select: { id: true, company: true, createdAt: true },
       orderBy: { createdAt: "desc" },
     });
 
-    const accountWhere = account ? { accountId: account.id } : { account: { userId } };
+    const accountWhere = account ? { accountId: account.id } : { account: { userId: uid } };
 
     const [totalInvoices, paidInvoices, pendingInvoices, recentInvoices, lastMessage, recentProjects, openTickets, documentsCount, savedPlansCount, recentRequests] = await Promise.all([
       prisma.invoice.count({ where: accountWhere }),
@@ -35,20 +36,20 @@ export async function GET() {
         },
       }),
       prisma.message.findFirst({
-        where: { userId },
+        where: { userId: uid },
         orderBy: { createdAt: "desc" },
       }),
       prisma.portalProject.findMany({
-        where: { userId },
+        where: { userId: uid },
         orderBy: { updatedAt: "desc" },
         take: 5,
         select: { id: true, title: true, status: true, progress: true },
       }),
-      prisma.supportTicket.count({ where: { userId, status: { not: "closed" } } }),
-      prisma.portalDocument.count({ where: { userId } }),
-      prisma.coveragePlan.count({ where: { userId } }),
+      prisma.supportTicket.count({ where: { userId: uid, status: { not: "closed" } } }),
+      prisma.portalDocument.count({ where: { userId: uid } }),
+      prisma.coveragePlan.count({ where: { userId: uid } }),
       prisma.serviceRequest.findMany({
-        where: { userId },
+        where: { userId: String(uid) },
         orderBy: { createdAt: "desc" },
         take: 3,
         select: { id: true, type: true, status: true, createdAt: true },

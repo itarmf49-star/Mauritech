@@ -14,7 +14,7 @@ const ItemSchema = z.object({
 });
 
 const CreateSchema = z.object({
-  userId: z.string().min(1),
+  userId: z.number().int().positive(),
   currency: z.string().min(1).max(8).optional(),
   notes: z.string().max(2000).optional(),
   items: z.array(ItemSchema).min(1).max(50),
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
 
     await prisma.auditLog.create({
       data: {
-        actorId: staff.session.user.id,
+        actorId: Number(staff.session.user.id),
         action: "invoice.create",
         metadata: { invoiceId: invoice.id, userId: invoice.userId },
       },

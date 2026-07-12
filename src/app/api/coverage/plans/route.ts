@@ -32,14 +32,15 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const key = `coverage:get:${session.user.id}`;
+  const uid = typeof session.user.id === "string" ? Number(session.user.id) : (session.user.id as number);
+  const key = `coverage:get:${String(uid)}`;
   if (!rateLimit(key, 120, 60_000)) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
   try {
     const plans = await prisma.coveragePlan.findMany({
-      where: { userId: session.user.id },
+      where: { userId: uid },
       orderBy: { createdAt: "desc" },
       take: 50,
     });
@@ -64,9 +65,11 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
   try {
+    const uid = typeof session.user.id === "string" ? Number(session.user.id) : (session.user.id as number);
+
     const plan = await prisma.coveragePlan.create({
       data: {
-        userId: session.user.id,
+        userId: uid,
         areaSqm: parsed.data.areaSqm,
         floors: parsed.data.floors,
         wallLossDb: parsed.data.wallLossDb,

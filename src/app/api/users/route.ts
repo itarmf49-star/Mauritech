@@ -64,6 +64,8 @@ export async function POST(req: Request) {
       data: {
         email: email.trim().toLowerCase(),
         name: isNonEmptyString(name) ? name.trim() : undefined,
+        // create with empty password by default; admin should require password reset
+        password: "",
         ...(isRoleInput(role) ? { role } : {}),
       },
       select: {
@@ -74,6 +76,15 @@ export async function POST(req: Request) {
         createdAt: true,
       },
     });
+
+    // Ensure a ClientAccount exists for the new user
+    try {
+      await prisma.clientAccount.upsert({
+        where: { userId: user.id },
+        update: {},
+        create: { userId: user.id, company: null },
+      });
+    } catch {}
 
     return Response.json(user, { status: 201 });
   } catch (e) {

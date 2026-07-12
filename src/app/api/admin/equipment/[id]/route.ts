@@ -38,7 +38,7 @@ export async function PUT(req: Request, context: RouteContext) {
     });
 
     await prisma.auditLog.create({
-      data: { actorId: staff.session.user.id, action: "equipment.update", metadata: { id } },
+      data: { actorId: Number(staff.session.user.id), action: "equipment.update", metadata: { id } },
     });
 
     return NextResponse.json({ equipment: updated });
@@ -58,7 +58,7 @@ export async function DELETE(_req: Request, context: RouteContext) {
     await prisma.networkEquipment.delete({ where: { id } });
 
     await prisma.auditLog.create({
-      data: { actorId: staff.session.user.id, action: "equipment.delete", metadata: { id } },
+      data: { actorId: Number(staff.session.user.id), action: "equipment.delete", metadata: { id } },
     });
 
     return NextResponse.json({ ok: true });
