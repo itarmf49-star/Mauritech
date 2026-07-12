@@ -7,10 +7,7 @@ export async function GET() {
       "search_read",
       [
         [],
-        {
-          fields: ["name", "email"],
-          limit: 5,
-        },
+        ["name", "email"]
       ]
     );
 
@@ -19,10 +16,10 @@ export async function GET() {
       partners,
     });
 
-  } catch (error:any) {
+  } catch (error: any) {
     return Response.json({
-      success:false,
-      error:error.message,
+      success: false,
+      error: error.message,
     });
   }
 }
