@@ -12,26 +12,37 @@ const RegisterSchema = z.object({
 
 export async function POST(req: Request) {
   const ip = clientKeyFromRequest(req);
+  let body: unknown = null;
+  let email: string | null = null;
+
   if (!rateLimit(`auth:register:${ip}`, 8, 60 * 60_000)) {
+    console.log("REGISTER BODY:", body);
+    console.log("REGISTER EMAIL:", email);
     return NextResponse.json({ error: "Too many registration attempts" }, { status: 429 });
   }
 
-  const data = await req.json().catch(() => null);
-  const parsed = RegisterSchema.safeParse(data);
+  body = await req.json().catch(() => null);
+  const parsed = RegisterSchema.safeParse(body);
   if (!parsed.success) {
     const fieldErrors = parsed.error.flatten().fieldErrors;
     const firstError =
       fieldErrors.name?.[0] ?? fieldErrors.email?.[0] ?? fieldErrors.password?.[0] ?? "Invalid input";
+    console.log("REGISTER BODY:", body);
+    console.log("REGISTER EMAIL:", email);
     return NextResponse.json({ error: firstError, fields: fieldErrors }, { status: 400 });
   }
 
-  const email = parsed.data.email.toLowerCase().trim();
+  email = parsed.data.email.toLowerCase().trim();
   try {
     const existing = await prisma.user.findUnique({
       where: { email },
       select: { id: true },
     });
-    if (existing) return NextResponse.json({ error: "Email already used" }, { status: 409 });
+    if (existing) {
+      console.log("REGISTER BODY:", body);
+      console.log("REGISTER EMAIL:", email);
+      return NextResponse.json({ error: "Email already used" }, { status: 409 });
+    }
 
     const hashed = await bcrypt.hash(parsed.data.password, 12);
     await prisma.$transaction(async (tx) => {
@@ -49,9 +60,13 @@ export async function POST(req: Request) {
       });
     });
   } catch (error) {
-    console.error("[api/auth/register]", error);
+    console.error("REGISTER ERROR:", error);
+    console.log("REGISTER BODY:", body);
+    console.log("REGISTER EMAIL:", email);
     return NextResponse.json({ error: "Could not create account" }, { status: 500 });
   }
 
+  console.log("REGISTER BODY:", body);
+  console.log("REGISTER EMAIL:", email);
   return NextResponse.json({ ok: true }, { status: 201 });
 }
