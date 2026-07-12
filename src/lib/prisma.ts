@@ -1,6 +1,12 @@
+import dotenv from "dotenv";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
+
+const envPaths = [".env.local", ".env"];
+for (const envPath of envPaths) {
+  dotenv.config({ path: envPath });
+}
 
 function isAccelerateUrl(url: string): boolean {
   return url.startsWith("prisma://") || url.startsWith("prisma+postgres://");
@@ -12,6 +18,10 @@ function isDirectPostgresUrl(url: string): boolean {
 }
 
 function createPrismaClient(): PrismaClient {
+  for (const envPath of [".env.local", ".env"]) {
+    dotenv.config({ path: envPath });
+  }
+
   const url = process.env.DATABASE_URL?.trim();
   if (!url) {
     throw new Error("DATABASE_URL is not set");

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { defaultLocale, isLocale } from "@/lib/i18n";
+import { getNextAuthSecret } from "@/lib/auth";
 
 const adminPaths = ["/admin"];
 
@@ -38,7 +39,7 @@ export async function middleware(req: NextRequest) {
   const isPortalRoute = pathname.includes("/portal");
 
   if (isAdminRoute) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const token = await getToken({ req, secret: getNextAuthSecret() });
     const role = token?.role;
     if (!token || (role !== "ADMIN" && role !== "EDITOR")) {
       const url = req.nextUrl.clone();
@@ -49,7 +50,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (isPortalRoute) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const token = await getToken({ req, secret: getNextAuthSecret() });
     if (!token) {
       const url = req.nextUrl.clone();
       url.pathname = `/${locale}/login`;
