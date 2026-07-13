@@ -1,6 +1,9 @@
 import { odooRequest } from "@/lib/odoo/client";
+import BuyButton from "@/components/shop/BuyButton";
+
 
 export default async function ShopPage() {
+
 
   const products = await odooRequest(
     "product.template",
@@ -14,7 +17,8 @@ export default async function ShopPage() {
           "id",
           "name",
           "list_price",
-          "image_1920"
+          "image_1920",
+          "qty_available"
         ],
         limit: 50
       }
@@ -22,53 +26,124 @@ export default async function ShopPage() {
   );
 
 
+
   return (
+
     <div className="p-8">
 
-      <h1 className="text-3xl font-bold mb-6">
-        Shop
+
+      <h1 className="text-4xl font-bold mb-8">
+        متجر Mauritech
       </h1>
 
 
-      <div className="grid grid-cols-3 gap-6">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
 
         {products.map((product:any)=>(
-          <div 
+
+
+          <div
+
             key={product.id}
-            className="border rounded p-4"
+
+            className="border rounded-xl overflow-hidden shadow-sm bg-white"
+
           >
 
-            <h2 className="font-bold">
-              {product.name}
-            </h2>
-
-            <p>
-              {product.list_price} MRU
-            </p>
 
 
-            <form action="/api/shop/order" method="POST">
+            {product.image_1920 ? (
 
-              <input 
-                type="hidden"
-                name="productId"
-                value={product.id}
+              <img
+
+                src={
+                  `data:image/png;base64,${product.image_1920}`
+                }
+
+                alt={product.name}
+
+                className="w-full h-56 object-contain p-4"
+
+              />
+
+            ) : (
+
+              <div className="w-full h-56 flex items-center justify-center bg-gray-100">
+
+                No Image
+
+              </div>
+
+            )}
+
+
+
+            <div className="p-5">
+
+
+              <h2 className="text-xl font-bold mb-3">
+
+                {product.name}
+
+              </h2>
+
+
+
+              <p className="text-lg mb-2">
+
+                السعر:
+
+                <span className="font-bold ml-2">
+
+                  {product.list_price}
+
+                </span>
+
+                {" "}MRU
+
+              </p>
+
+
+
+              <p className="text-sm text-gray-600 mb-5">
+
+                المخزون:
+
+                {" "}
+
+                {product.qty_available ?? 0}
+
+              </p>
+
+
+
+
+              <BuyButton
+
+                productId={product.id}
+
               />
 
 
-              <button
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                شراء
-              </button>
 
-            </form>
+            </div>
+
+
 
           </div>
+
+
         ))}
+
+
 
       </div>
 
+
     </div>
+
   );
+
 }
