@@ -2,28 +2,75 @@
 
 import { useEffect, useState } from "react";
 import BuyButton from "@/components/shop/BuyButton";
+import type { Locale } from "@/lib/i18n";
 
 
-export default function StoreFront() {
+type StoreFrontProps = {
+  locale: Locale;
+};
+
+
+
+export default function StoreFront({
+  locale,
+}: StoreFrontProps) {
 
 
   const [products, setProducts] = useState<any[]>([]);
 
 
 
-  useEffect(() => {
+  const content = {
 
+    ar: {
+      title: "متجر Mauritech",
+      description:
+        "معدات الشبكات والاتصالات وحلول البنية التحتية المتوفرة مباشرة من مخزوننا.",
+      price: "السعر",
+      video:
+        "فيديو حلول Mauritech",
+    },
+
+
+    fr: {
+      title: "Boutique Mauritech",
+      description:
+        "Équipements réseau, connectivité et solutions d’infrastructure disponibles directement depuis notre stock.",
+      price: "Prix",
+      video:
+        "Vidéo des solutions Mauritech",
+    },
+
+
+    en: {
+      title: "Mauritech Store",
+      description:
+        "Networking equipment, connectivity and infrastructure solutions available directly from our stock.",
+      price: "Price",
+      video:
+        "Mauritech Solutions Video",
+    },
+
+  };
+
+
+
+  const text = content[locale];
+
+
+
+  useEffect(() => {
 
     async function loadProducts() {
 
       try {
 
-        const res = await fetch(
-          "/api/odoo/products"
-        );
+        const res =
+          await fetch("/api/odoo/products");
 
 
-        const data = await res.json();
+        const data =
+          await res.json();
 
 
         setProducts(
@@ -31,10 +78,9 @@ export default function StoreFront() {
         );
 
 
-      } catch (error) {
+      } catch(error) {
 
         console.error(
-          "Store products error:",
           error
         );
 
@@ -58,16 +104,17 @@ export default function StoreFront() {
         bg-[#0B1220]
         text-white
         py-20
-        overflow-hidden
       "
     >
 
+      <div
+        className="
+          max-w-7xl
+          mx-auto
+          px-6
+        "
+      >
 
-      <div className="max-w-7xl mx-auto px-6">
-
-
-
-        {/* عنوان المتجر */}
 
         <div className="text-center mb-12">
 
@@ -76,24 +123,25 @@ export default function StoreFront() {
             className="
               text-4xl
               font-bold
-              mb-4
             "
           >
-            متجر Mauritech
-          </h2>
 
+            {text.title}
+
+          </h2>
 
 
           <p
             className="
+              mt-4
               text-gray-300
-              max-w-2xl
+              max-w-3xl
               mx-auto
             "
           >
-            معدات الشبكات والاتصالات
-            وحلول البنية التحتية
-            المتوفرة مباشرة من مخزوننا.
+
+            {text.description}
+
           </p>
 
 
@@ -102,19 +150,15 @@ export default function StoreFront() {
 
 
 
-        {/* مكان الفيديو */}
-
+        {/* Video Area */}
 
         <div
           className="
+            h-[350px]
             rounded-2xl
             overflow-hidden
-            mb-14
             bg-black
-            h-[350px]
-            flex
-            items-center
-            justify-center
+            mb-14
           "
         >
 
@@ -139,6 +183,7 @@ export default function StoreFront() {
               type="video/mp4"
             />
 
+
           </video>
 
 
@@ -148,7 +193,7 @@ export default function StoreFront() {
 
 
 
-        {/* المنتجات المتحركة */}
+        {/* Products Slider */}
 
 
         <div
@@ -156,15 +201,13 @@ export default function StoreFront() {
             flex
             gap-6
             overflow-x-auto
-            scroll-smooth
             pb-6
           "
         >
 
 
-          {
-            products.map(
-              (product:any)=>(
+          {products.map(
+            (product:any)=>(
 
 
               <div
@@ -177,84 +220,88 @@ export default function StoreFront() {
                   text-black
                   rounded-2xl
                   p-5
-                  shadow-lg
                   transition
-                  hover:-translate-y-2
+                  hover:scale-105
                 "
 
               >
 
 
-
-                {
-                  product.image_1920 &&
+                {product.image_1920 && (
 
                   <img
 
                     src={
-                      `data:image/png;base64,${product.image_1920}`
+                    `data:image/png;base64,${product.image_1920}`
                     }
 
                     alt={product.name}
 
                     className="
-                      w-full
                       h-48
+                      w-full
                       object-contain
-                      mb-4
                     "
 
                   />
 
-                }
+                )}
 
 
 
                 <h3
                   className="
                     font-bold
-                    text-lg
+                    mt-4
                   "
                 >
+
                   {product.name}
+
                 </h3>
 
 
 
                 <p
                   className="
-                    mt-2
-                    mb-4
                     text-blue-600
                     font-bold
+                    mt-3
                   "
                 >
+
+                  {text.price}:
+                  {" "}
                   {product.list_price}
                   {" "}
                   MRU
+
                 </p>
 
 
 
-                <BuyButton
+                <div className="mt-5">
 
-                  productId={
-                    product.id
-                  }
 
-                />
+                  <BuyButton
+                    productId={
+                      product.id
+                    }
+                  />
 
+
+                </div>
 
 
               </div>
 
 
-            ))
-          }
+            )
+
+          )}
 
 
         </div>
-
 
 
       </div>
