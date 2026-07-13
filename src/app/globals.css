@@ -1601,31 +1601,30 @@ body {
 
 .store-background::before {
 
-  content: "";
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  inset: 0;
+  inset:0;
 
   background-image:
     linear-gradient(
-      rgba(255,255,255,0.05) 1px,
+      rgba(255,255,255,0.04) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(255,255,255,0.05) 1px,
+      rgba(255,255,255,0.04) 1px,
       transparent 1px
     );
 
-  background-size:
-    60px 60px;
+  background-size:70px 70px;
 
-  animation:
-    storeGridMove 25s linear infinite;
+  animation:storeGridMove 20s linear infinite;
+
+  opacity:0.4;
 
   pointer-events:none;
-
 }
 
 
@@ -1673,5 +1672,29 @@ body {
 .animate-product-scroll:hover {
 
   animation-play-state: paused;
+
+}
+
+.product-track {
+  display:flex;
+  width:max-content;
+  animation: productScroll 35s linear infinite;
+}
+
+
+.product-track:hover {
+  animation-play-state:paused;
+}
+
+
+@keyframes productScroll {
+
+ from {
+   transform:translateX(0);
+ }
+
+ to {
+   transform:translateX(-50%);
+ }
 
 }
