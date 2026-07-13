@@ -28,3 +28,33 @@ export async function GET() {
     });
   }
 }
+
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    const customerId = await odooRequest(
+      "res.partner",
+      "create",
+      [
+        {
+          name: body.name,
+          email: body.email,
+          phone: body.phone,
+        }
+      ]
+    );
+
+    return Response.json({
+      success: true,
+      customerId,
+    });
+
+  } catch (error: any) {
+    return Response.json({
+      success: false,
+      error: error?.message || String(error),
+    });
+  }
+}
