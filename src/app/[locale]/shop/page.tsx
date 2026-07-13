@@ -12,7 +12,6 @@ type ShopPageProps = {
 };
 
 
-
 export default async function ShopPage({
   params,
 }: ShopPageProps) {
@@ -29,35 +28,49 @@ export default async function ShopPage({
 
 
 
-  let products = [];
+  let products: any[] = [];
 
-try {
-  products = await odooRequest(
-    "product.template",
-    "search_read",
-    [
+
+
+  try {
+
+    products = await odooRequest(
+      "product.template",
+      "search_read",
       [
         [
-          "sale_ok",
-          "=",
-          true
-        ]
-      ],
-      {
-        fields: [
-          "id",
-          "name",
-          "list_price",
-          "image_1920",
-          "qty_available"
+          [
+            "sale_ok",
+            "=",
+            true
+          ]
         ],
-        limit: 50
-      }
-    ]
-  );
-} catch (error) {
-  console.error("ODOO SHOP ERROR:", error);
-}
+        {
+          fields: [
+            "id",
+            "name",
+            "list_price",
+            "image_1920",
+            "qty_available"
+          ],
+          limit: 50
+        }
+      ]
+    );
+
+
+    console.log("ODOO PRODUCTS:", products);
+
+
+  } catch (error) {
+
+    console.error(
+      "ODOO SHOP ERROR:",
+      error
+    );
+
+  }
+
 
 
 
@@ -65,29 +78,28 @@ try {
   return (
 
     <main
+      className="
+        min-h-screen
+        store-background
+        py-10
+        relative
+      "
+    >
 
-className="
- min-h-screen
- store-background
- py-10
-"
 
->
-
-
-<div className="network-grid" />
+      <div className="network-grid" />
 
 
 
       <div
-
         className="
           max-w-7xl
           mx-auto
           px-4
           md:px-8
+          relative
+          z-10
         "
-
       >
 
 
@@ -95,9 +107,7 @@ className="
         {/* Store Hero */}
 
         <ShopHero
-
           locale={locale}
-
         />
 
 
@@ -107,9 +117,7 @@ className="
         {/* Animated Products */}
 
         <ProductSlider
-
           products={products}
-
         />
 
 
@@ -120,7 +128,7 @@ className="
 
         {/* All Products */}
 
-        <section>
+        <section className="mt-16">
 
 
 
@@ -132,7 +140,7 @@ className="
               className="
                 text-3xl
                 font-bold
-                text-gray-900
+                text-white
               "
 
             >
@@ -146,7 +154,7 @@ className="
             <p
 
               className="
-                text-gray-600
+                text-gray-300
                 mt-2
               "
 
@@ -159,6 +167,7 @@ className="
 
 
           </div>
+
 
 
 
@@ -178,19 +187,48 @@ className="
 
 
 
-            {products.map((product:any)=>(
+            {products.length > 0 ? (
 
 
-              <ProductCard
-
-                key={product.id}
-
-                product={product}
-
-              />
+              products.map((product:any)=>(
 
 
-            ))}
+                <ProductCard
+
+                  key={product.id}
+
+                  product={product}
+
+                />
+
+
+              ))
+
+
+
+            ) : (
+
+
+              <div
+
+                className="
+                  text-white
+                  bg-black/30
+                  rounded-2xl
+                  p-6
+                  border
+                  border-white/10
+                "
+
+              >
+
+                No products available from Odoo
+
+
+              </div>
+
+
+            )}
 
 
 
@@ -199,7 +237,9 @@ className="
 
 
 
+
         </section>
+
 
 
 
