@@ -66,13 +66,16 @@ try {
 
     <main
 
-      className="
-        min-h-screen
-        store-background
-        py-10
-      "
+className="
+ min-h-screen
+ store-background
+ py-10
+"
 
 >
+
+
+<div className="network-grid" />
 
 
 
