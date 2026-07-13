@@ -1584,3 +1584,59 @@ body {
 .animate-scroll {
   animation: scroll 25s linear infinite;
 }
+
+/* =========================
+   Mauritech Store Background
+========================= */
+
+.store-background {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top right, rgba(37,99,235,0.35), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(212,175,55,0.25), transparent 45%),
+    #050b16;
+}
+
+
+.store-background::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.05) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    60px 60px;
+
+  animation:
+    storeGridMove 25s linear infinite;
+
+  pointer-events:none;
+
+}
+
+
+@keyframes storeGridMove {
+
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(60px);
+  }
+
+}
