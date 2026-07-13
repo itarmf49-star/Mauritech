@@ -20,11 +20,9 @@ export default function BuyButton({
 
   async function handleBuy() {
 
-
     try {
 
       setLoading(true);
-
 
 
       const response = await fetch(
@@ -37,8 +35,6 @@ export default function BuyButton({
           },
 
           body: JSON.stringify({
-
-            partner_id: 1,
 
             product_id: productId,
 
@@ -55,10 +51,10 @@ export default function BuyButton({
 
 
 
-      if (!data.success) {
+      if (!response.ok || !data.success) {
 
         throw new Error(
-          data.error || "Order creation failed"
+          data.error || "فشل إنشاء الطلب"
         );
 
       }
@@ -66,24 +62,24 @@ export default function BuyButton({
 
 
       alert(
-        `تم إنشاء الطلب بنجاح رقم: ${data.orderId}`
+        `تم إنشاء الطلب بنجاح رقم ${data.orderId}`
       );
 
 
 
-    } catch (error:any) {
+    } catch (error: any) {
 
 
       console.error(
-        "Buy error:",
+        "Order error:",
         error
       );
 
 
       alert(
-        error.message || "حدث خطأ أثناء الطلب"
+        error.message ||
+        "حدث خطأ أثناء إنشاء الطلب"
       );
-
 
 
     } finally {
@@ -92,14 +88,12 @@ export default function BuyButton({
 
     }
 
-
   }
 
 
 
 
   return (
-
 
     <button
 
@@ -115,19 +109,20 @@ export default function BuyButton({
         py-3
         rounded-lg
         font-semibold
+        transition
         disabled:opacity-50
       "
 
     >
 
-      {loading
-        ? "جاري إنشاء الطلب..."
-        : "شراء"
+      {
+        loading
+          ? "جاري إنشاء الطلب..."
+          : "شراء"
       }
 
 
     </button>
-
 
   );
 
