@@ -17,7 +17,6 @@ export default function ProductSlider({
   }
 
 
-
   return (
 
     <section className="mb-16">
@@ -39,6 +38,7 @@ export default function ProductSlider({
         <p className="text-gray-600 mt-2">
           Latest networking equipment from Mauritech stock
         </p>
+
 
       </div>
 
@@ -63,28 +63,25 @@ export default function ProductSlider({
           "
         >
 
+          {[...products, ...products].map(
+            (product, index) => (
 
-          {
-            [...products, ...products].map(
-              (product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="
+                  w-[300px]
+                  flex-shrink-0
+                "
+              >
 
-                <div
-                  key={`${product.id}-${index}`}
-                  className="
-                    w-[300px]
-                    flex-shrink-0
-                  "
-                >
+                <ProductCard
+                  product={product}
+                />
 
-                  <ProductCard
-                    product={product}
-                  />
+              </div>
 
-                </div>
-
-              )
             )
-          }
+          )}
 
 
         </div>
