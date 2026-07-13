@@ -71,11 +71,9 @@ export default function ProductSlider({
 
         <div
           className="
-            flex
-            gap-6
-            w-max
-            animate-product-scroll
-          "
+ product-track
+ gap-6
+"
         >
 
 
