@@ -7,15 +7,7 @@ export async function GET() {
       "search_read",
       [
         [],
-        {
-          fields: [
-            "id",
-            "name",
-            "list_price",
-            "default_code",
-          ],
-          limit: 100,
-        },
+        ["id", "name", "list_price", "default_code"]
       ]
     );
 
@@ -24,12 +16,9 @@ export async function GET() {
       products,
     });
   } catch (error: any) {
-    console.error("ODOO ERROR:", error);
-
     return Response.json({
       success: false,
       error: error?.message || String(error),
-      details: error,
     });
   }
 }
