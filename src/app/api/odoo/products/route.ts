@@ -23,15 +23,13 @@ export async function GET() {
       success: true,
       products,
     });
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.error("ODOO ERROR:", error);
 
-    return Response.json(
-      {
-        success: false,
-        error: "Failed to load products",
-      },
-      { status: 500 }
-    );
+    return Response.json({
+      success: false,
+      error: error?.message || String(error),
+      details: error,
+    });
   }
 }
