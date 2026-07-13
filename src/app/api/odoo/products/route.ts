@@ -8,12 +8,13 @@ export async function GET() {
       [
         [],
         [
-          "id",
-          "name",
-          "default_code",
-          "list_price",
-          "qty_available"
-        ]
+  "id",
+  "name",
+  "default_code",
+  "list_price",
+  "qty_available",
+  "image_1920"
+]
       ]
     );
 
