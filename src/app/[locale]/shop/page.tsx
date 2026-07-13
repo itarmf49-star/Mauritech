@@ -31,7 +31,7 @@ export default async function ShopPage({
 
   const products = await odooRequest(
 
-    "product.template",
+    "product.product",
 
     "search_read",
 
