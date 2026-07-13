@@ -1,4 +1,4 @@
-import ProductCard from "@/components/shop/ProductCard";
+ import ProductCard from "@/components/shop/ProductCard";
 
 
 type ProductSliderProps = {
