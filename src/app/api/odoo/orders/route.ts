@@ -1,6 +1,4 @@
 import { odooRequest } from "@/lib/odoo/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 
 
 export async function GET() {
@@ -17,7 +15,6 @@ export async function GET() {
 export async function POST(request: Request) {
 
   try {
-
 
     const body = await request.json();
 
@@ -36,7 +33,9 @@ export async function POST(request: Request) {
           success: false,
           error: "product_id is required",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
 
     }
@@ -44,30 +43,13 @@ export async function POST(request: Request) {
 
 
     /*
-      الحصول على المستخدم الحالي
+      جلب بيانات العميل
+      سيتم ربطها مع المستخدم لاحقاً
+      بدون كسر الصفحة الآن
     */
 
-    const session = await getServerSession(
-      authOptions
-    );
-
-
-
-    if (!session?.user?.email) {
-
-      return Response.json(
-        {
-          success: false,
-          error: "User not authenticated",
-        },
-        { status: 401 }
-      );
-
-    }
-
-
-
-    const email = session.user.email;
+    const customerEmail = "guest@mauritech.tech";
+    const customerName = "Guest Customer";
 
 
 
@@ -75,12 +57,16 @@ export async function POST(request: Request) {
       البحث عن العميل في Odoo
     */
 
-    let partners = await odooRequest(
+    const partners = await odooRequest(
       "res.partner",
       "search_read",
       [
         [
-          ["email", "=", email]
+          [
+            "email",
+            "=",
+            customerEmail
+          ]
         ],
         {
           fields: [
@@ -99,11 +85,12 @@ export async function POST(request: Request) {
 
 
 
-    /*
-      إذا العميل غير موجود ننشئه
-    */
+    if (partners.length > 0) {
 
-    if (!partners.length) {
+      partnerId = partners[0].id;
+
+
+    } else {
 
 
       partnerId = await odooRequest(
@@ -111,27 +98,18 @@ export async function POST(request: Request) {
         "create",
         [
           {
-            name:
-              session.user.name ||
-              email,
+            name: customerName,
 
-            email,
+            email: customerEmail,
 
             customer_rank: 1,
 
-          },
+          }
         ]
       );
 
 
-    } else {
-
-
-      partnerId = partners[0].id;
-
-
     }
-
 
 
 
@@ -144,30 +122,23 @@ export async function POST(request: Request) {
       "create",
       [
         {
-
           partner_id: partnerId,
 
-
           order_line: [
-
             [
               0,
               0,
               {
-
                 product_id,
 
                 product_uom_qty: quantity,
 
               }
             ]
-
-          ]
-
+          ],
         }
       ]
     );
-
 
 
 
@@ -186,7 +157,7 @@ export async function POST(request: Request) {
 
 
 
-  } catch (error: any) {
+  } catch (error:any) {
 
 
     console.error(
@@ -195,20 +166,18 @@ export async function POST(request: Request) {
     );
 
 
-
     return Response.json(
-
       {
-        success: false,
+        success:false,
+
         error:
           error?.message ||
           String(error),
+
       },
-
       {
-        status: 500
+        status:500,
       }
-
     );
 
 
