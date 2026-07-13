@@ -1,0 +1,73 @@
+async function getProducts() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SITE_URL}/api/odoo/products`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to load products");
+  }
+
+  return res.json();
+}
+
+export default async function ShopPage() {
+  const data = await getProducts();
+
+  const products = data.products || [];
+
+  return (
+    <main className="p-8">
+
+      <h1 className="text-4xl font-bold mb-8">
+        Mauritech Shop
+      </h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        {products.map((product: any) => (
+
+          <div
+            key={product.id}
+            className="border rounded-xl p-5 shadow"
+          >
+
+            {product.image_1920 && (
+              <img
+                src={`data:image/png;base64,${product.image_1920}`}
+                alt={product.name}
+                className="w-full h-52 object-contain"
+              />
+            )}
+
+            <h2 className="text-xl font-bold mt-4">
+              {product.name}
+            </h2>
+
+            <p>
+              Code: {product.default_code || "N/A"}
+            </p>
+
+            <p className="font-semibold">
+              {product.list_price} MRU
+            </p>
+
+            <p>
+              Stock: {product.qty_available}
+            </p>
+
+            <button className="mt-4 bg-black text-white px-5 py-2 rounded">
+              Acheter
+            </button>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </main>
+  );
+}
