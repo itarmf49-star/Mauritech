@@ -1640,3 +1640,38 @@ body {
   }
 
 }
+
+/* =========================
+   Product Live Slider
+========================= */
+
+
+@keyframes productScroll {
+
+  from {
+    transform: translateX(0);
+  }
+
+
+  to {
+    transform: translateX(-50%);
+  }
+
+}
+
+
+
+.animate-product-scroll {
+
+  animation:
+    productScroll 30s linear infinite;
+
+}
+
+
+
+.animate-product-scroll:hover {
+
+  animation-play-state: paused;
+
+}
