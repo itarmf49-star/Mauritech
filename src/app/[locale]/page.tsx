@@ -80,7 +80,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Mauritech Store */}
 
-      <StoreFront />
+      <StoreFront locale={locale} />
 
 
 
