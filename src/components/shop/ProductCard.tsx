@@ -22,34 +22,33 @@ export default function ProductCard({
 
     <div
 
+className="
+  group
+  store-glass
+  rounded-3xl
+  overflow-hidden
+  border
+  border-white/10
+  shadow-2xl
+  hover:border-cyan-400/40
+  transition-all
+  duration-500
+  hover:-translate-y-2
+"
+
+>
+
+
+
       className="
-        group
-        bg-white
-        rounded-2xl
-        overflow-hidden
-        border
-        shadow-sm
-        hover:shadow-xl
-        transition-all
-        duration-300
-        hover:-translate-y-1
-      "
-
-    >
-
-
-
-      <div
-
-        className="
-          h-64
-          bg-gray-50
-          flex
-          items-center
-          justify-center
-          overflow-hidden
-        "
-
+  h-64
+  bg-black/20
+  flex
+  items-center
+  justify-center
+  overflow-hidden
+  relative
+"
       >
 
         {product.image_1920 ? (
@@ -60,15 +59,16 @@ export default function ProductCard({
 
             alt={product.name}
 
-            className="
-              w-full
-              h-full
-              object-contain
-              p-6
-              group-hover:scale-110
-              transition-transform
-              duration-500
-            "
+           className="
+ w-full
+ h-full
+ object-contain
+ p-8
+ group-hover:scale-110
+ transition-transform
+ duration-700
+ drop-shadow-2xl
+"
 
           />
 
@@ -95,7 +95,7 @@ export default function ProductCard({
 
 
 
-      <div className="p-5">
+     <div className="p-5 bg-black/10">
 
 
 
@@ -104,7 +104,7 @@ export default function ProductCard({
           className="
             text-xl
             font-bold
-            text-gray-900
+            text-white
             line-clamp-2
             min-h-[56px]
           "
@@ -135,7 +135,7 @@ export default function ProductCard({
             className="
               text-2xl
               font-bold
-              text-blue-700
+              text-cyan-300
             "
 
           >
@@ -164,7 +164,7 @@ export default function ProductCard({
           className="
             mt-3
             text-sm
-            text-gray-500
+            text-gray-300
           "
 
         >
