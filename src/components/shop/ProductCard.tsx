@@ -12,7 +12,6 @@ type ProductCardProps = {
 };
 
 
-
 export default function ProductCard({
   product,
 }: ProductCardProps) {
@@ -21,34 +20,34 @@ export default function ProductCard({
   return (
 
     <div
-
-className="
-  group
-  store-glass
-  rounded-3xl
-  overflow-hidden
-  border
-  border-white/10
-  shadow-2xl
-  hover:border-cyan-400/40
-  transition-all
-  duration-500
-  hover:-translate-y-2
-"
-
->
-
-
-
       className="
-  h-64
-  bg-black/20
-  flex
-  items-center
-  justify-center
-  overflow-hidden
-  relative
-"
+        group
+        store-glass
+        rounded-3xl
+        overflow-hidden
+        border
+        border-white/10
+        shadow-2xl
+        hover:border-cyan-400/40
+        transition-all
+        duration-500
+        hover:-translate-y-2
+      "
+    >
+
+
+      {/* Product Image */}
+
+      <div
+        className="
+          h-64
+          bg-black/20
+          flex
+          items-center
+          justify-center
+          overflow-hidden
+          relative
+        "
       >
 
         {product.image_1920 ? (
@@ -59,16 +58,16 @@ className="
 
             alt={product.name}
 
-           className="
- w-full
- h-full
- object-contain
- p-8
- group-hover:scale-110
- transition-transform
- duration-700
- drop-shadow-2xl
-"
+            className="
+              w-full
+              h-full
+              object-contain
+              p-8
+              group-hover:scale-110
+              transition-transform
+              duration-700
+              drop-shadow-2xl
+            "
 
           />
 
@@ -93,10 +92,14 @@ className="
 
 
 
+      {/* Product Details */}
 
-
-     <div className="p-5 bg-black/10">
-
+      <div
+        className="
+          p-5
+          bg-black/10
+        "
+      >
 
 
         <h2
@@ -114,8 +117,6 @@ className="
           {product.name}
 
         </h2>
-
-
 
 
 
@@ -152,9 +153,7 @@ className="
           </span>
 
 
-
         </div>
-
 
 
 
@@ -185,7 +184,6 @@ className="
 
 
 
-
         <div className="mt-5">
 
           <BuyButton
@@ -195,7 +193,6 @@ className="
           />
 
         </div>
-
 
 
 
