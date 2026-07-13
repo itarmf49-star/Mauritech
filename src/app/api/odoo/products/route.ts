@@ -7,15 +7,12 @@ export async function GET() {
       "search_read",
       [
         [],
-        {
-          fields: [
-            "id",
-            "name",
-            "list_price",
-            "default_code",
-          ],
-          limit: 50,
-        },
+        [
+          "id",
+          "name",
+          "list_price",
+          "default_code"
+        ]
       ]
     );
 
@@ -25,12 +22,9 @@ export async function GET() {
     });
 
   } catch (error: any) {
-    return Response.json(
-      {
-        success: false,
-        error: error?.message || String(error),
-      },
-      { status: 500 }
-    );
+    return Response.json({
+      success: false,
+      error: error?.message || String(error),
+    });
   }
 }
