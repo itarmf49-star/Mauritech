@@ -6,7 +6,7 @@ import { HowItWorks } from "@/components/sections/home/how-it-works";
 import { TrustStrip } from "@/components/sections/home/trust-strip";
 import { ProjectsGrid } from "@/components/sections/projects-grid";
 import { ServicesGrid } from "@/components/sections/services-grid";
-
+import { ShopCta } from "@/components/sections/home/shop-cta";
 
 import { networkingProjects, services } from "@/lib/content";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
@@ -77,7 +77,7 @@ export default async function HomePage({ params }: HomePageProps) {
         locale={locale}
       />
 
-
+      <ShopCta locale={locale} />
      
 
 
