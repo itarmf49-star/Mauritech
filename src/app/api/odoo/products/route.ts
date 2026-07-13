@@ -3,15 +3,16 @@ import { odooRequest } from "@/lib/odoo/client";
 export async function GET() {
   try {
     const products = await odooRequest(
-      "product.template",
+      "product.product",
       "search_read",
       [
         [],
         [
           "id",
           "name",
+          "default_code",
           "list_price",
-          "default_code"
+          "qty_available"
         ]
       ]
     );
