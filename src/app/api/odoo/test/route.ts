@@ -1,25 +1,42 @@
 import { odooRequest } from "@/lib/odoo/client";
 
+
 export async function GET() {
+
   try {
-    const partners = await odooRequest(
-      "res.partner",
+
+    const products = await odooRequest(
+      "product.template",
       "search_read",
       [
         [],
-        ["name", "email"]
+        {
+          fields: [
+            "id",
+            "name",
+            "sale_ok",
+            "list_price",
+            "qty_available"
+          ],
+          limit: 10
+        }
       ]
     );
 
+
     return Response.json({
       success: true,
-      partners,
+      products
     });
 
-  } catch (error: any) {
+
+  } catch(error:any) {
+
     return Response.json({
-      success: false,
-      error: error.message,
+      success:false,
+      error:error.message
     });
+
   }
+
 }
