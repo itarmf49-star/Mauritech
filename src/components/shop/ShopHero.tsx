@@ -1,62 +1,10 @@
-import type { Locale } from "@/lib/i18n";
-
-
 type ShopHeroProps = {
-  locale: Locale;
+  locale?: string;
 };
-
 
 export default function ShopHero({
   locale,
 }: ShopHeroProps) {
-
-
-  const content = {
-
-    ar: {
-      title: "متجر Mauritech",
-      subtitle:
-        "معدات الشبكات والواي فاي والبنية التحتية الاحترافية",
-      badge1: "Wi-Fi Solutions",
-      badge2: "Network Equipment",
-      badge3: "Fiber Optic",
-      badge4: "Enterprise Networks",
-      button:
-        "تصفح المنتجات",
-    },
-
-
-    fr: {
-      title: "Boutique Mauritech",
-      subtitle:
-        "Équipements réseau, Wi-Fi et solutions d'infrastructure professionnelles",
-      badge1: "Solutions Wi-Fi",
-      badge2: "Équipements réseau",
-      badge3: "Fibre optique",
-      badge4: "Réseaux entreprise",
-      button:
-        "Voir les produits",
-    },
-
-
-    en: {
-      title: "Mauritech Store",
-      subtitle:
-        "Professional networking equipment, Wi-Fi devices and infrastructure solutions",
-      badge1: "Wi-Fi Solutions",
-      badge2: "Network Equipment",
-      badge3: "Fiber Optic",
-      badge4: "Enterprise Networks",
-      button:
-        "Browse Products",
-    },
-
-  };
-
-
-  const text = content[locale];
-
-
 
   return (
 
@@ -65,151 +13,152 @@ export default function ShopHero({
         relative
         overflow-hidden
         rounded-3xl
-        min-h-[520px]
         mb-16
-        bg-[#071426]
-        text-white
+        border
+        border-white/10
+        bg-black/40
+        backdrop-blur-xl
+        shadow-2xl
       "
     >
 
-
-      {/* Background */}
-
-      <div
-        className="
-          absolute
-          inset-0
-          bg-[radial-gradient(circle_at_top_right,_#2563eb,_transparent_40%)]
-        "
-      />
-
+      {/* Network Background */}
 
       <div
         className="
           absolute
           inset-0
           opacity-30
-          bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,.15)_50%,transparent_100%)]
-          animate-pulse
+          pointer-events-none
+          network-lines
         "
       />
-
 
 
       <div
         className="
           relative
           z-10
-          flex
-          flex-col
-          justify-center
-          h-full
-          min-h-[520px]
+          grid
+          md:grid-cols-2
+          gap-10
           p-8
-          md:p-16
+          md:p-14
+          items-center
         "
       >
 
 
+        {/* Text */}
 
-        <span
-          className="
-            inline-block
-            w-fit
-            px-4
-            py-2
-            rounded-full
-            bg-blue-600/30
-            border
-            border-blue-400/30
-            mb-6
-          "
-        >
-
-          Mauritech Network Store
-
-        </span>
+        <div>
 
 
+          <div
+            className="
+              inline-flex
+              px-4
+              py-2
+              rounded-full
+              bg-cyan-400/10
+              border
+              border-cyan-400/30
+              text-cyan-300
+              text-sm
+              font-semibold
+              mb-6
+            "
+          >
 
+            Mauritech Network Store
 
-
-        <h1
-          className="
-            text-4xl
-            md:text-6xl
-            font-bold
-            max-w-3xl
-            leading-tight
-          "
-        >
-
-          {text.title}
-
-        </h1>
+          </div>
 
 
 
+          <h1
+            className="
+              text-4xl
+              md:text-6xl
+              font-black
+              text-white
+              leading-tight
+            "
+          >
 
-        <p
-          className="
-            mt-6
-            text-lg
-            md:text-xl
-            text-gray-300
-            max-w-2xl
-          "
-        >
+            Professional
 
-          {text.subtitle}
-
-        </p>
-
-
-
-
-
-        <div
-          className="
-            flex
-            flex-wrap
-            gap-3
-            mt-8
-          "
-        >
-
-
-          {[
-
-            text.badge1,
-            text.badge2,
-            text.badge3,
-            text.badge4,
-
-          ].map((item)=>(
-
-            <span
-
-              key={item}
-
-              className="
-                px-4
-                py-2
-                rounded-xl
-                bg-white/10
-                backdrop-blur
-                border
-                border-white/10
-                text-sm
-              "
-
-            >
-
-              {item}
-
+            <span className="text-cyan-400">
+              {" "}Network Solutions
             </span>
 
-          ))}
+          </h1>
+
+
+
+          <p
+            className="
+              mt-6
+              text-lg
+              text-gray-300
+              max-w-xl
+            "
+          >
+
+            Professional networking equipment,
+            Wi-Fi devices and infrastructure
+            solutions for homes, businesses
+            and enterprises.
+
+          </p>
+
+
+
+          <div
+            className="
+              flex
+              flex-wrap
+              gap-4
+              mt-8
+            "
+          >
+
+            <a
+              href="#products"
+              className="
+                px-7
+                py-3
+                rounded-full
+                bg-cyan-400
+                text-black
+                font-bold
+                hover:scale-105
+                transition
+              "
+            >
+              Shop Products
+            </a>
+
+
+
+            <a
+              href="/contact"
+              className="
+                px-7
+                py-3
+                rounded-full
+                border
+                border-white/20
+                text-white
+                hover:bg-white/10
+                transition
+              "
+            >
+              Contact Us
+            </a>
+
+
+          </div>
 
 
         </div>
@@ -217,13 +166,85 @@ export default function ShopHero({
 
 
 
+        {/* Stats Panel */}
+
+
+        <div
+          className="
+            grid
+            grid-cols-2
+            gap-4
+          "
+        >
+
+
+          {[
+            {
+              value:"50+",
+              label:"Network Products"
+            },
+            {
+              value:"24/7",
+              label:"Technical Support"
+            },
+            {
+              value:"Fiber",
+              label:"Optic Solutions"
+            },
+            {
+              value:"Enterprise",
+              label:"Infrastructure"
+            }
+          ].map((item)=>(
+
+            <div
+              key={item.label}
+              className="
+                rounded-2xl
+                p-6
+                bg-white/5
+                border
+                border-white/10
+                backdrop-blur
+                hover:border-cyan-400/40
+                transition
+              "
+            >
+
+              <div
+                className="
+                  text-2xl
+                  font-black
+                  text-white
+                "
+              >
+                {item.value}
+              </div>
+
+
+              <div
+                className="
+                  mt-2
+                  text-gray-400
+                  text-sm
+                "
+              >
+                {item.label}
+              </div>
+
+
+            </div>
+
+          ))}
+
+
+        </div>
+
 
       </div>
-
 
 
     </section>
 
   );
-
 }
