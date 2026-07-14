@@ -1829,3 +1829,34 @@ body {
  0 25px 80px rgba(0,0,0,.45);
 
 }
+
+.network-lines {
+  background-image:
+    linear-gradient(
+      rgba(34,211,238,.15) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(34,211,238,.15) 1px,
+      transparent 1px
+    );
+
+  background-size:50px 50px;
+
+  animation:
+    networkMove 20s linear infinite;
+}
+
+
+@keyframes networkMove {
+
+  from {
+    transform:translateY(0);
+  }
+
+  to {
+    transform:translateY(50px);
+  }
+
+}
