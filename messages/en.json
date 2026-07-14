@@ -344,4 +344,31 @@
   "aiStreamError": "Could not read AI stream",
   "aiThinking": "Thinking...",
   "aiAsk": "Ask"
+  ,
+"footerSupportPromise": "Support promise: 24/7 monitoring and rapid escalation for critical incidents.",
+"footerNavigate": "Navigate",
+
+"shopTitle": "Mauritech Network Store",
+"shopSubtitle": "Professional networking equipment, Wi-Fi devices and infrastructure solutions",
+
+"shopHeroTitle": "Professional Network Solutions",
+"shopHeroDescription": "Professional networking equipment, Wi-Fi devices and infrastructure solutions for homes, businesses and enterprises.",
+"shopHeroButtonProducts": "Shop Products",
+"shopHeroButtonContact": "Contact Us",
+
+"shopProductsCount": "Network Products",
+"shopSupport": "Technical Support",
+"shopFiber": "Fiber Optic Solutions",
+"shopEnterprise": "Enterprise Infrastructure",
+
+"latestProducts": "Latest Products",
+"latestProductsDescription": "New networking equipment from Mauritech inventory",
+
+"allProducts": "All Products",
+"allProductsDescription": "Networking equipment available from Mauritech",
+
+"stock": "Stock",
+"buy": "Buy",
+
+"noProducts": "No products available from Odoo"
 }
