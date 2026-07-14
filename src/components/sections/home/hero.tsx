@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+
 import { Container } from "@/components/ui/container";
 import { LinkButton } from "@/components/ui/button";
+
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
 
@@ -16,59 +18,58 @@ export function HomeHero({ locale }: HomeHeroProps) {
     <section className="hero hero-premium">
       <Container className="hero-grid">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.7 }}
         >
-          <p className="eyebrow">{t(locale, "heroEyebrow")}</p>
-          <h1 className="h1">{t(locale, "heroHeadline")}</h1>
-          <p className="lead">{t(locale, "heroSubheadline")}</p>
-          <p className="muted">{t(locale, "heroTagline")}</p>
+          <p className="eyebrow">
+            {t(locale, "heroEyebrow")}
+          </p>
+
+          <h1 className="h1">
+            {t(locale, "heroHeadline")}
+          </h1>
+
+          <p className="lead">
+            {t(locale, "heroSubheadline")}
+          </p>
+
           <div className="hero-actions">
-            <LinkButton href={`/${locale}/coverage`}>{t(locale, "heroCalculateCoverage")}</LinkButton>
-            <LinkButton href={`/${locale}/contact?intent=consultation`} variant="ghost">
-              {t(locale, "heroFreeConsultation")}
+            <LinkButton
+              href={`/${locale}/contact`}
+            >
+              {t(locale, "heroPrimaryCta")}
             </LinkButton>
+
+            <LinkButton
+              href={`/${locale}/projects`}
+              variant="ghost"
+            >
+              {t(locale, "heroSecondaryCta")}
+            </LinkButton>
+          </div>
+
+          <div className="hero-highlights">
+            <span>Network Infrastructure</span>
+            <span>Fiber Optics</span>
+            <span>Smart Systems</span>
+            <span>Security Solutions</span>
           </div>
         </motion.div>
 
         <motion.div
-          className="hero-glass"
-          initial={{ opacity: 0, scale: 0.98 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: "easeOut", delay: 0.05 }}
-          aria-hidden
+          transition={{ duration: 0.8 }}
+          className="hero-visual"
         >
-          <div className="hero-image-wrap">
-            <Image
-              src={`/images/hero-${locale}.svg`}
-              alt={t(locale, "heroImageAlt")}
-              width={640}
-              height={360}
-              style={{ width: "100%", height: "auto", borderBottom: "1px solid rgba(212, 175, 55, 0.12)" }}
-              priority
-            />
-            <div className="hero-logo" aria-hidden>
-              <div className="hero-logo-badge">
-                <span className="hero-logo-mark">Mauri</span>
-                <span className="hero-logo-word">Tech</span>
-              </div>
-            </div>
-          </div>
-          <div className="hero-glass-inner">
-            <div className="hero-metric">
-              <p className="metric-label">{t(locale, "heroMetricUptime")}</p>
-              <p className="metric-value">99.9%</p>
-            </div>
-            <div className="hero-metric">
-              <p className="metric-label">{t(locale, "heroMetricCoverage")}</p>
-              <p className="metric-value">Wi-Fi 6</p>
-            </div>
-            <div className="hero-metric">
-              <p className="metric-label">{t(locale, "heroMetricResponse")}</p>
-              <p className="metric-value">&lt; 60m</p>
-            </div>
-          </div>
+          <Image
+            src="/images/hero-network.webp"
+            alt={t(locale, "heroImageAlt")}
+            width={900}
+            height={700}
+            priority
+          />
         </motion.div>
       </Container>
     </section>
