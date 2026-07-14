@@ -30,47 +30,41 @@ export default async function ShopPage({
 
   let products: any[] = [];
 
+try {
 
-
-  try {
-
-    products = await odooRequest(
-      "product.template",
-      "search_read",
+  products = await odooRequest(
+    "product.template",
+    "search_read",
+    [
       [
         [
-          [
-            "sale_ok",
-            "=",
-            true
-          ]
-        ],
-        {
-          fields: [
-            "id",
-            "name",
-            "list_price",
-            "image_1920",
-            "qty_available"
-          ],
-          limit: 50
-        }
+          "sale_ok",
+          "=",
+          true
+        ]
+      ],
+      [
+        "id",
+        "name",
+        "list_price",
+        "image_1920",
+        "qty_available"
       ]
-    );
+    ]
+  );
 
 
-    console.log("ODOO PRODUCTS:", products);
+  console.log("SHOP PRODUCTS:", products);
 
 
-  } catch (error) {
+} catch (error) {
 
-    console.error(
-      "ODOO SHOP ERROR:",
-      error
-    );
+  console.error(
+    "ODOO SHOP ERROR:",
+    error
+  );
 
-  }
-
+}
 
 
 
