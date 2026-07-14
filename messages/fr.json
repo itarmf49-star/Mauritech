@@ -1,347 +1,526 @@
 {
-  "metaTitle": "{brand} | Internet, Wi-Fi et Infrastructure Reseau",
-  "metaDescription": "MauriTech fournit Internet residentiel, Wi-Fi professionnel, installation fibre optique et infrastructure reseau en Mauritanie.",
-  "skipToContent": "Aller au contenu principal",
-  "navHome": "Accueil",
-  "navProjects": "Projets",
-  "navServices": "Services",
-  "navCoverage": "Calculateur de couverture",
-  "navIndustries": "Secteurs",
-  "navAbout": "À propos",
-  "navContactLink": "Contact",
-  "navPortal": "Portail Client",
-  "navLogin": "Connexion",
-  "navQuote": "Demander un devis",
-  "footerTagline": "Solutions Internet, Wi-Fi et infrastructure reseau pour foyers, entreprises et institutions.",
-  "footerContact": "Contact",
-  "heroEyebrow": "Internet • Wi-Fi • Infrastructure Reseau",
-  "heroHeadline": "Apporter un Internet fiable dans chaque coin",
-  "heroSubheadline": "Solutions completes d'Internet, Wi-Fi et infrastructure reseau pour foyers, entreprises et institutions en Mauritanie.",
-  "heroTagline": "Internet residentiel • Wi-Fi domestique • Fibre optique • Reseaux entreprise",
-  "heroImageAlt": "Visuel connectivite {brand}",
-  "heroMetricUptime": "Disponibilite reseau",
-  "heroMetricCoverage": "Standard Wi-Fi",
-  "heroMetricResponse": "Premiere reponse",
-  "heroCalculateCoverage": "Calculer ma couverture",
-  "heroFreeConsultation": "Demander une consultation gratuite",
-  "servicesTitle": "Services principaux",
-  "servicesSubtitle": "Distribution Internet, deploiement Wi-Fi et infrastructure reseau specialisee pour chaque environnement.",
-  "serviceResidentialTitle": "Solutions Internet residentielles",
-  "serviceResidentialDesc": "Internet domestique fiable avec routage optimise, paliers de vitesse et installation professionnelle.",
-  "serviceHomeWifiTitle": "Couverture Wi-Fi domestique",
-  "serviceHomeWifiDesc": "Conception Wi-Fi pour toute la maison, systemes mesh et planification de couverture pour chaque piece.",
-  "serviceBusinessTitle": "Solutions reseau entreprise",
-  "serviceBusinessDesc": "LAN/WAN securise, reseaux invites, segmentation VLAN et connectivite professionnelle.",
-  "serviceInfrastructureTitle": "Deploiement infrastructure reseau",
-  "serviceInfrastructureDesc": "Cablage structure, commutation, routage et conception de backbone pour campus et institutions.",
-  "serviceFiberTitle": "Installation fibre optique",
-  "serviceFiberDesc": "Tirage fibre, epissure, termination et liaisons haute capacite pour foyers et entreprises.",
-  "serviceMaintenanceTitle": "Maintenance reseau et support technique",
-  "serviceMaintenanceDesc": "Maintenance preventive, diagnostic a distance, intervention sur site et support avec SLA.",
-  "trustAriaLabel": "Indicateurs de confiance",
-  "trustItem1Value": "99,9 %",
-  "trustItem1Label": "Objectif disponibilite reseau",
-  "trustItem2Value": "24/7",
-  "trustItem2Label": "Support technique",
-  "trustItem3Value": "< 60m",
-  "trustItem3Label": "Delai premiere reponse",
-  "trustItem4Value": "50+",
-  "trustItem4Label": "Deploiements realises",
-  "coverageCtaEyebrow": "Planificateur de couverture intelligent",
-  "coverageCtaTitle": "Estimez vos besoins Wi-Fi instantanement",
-  "coverageCtaDescription": "Entrez les details de votre logement et obtenez un plan, une liste d'equipements et une estimation d'installation en quelques secondes.",
-  "howItWorksEyebrow": "Notre processus",
-  "howItWorksTitle": "Comment nous deployons la connectivite",
-  "step1Title": "Etude de site",
-  "step1Description": "Nous evaluons votre espace, types de murs et objectifs de connectivite pour concevoir la bonne solution.",
-  "step2Title": "Conception reseau",
-  "step2Description": "Plans personnalises, selection d'equipements et cartographie de couverture adaptes a vos besoins.",
-  "step3Title": "Installation professionnelle",
-  "step3Description": "Techniciens certifies deployent cablage, points d'acces et fibre avec un travail soigne.",
-  "step4Title": "Support continu",
-  "step4Description": "Maintenance, supervision et support technique pour maintenir les performances de votre reseau.",
-  "projectsTitle": "Projets recents",
-  "projectViewDetails": "Voir les details",
-  "projectVideo": "Video du projet",
-  "project.title": "Projet",
-  "project.description": "Description",
-  "project.notFound": "Projet introuvable",
-  "project.notFoundHint": "Verifiez le lien ou revenez a la liste des projets.",
-  "project.playVideo": "Lire la video",
-  "project.videoAlt": "Apercu video du projet",
-  "project.gallery": "Galerie",
-  "common.backToHome": "Retour a l'accueil",
-  "announcementsAriaLabel": "Annonces",
-  "ctaEyebrow": "Construisons votre plateforme",
-  "ctaTitle": "Demandez une installation professionnelle ou une consultation.",
-  "ctaDescription": "Partagez vos besoins et notre equipe repondra avec un perimetre clair, un delai et des recommandations.",
-  "ctaCallNow": "Appeler maintenant",
-  "ctaCopyEmail": "Copier l'email",
-  "notFoundTitle": "Page introuvable",
-  "notFoundDescription": "La page que vous recherchez n'existe pas.",
-  "notFoundBackHome": "Retour a l'accueil",
-  "authSignInTitle": "Connexion",
-  "authSignInDescription": "Accedez a votre compte, aux outils du portail et au tableau de bord admin.",
-  "authEmail": "Email",
-  "authPassword": "Mot de passe",
-  "authInvalidCredentials": "Identifiants invalides",
-  "authSigningIn": "Connexion...",
-  "authSignIn": "Se connecter",
-  "authNewHere": "Nouveau ici ?",
-  "authCreateAccount": "Creer un compte",
-  "authRegisterTitle": "Creer un compte",
-  "authRegisterDescription": "Inscrivez-vous pour acceder aux outils client, au chat et aux factures.",
-  "authName": "Nom",
-  "authRegistrationFailed": "Echec de l'inscription",
-  "authNameMin": "Le nom doit contenir au moins 2 caracteres",
-  "authEmailInvalid": "Entrez une adresse e-mail valide",
-  "authPasswordMin": "Le mot de passe doit contenir au moins 8 caracteres",
-  "authCreating": "Creation...",
-  "authAlreadyHaveAccount": "Vous avez deja un compte ?",
-  "authForgotPassword": "Mot de passe oublie ?",
-  "authForgotTitle": "Reinitialiser le mot de passe",
-  "authForgotDescription": "Entrez votre email ; si un compte existe, vous recevrez un lien securise.",
-  "authForgotSubmit": "Envoyer le lien",
-  "authForgotSending": "Envoi...",
-  "authForgotDone": "Si un compte existe pour cet email, vous recevrez des instructions sous peu.",
-  "authResetTitle": "Choisir un nouveau mot de passe",
-  "authResetDescription": "Saisissez votre nouveau mot de passe ci-dessous.",
-  "authResetSubmit": "Mettre a jour",
-  "authResetSaving": "Enregistrement...",
-  "authResetSuccess": "Mot de passe mis a jour. Vous pouvez vous connecter.",
-  "authResetInvalid": "Ce lien est invalide ou expire.",
-  "authPasswordMismatch": "Les mots de passe ne correspondent pas.",
-  "contactFormTitle": "Envoyer un message",
-  "contactFormName": "Votre nom",
-  "contactFormPhone": "Telephone (optionnel)",
-  "contactFormSubject": "Sujet (optionnel)",
-  "contactFormMessage": "Message",
-  "contactFormSubmit": "Envoyer",
-  "contactFormSending": "Envoi...",
-  "contactFormSuccess": "Merci. Votre message a bien ete recu.",
-  "contactFormError": "Impossible d'envoyer le message.",
-  "portalProfileSection": "Profil",
-  "portalProfilePhone": "Telephone",
-  "portalProfileNotes": "Notes pour notre equipe",
-  "portalProfileLoading": "Chargement du profil…",
-  "portalProfileSaved": "Modifications enregistrees.",
-  "portalSaveProfile": "Enregistrer",
-  "portalSavingProfile": "Enregistrement…",
-  "portalCurrentPassword": "Mot de passe actuel",
-  "portalNewPassword": "Nouveau mot de passe",
-  "portalConfirmPassword": "Confirmer le mot de passe",
-  "portalChangePasswordActive": "Laissez les champs vides pour conserver le mot de passe actuel.",
-  "portalTitle": "Bienvenue sur votre portail client",
-  "portalSignedInAs": "Connecte en tant que",
-  "portalSignedInFallback": "client",
-  "portalDescription": "Accedez aux factures, contactez l'administration et consultez l'activite du compte.",
-  "portalInvoices": "Factures",
-  "portalInvoicesAction": "Voir et telecharger",
-  "portalMessages": "Contacter l'administration",
-  "portalMessagesAction": "Envoyer et suivre les messages",
-  "portalAccountAudit": "Audit du compte",
-  "portalAccountAuditAction": "Consulter le resume du compte",
-  "portalOverview": "Vue d'ensemble",
-  "portalBrand": "Portail client",
-  "portalDashboardTitle": "Tableau de bord client",
-  "portalLogout": "Deconnexion",
-  "portalSettings": "Parametres",
-  "portal.settings": "Parametres",
-  "portal.overview": "Vue d'ensemble",
-  "portal.invoices": "Factures",
-  "portal.messages": "Messages",
-  "portal.account": "Compte",
-  "portal.status": "Statut",
-  "portal.noData": "Aucune donnee pour le moment.",
-  "portal.download": "Telecharger",
-  "portalNoData": "Aucune donnee",
-  "portalNoDataHint": "Aucun element recent a afficher.",
-  "portalWelcome": "Votre espace pour les factures et les messages de support.",
-  "portalAccount": "Compte",
-  "portalManageAccount": "Gerer le compte",
-  "portalCoveragePlans": "Plans de couverture",
-  "portalServiceRequests": "Demandes de service",
-  "portalServiceRequestsHint": "Devis d'installation, releves sur site et consultations lies a votre compte.",
-  "portalNewCalculator": "Ouvrir le calculateur",
-  "portalViewPlan": "Voir les plans",
-  "portalAccountStatus": "Statut du compte",
-  "portalAccountStatusHint": "Votre acces est actif et pret a etre utilise.",
-  "portalLastInvoice": "Derniere facture",
-  "portalQuickActions": "Actions rapides",
-  "portalViewInvoices": "Voir les factures",
-  "portalSendMessage": "Envoyer un message",
-  "portalDownloadFiles": "Telecharger des fichiers",
-  "portalInvoiceHint": "Filtrez les factures par statut et telechargez les PDF.",
-  "portalFilterAll": "Tout",
-  "portalFilterPaid": "Payee",
-  "portalFilterPending": "En attente",
-  "portalFilterOverdue": "En retard",
-  "portalInvoiceId": "ID facture",
-  "portalInvoiceDate": "Date",
-  "portalInvoiceAmount": "Montant",
-  "portalThreadTitle": "Fil de support",
-  "portalMessagePlaceholder": "Ecrire un message...",
-  "portalSend": "Envoyer",
-  "portalChangePassword": "Changer le mot de passe",
-  "portalChangePasswordHint": "Mettez a jour email, mot de passe et coordonnees en toute securite.",
-  "portalSettingsHint": "Gerez votre profil et la securite du compte.",
-  "adminBrand": "Admin {brand}",
-  "adminOverview": "Vue d'ensemble",
-  "adminCustomers": "Clients",
-  "adminMessages": "Messages",
-  "adminProjects": "Projets (CMS)",
-  "adminServices": "Services",
-  "adminInvoices": "Factures",
-  "adminAnalytics": "Analytique",
-  "adminSettings": "Parametres",
-  "adminEquipment": "Equipements",
-  "adminEquipmentHint": "Gerer routeurs, points d'acces et noeuds mesh utilises par le calculateur.",
-  "adminAddEquipment": "Ajouter equipement",
-  "adminEditEquipment": "Modifier equipement",
-  "adminManufacturer": "Fabricant",
-  "adminDeviceType": "Type d'appareil",
-  "adminCoverageRadius": "Couverture (m)",
-  "adminMaxUsers": "Utilisateurs max",
-  "adminEdit": "Modifier",
-  "adminDelete": "Supprimer",
-  "adminPricing": "Tarifs installation",
-  "adminRequests": "Demandes de service",
-  "adminRevenue": "Revenus",
-  "adminRecentMessages": "Messages recents",
-  "adminRecentProjects": "Projets recents",
-  "adminOpsOverview": "Vue des operations",
-  "adminLiveMetrics": "Metriques en direct depuis Supabase (PostgreSQL).",
-  "adminContactMessages": "Messages de contact",
-  "adminCmsProjects": "Projets CMS",
-  "adminTraffic24h": "Trafic (24h)",
-  "adminRegisteredCustomers": "Comptes clients enregistres.",
-  "adminCreated": "Cree le",
-  "adminNoCustomers": "Aucun client trouve (configurez Supabase ou ajoutez des donnees).",
-  "adminInboundInquiries": "Demandes entrantes du site web.",
-  "adminFrom": "De",
-  "adminSubject": "Sujet",
-  "adminRead": "Lu",
-  "adminDate": "Date",
-  "adminYes": "Oui",
-  "adminNo": "Non",
-  "adminNoMessages": "Aucun message pour le moment.",
-  "adminPublishedEntries": "Elements de portfolio publies.",
-  "adminCategory": "Categorie",
-  "adminPublished": "Publie",
-  "adminPublic": "Public",
-  "adminView": "Voir",
-  "adminNoProjects": "Aucun projet dans la base.",
-  "adminSeedTip": "Astuce : importez des projets via SQL Supabase ou Table Editor.",
-  "adminServicesPricing": "Services et tarification",
-  "adminCatalogActiveRules": "Elements du catalogue et regles de prix actives.",
-  "adminServiceCatalog": "Catalogue de services",
-  "adminTitle": "Titre",
-  "adminSlug": "Slug",
-  "adminBasePrice": "Prix de base",
-  "adminActive": "Actif",
-  "adminNoServices": "Aucun service pour le moment.",
-  "adminPricingRules": "Regles de tarification",
-  "adminPriority": "Priorite",
-  "adminPriceHint": "Indice de prix",
-  "adminNoPricingRules": "Aucune regle de tarification.",
-  "adminCustomerBillingRecords": "Dossiers de facturation clients.",
-  "adminStaffInvoiceHint": "Le personnel peut creer des factures via POST /api/admin/invoices (corps JSON). Portail client :",
-  "adminCustomer": "Client",
-  "adminStatus": "Statut",
-  "adminTotal": "Total",
-  "adminPdf": "PDF",
-  "adminDownload": "Telecharger",
-  "adminNoInvoices": "Aucune facture pour le moment.",
-  "analyticsTrafficSummary": "Trafic, utilisation IA et volume de chat (7 derniers jours).",
-  "analyticsPageViews7d": "Vues de pages (7j)",
-  "analyticsAiCalls7d": "Appels IA (7j)",
-  "analyticsChatMessages7d": "Messages chat (7j)",
-  "analyticsDailyPageViews": "Vues quotidiennes",
-  "analyticsTopPaths": "Chemins principaux",
-  "analyticsPath": "Chemin",
-  "analyticsViews": "Vues",
-  "analyticsNoPageViewData": "Aucune donnee de vue dans cette periode.",
-  "portalYourInvoices": "Vos factures",
-  "portalDownloadPdf": "Telechargez les PDF pour vos archives.",
-  "portalInvoice": "Facture",
-  "portalNoInvoices": "Aucune facture pour le moment.",
-  "portalMessagesTitle": "Contacter l'administration",
-  "portalMessagesDescription": "Envoyez des messages et gardez un historique de vos demandes.",
-  "portalSubjectOptional": "Sujet (optionnel)",
-  "portalMessage": "Message",
-  "portalCouldNotSend": "Envoi du message impossible.",
-  "portalSending": "Envoi...",
-  "portalSendToAdmin": "Envoyer a l'administration",
-  "portalNoMessagesSent": "Aucun message envoye.",
-  "portalAccountTitle": "Audit du compte",
-  "portalAccountDescription": "Consultez les details du compte et l'historique d'activite.",
-  "portalAccountEmail": "Email du compte",
-  "portalNotAvailable": "Non disponible",
-  "portalTotalInvoices": "Total des factures",
-  "portalMessagesToAdmin": "Messages a l'administration",
-  "portalRecentActivity": "Activite recente du compte",
-  "portalAction": "Action",
-  "portalNoAuditEvents": "Aucun evenement d'audit pour le moment.",
-  "coverageTitle": "Calculateur de couverture Wi-Fi",
-  "coverageDescription": "Estimez votre plan Wi-Fi, equipements et cout d'installation instantanement.",
-  "coverageIndoorArea": "Surface (m²)",
-  "coverageRooms": "Nombre de pieces",
-  "coverageFloors": "Nombre d'etages",
-  "coverageWallType": "Type de murs",
-  "coverageWallStandard": "Murs standards",
-  "coverageWallConcrete": "Beton arme",
-  "coverageDesiredSpeed": "Debit souhaite (Mbps)",
-  "coverageDeviceCount": "Utilisateurs / appareils",
-  "coverageCalculate": "Calculer",
-  "coverageCalculating": "Calcul en cours...",
-  "coverageFloorPlan": "Plan approximatif",
-  "coverageFloor": "Etage",
-  "coverageResultsTitle": "Votre estimation",
-  "coverageOutlets": "Prises reseau",
-  "coverageQuality": "Qualite de couverture",
-  "coverageQuality_excellent": "Excellente",
-  "coverageQuality_good": "Bonne",
-  "coverageQuality_fair": "Correcte",
-  "coverageEquipmentCost": "Cout equipement",
-  "coverageInstallCost": "Estimation installation",
-  "coverageTotalCost": "Estimation totale",
-  "coverageRequestSent": "Demande envoyee. Notre equipe vous contactera.",
-  "coverageExportPrint": "Exporter / imprimer",
-  "coverageCouldNotSave": "Impossible d'enregistrer le plan.",
-  "coverageSaved": "Plan enregistre dans votre compte.",
-  "coverageSavePlan": "Enregistrer le plan",
-  "coverageSignInSave": "Connectez-vous pour enregistrer",
-  "coverageYourSavedPlans": "Vos plans enregistres",
-  "coverageAps": "PA",
-  "coverageSwitches": "Switches",
-  "coverageNetworkDesign": "Apercu du design reseau",
-  "coveragePreviewTitle": "Apercu d'installation",
-  "coveragePreviewDescription": "Visualisez routeur, points d'acces, cablage structure et force du signal avant visite sur site.",
-  "coverageHeatmapLegend": "Carte thermique du signal",
-  "coverageSignalStrong": "Couverture forte",
-  "coverageSignalMedium": "Couverture moderee",
-  "coverageSignalWeak": "Zones faibles / limites",
-  "coverageLegendDevices": "Legende equipement",
-  "coverageLegendRouter": "Routeur / passerelle en salle technique",
-  "coverageLegendAp": "Points d'acces plafond",
-  "coverageLegendMesh": "Noeuds mesh pour maisons multi-etages",
-  "coverageLegendCabling": "Cables Cat6 depuis l'armoire reseau",
-  "chatLive": "Chat en direct",
-  "chatTitle": "{brand} Live",
-  "chatSubtitle": "Salon Socket.io (demo publique)",
-  "chatClose": "Fermer le chat",
-  "chatPlaceholder": "Message...",
-  "chatSend": "Envoyer",
-  "aiToggle": "IA",
-  "aiDialogLabel": "Assistant IA",
-  "aiTitle": "Assistant fibre et reseau",
-  "aiSubtitle": "Les reponses sont informatives et doivent etre validees sur site.",
-  "aiSignInHint": "Connectez-vous pour un meilleur suivi des quotas. Les invites peuvent poser des questions rapides.",
-  "aiQuestionLabel": "Votre question",
-  "aiQuestionPlaceholder": "Exemple : Comment estimer le budget de perte fibre pour un lien de 2 km ?",
-  "aiAnswerLabel": "Reponse",
-  "aiUnavailable": "Service IA indisponible",
-  "aiStreamError": "Lecture du flux IA impossible",
-  "aiThinking": "Reflexion...",
-  "aiAsk": "Demander"
+"metaTitle": "{brand} | Internet, Wi-Fi et infrastructure réseau",
+"metaDescription": "MauriTech fournit des solutions Internet résidentiel, Wi-Fi professionnel, installation fibre optique et infrastructure réseau en Mauritanie.",
+"skipToContent": "Aller au contenu principal",
+
+"navHome": "Accueil",
+"navProjects": "Projets",
+"navServices": "Services",
+"navCoverage": "Planificateur de couverture",
+"navIndustries": "Secteurs",
+"navAbout": "À propos",
+"navContactLink": "Contact",
+"navPortal": "Portail client",
+"navLogin": "Connexion",
+"navQuote": "Demander un devis",
+
+"footerTagline": "Solutions Internet, Wi-Fi et infrastructure réseau pour les foyers, entreprises et institutions.",
+
+"footerContact": "Contact",
+
+"heroEyebrow": "Internet • Wi-Fi • Infrastructure réseau",
+"heroHeadline": "Une connectivité fiable partout en Mauritanie",
+"heroSubheadline": "Solutions complètes Internet, Wi-Fi et infrastructure réseau pour les foyers, entreprises et institutions en Mauritanie.",
+"heroTagline": "Internet résidentiel • Wi-Fi domestique • Fibre optique • Réseaux d'entreprise",
+"heroImageAlt": "Visuel de connectivité {brand}",
+
+"heroMetricUptime": "Disponibilité réseau",
+"heroMetricCoverage": "Technologie Wi-Fi",
+"heroMetricResponse": "Première réponse",
+
+"heroCalculateCoverage": "Calculer ma couverture",
+"heroFreeConsultation": "Demander une consultation gratuite",
+
+"servicesTitle": "Services principaux",
+"servicesSubtitle": "Solutions Internet, déploiement Wi-Fi et infrastructure réseau spécialisée adaptées à chaque environnement.",
+
+"serviceResidentialTitle": "Solutions Internet résidentielles",
+"serviceResidentialDesc": "Une connexion Internet fiable pour votre domicile avec routage optimisé, différentes offres de débit et installation professionnelle.",
+
+"serviceHomeWifiTitle": "Couverture Wi-Fi domestique",
+"serviceHomeWifiDesc": "Conception Wi-Fi complète pour votre maison, systèmes mesh et planification de couverture pour chaque espace.",
+
+"serviceBusinessTitle": "Solutions réseau pour entreprises",
+"serviceBusinessDesc": "Réseaux LAN/WAN sécurisés, réseaux invités, segmentation VLAN et connectivité professionnelle adaptée aux entreprises.",
+
+"serviceInfrastructureTitle": "Déploiement d'infrastructure réseau",
+"serviceInfrastructureDesc": "Câblage structuré, commutation réseau, routage et conception d'architecture réseau pour campus et institutions.",
+
+"serviceFiberTitle": "Installation fibre optique",
+"serviceFiberDesc": "Déploiement fibre optique, épissure, raccordement et liaisons haute capacité pour les foyers et les entreprises.",
+
+"serviceMaintenanceTitle": "Maintenance réseau et support technique",
+"serviceMaintenanceDesc": "Maintenance préventive, diagnostic à distance, intervention sur site et support technique avec engagement SLA.",
+
+"trustAriaLabel": "Indicateurs de confiance",
+
+"trustItem1Value": "99,9 %",
+"trustItem1Label": "Objectif de disponibilité réseau",
+
+"trustItem2Value": "24/7",
+"trustItem2Label": "Support technique",
+
+"trustItem3Value": "< 60 min",
+"trustItem3Label": "Délai de première réponse",
+
+"trustItem4Value": "50+",
+"trustItem4Label": "Déploiements réalisés",
+
+"coverageCtaEyebrow": "Planificateur intelligent de couverture Wi-Fi",
+"coverageCtaTitle": "Estimez vos besoins Wi-Fi instantanément",
+"coverageCtaDescription": "Indiquez les caractéristiques de votre logement et obtenez un plan recommandé, une liste d'équipements et une estimation d'installation en quelques secondes.",
+
+"howItWorksEyebrow": "Notre processus",
+"howItWorksTitle": "Comment nous déployons votre connectivité",
+
+"step1Title": "Étude de site",
+"step1Description": "Nous analysons votre espace, les types de murs et vos objectifs de connectivité afin de concevoir la solution adaptée.",
+
+"step2Title": "Conception réseau",
+"step2Description": "Plans personnalisés, sélection des équipements et cartographie de couverture adaptés à vos besoins.",
+
+"step3Title": "Installation professionnelle",
+"step3Description": "Nos techniciens certifiés déploient le câblage, les points d'accès et la fibre avec une installation soignée.",
+
+"step4Title": "Support continu",
+"step4Description": "Maintenance, supervision et assistance technique pour garantir les performances de votre réseau.",
+
+"projectsTitle": "Projets récents",
+"projectViewDetails": "Voir les détails"
+{
+"projectsTitle": "Projets récents",
+"projectViewDetails": "Voir les détails",
+"projectVideo": "Vidéo du projet",
+
+"project.title": "Projet",
+"project.description": "Description",
+"project.notFound": "Projet introuvable",
+"project.notFoundHint": "Vérifiez le lien ou retournez à la liste des projets.",
+"project.playVideo": "Lire la vidéo",
+"project.videoAlt": "Aperçu vidéo du projet",
+"project.gallery": "Galerie",
+
+"common.backToHome": "Retour à l'accueil",
+
+"announcementsAriaLabel": "Annonces",
+
+"ctaEyebrow": "Construisons votre solution",
+"ctaTitle": "Demandez une installation professionnelle ou une consultation.",
+"ctaDescription": "Présentez vos besoins et notre équipe vous répondra avec une solution claire, un planning détaillé et des recommandations adaptées.",
+"ctaCallNow": "Appeler maintenant",
+"ctaCopyEmail": "Copier l'e-mail",
+
+"notFoundTitle": "Page introuvable",
+"notFoundDescription": "La page que vous recherchez n'existe pas.",
+"notFoundBackHome": "Retour à l'accueil",
+
+"authSignInTitle": "Connexion",
+"authSignInDescription": "Accédez à votre compte client, aux outils du portail et au tableau de bord selon votre rôle.",
+
+"authEmail": "Adresse e-mail",
+"authPassword": "Mot de passe",
+"authInvalidCredentials": "Identifiants invalides",
+"authSigningIn": "Connexion en cours...",
+"authSignIn": "Se connecter",
+
+"authNewHere": "Nouveau ici ?",
+"authCreateAccount": "Créer un compte",
+
+"authRegisterTitle": "Créer un compte",
+"authRegisterDescription": "Inscrivez-vous pour accéder aux services clients, au chat et au suivi des factures.",
+
+"authName": "Nom",
+"authRegistrationFailed": "Échec de l'inscription",
+"authNameMin": "Le nom doit contenir au moins 2 caractères",
+"authEmailInvalid": "Saisissez une adresse e-mail valide",
+"authPasswordMin": "Le mot de passe doit contenir au moins 8 caractères",
+
+"authCreating": "Création en cours...",
+"authAlreadyHaveAccount": "Vous avez déjà un compte ?",
+
+"authForgotPassword": "Mot de passe oublié ?",
+"authForgotTitle": "Réinitialiser le mot de passe",
+"authForgotDescription": "Saisissez votre adresse e-mail. Si un compte existe, vous recevrez un lien sécurisé.",
+"authForgotSubmit": "Envoyer le lien",
+"authForgotSending": "Envoi en cours...",
+"authForgotDone": "Si un compte existe pour cette adresse e-mail, vous recevrez les instructions prochainement.",
+
+"authResetTitle": "Choisir un nouveau mot de passe",
+"authResetDescription": "Saisissez votre nouveau mot de passe ci-dessous.",
+"authResetSubmit": "Mettre à jour le mot de passe",
+"authResetSaving": "Enregistrement en cours...",
+"authResetSuccess": "Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.",
+"authResetInvalid": "Ce lien est invalide ou a expiré.",
+
+"authPasswordMismatch": "Les mots de passe ne correspondent pas.",
+
+"contactFormTitle": "Envoyer un message",
+"contactFormName": "Votre nom",
+"contactFormPhone": "Téléphone (optionnel)",
+"contactFormSubject": "Sujet (optionnel)",
+"contactFormMessage": "Message",
+"contactFormSubmit": "Envoyer le message",
+"contactFormSending": "Envoi en cours...",
+"contactFormSuccess": "Merci. Votre message a bien été reçu et notre équipe vous répondra rapidement.",
+"contactFormError": "Impossible d'envoyer votre message. Veuillez réessayer.",
+
+"portalProfileSection": "Profil",
+"portalProfilePhone": "Téléphone",
+"portalProfileNotes": "Notes pour notre équipe",
+"portalProfileLoading": "Chargement du profil…",
+"portalProfileSaved": "Modifications enregistrées.",
+
+"portalSaveProfile": "Enregistrer les modifications",
+"portalSavingProfile": "Enregistrement…",
+
+"portalCurrentPassword": "Mot de passe actuel",
+"portalNewPassword": "Nouveau mot de passe",
+"portalConfirmPassword": "Confirmer le nouveau mot de passe",
+
+"portalChangePasswordActive": "Laissez les champs vides pour conserver votre mot de passe actuel.",
+
+"portalTitle": "Bienvenue dans votre portail client",
+"portalSignedInAs": "Connecté en tant que",
+"portalSignedInFallback": "client",
+
+"portalDescription": "Accédez à vos factures, contactez l'administration et consultez l'activité de votre compte.",
+
+"portalInvoices": "Factures",
+"portalInvoicesAction": "Consulter et télécharger",
+
+"portalMessages": "Contacter l'administration",
+"portalMessagesAction": "Envoyer et suivre vos demandes",
+
+"portalAccountAudit": "Suivi du compte",
+"portalAccountAuditAction": "Consulter le résumé de votre compte",
+
+"portalOverview": "Vue d'ensemble",
+"portalBrand": "Portail client",
+
+"portalDashboardTitle": "Tableau de bord client",
+
+"portalLogout": "Déconnexion",
+"portalSettings": "Paramètres",
+
+"portal.settings": "Paramètres",
+"portal.overview": "Vue d'ensemble",
+"portal.invoices": "Factures",
+"portal.messages": "Messages",
+"portal.account": "Compte",
+"portal.status": "Statut",
+
+"portal.noData": "Aucune donnée disponible pour le moment.",
+"portal.download": "Télécharger",
+
+"portalNoData": "Aucune donnée",
+"portalNoDataHint": "Aucun élément récent à afficher.",
+
+"portalWelcome": "Votre espace pour gérer vos factures et communiquer avec notre équipe support.",
+
+"portalAccount": "Compte",
+"portalManageAccount": "Gérer le compte",
+
+"portalCoveragePlans": "Plans de couverture Wi-Fi",
+"portalServiceRequests": "Demandes de service",
+
+"portalServiceRequestsHint": "Devis d'installation, études de site et demandes de consultation associées à votre compte.",
+
+"portalNewCalculator": "Ouvrir le calculateur",
+"portalViewPlan": "Voir les plans",
+
+"portalAccountStatus": "Statut du compte",
+"portalAccountStatusHint": "Votre accès est actif et prêt à être utilisé.",
+
+"portalLastInvoice": "Dernière facture",
+
+"portalQuickActions": "Actions rapides",
+"portalViewInvoices": "Voir les factures",
+"portalSendMessage": "Envoyer un message",
+"portalDownloadFiles": "Télécharger des fichiers",
+
+"portalInvoiceHint": "Filtrez vos factures par statut et téléchargez vos documents PDF.",
+
+"portalFilterAll": "Toutes",
+"portalFilterPaid": "Payées",
+"portalFilterPending": "En attente",
+"portalFilterOverdue": "En retard",
+
+"portalInvoiceId": "ID facture",
+"portalInvoiceDate": "Date",
+"portalInvoiceAmount": "Montant",
+
+"portalThreadTitle": "Conversation support",
+"portalMessagePlaceholder": "Écrivez votre message...",
+"portalSend": "Envoyer",
+
+"portalChangePassword": "Modifier le mot de passe",
+"portalChangePasswordHint": "Mettez à jour votre e-mail, votre mot de passe et vos informations de contact en toute sécurité.",
+
+"portalSettingsHint": "Gérez votre profil et les paramètres de sécurité de votre compte."
+
+
+"adminBrand": "Administration {brand}",
+"adminOverview": "Vue d'ensemble",
+"adminCustomers": "Clients",
+"adminMessages": "Messages",
+"adminProjects": "Projets (CMS)",
+"adminServices": "Services",
+"adminInvoices": "Factures",
+"adminAnalytics": "Analytique",
+"adminSettings": "Paramètres",
+
+"adminEquipment": "Équipements réseau",
+"adminEquipmentHint": "Gérez les routeurs, points d'accès et équipements Mesh utilisés pour les solutions de couverture Wi-Fi.",
+"adminAddEquipment": "Ajouter un équipement",
+"adminEditEquipment": "Modifier l'équipement",
+
+"adminManufacturer": "Fabricant",
+"adminDeviceType": "Type d'équipement",
+"adminCoverageRadius": "Portée de couverture (m)",
+"adminMaxUsers": "Nombre maximal d'utilisateurs",
+
+"adminEdit": "Modifier",
+"adminDelete": "Supprimer",
+
+"adminPricing": "Tarification des installations",
+"adminRequests": "Demandes de service",
+"adminRevenue": "Revenus",
+
+"adminRecentMessages": "Messages récents",
+"adminRecentProjects": "Projets récents",
+
+"adminOpsOverview": "Vue des opérations",
+"adminLiveMetrics": "Métriques en temps réel depuis la base de données PostgreSQL.",
+
+"adminContactMessages": "Messages de contact",
+"adminCmsProjects": "Projets CMS",
+
+"adminTraffic24h": "Trafic (24 h)",
+
+"adminRegisteredCustomers": "Comptes clients enregistrés.",
+"adminCreated": "Créé le",
+
+"adminNoCustomers": "Aucun client trouvé. Configurez la base de données ou ajoutez des données.",
+
+"adminInboundInquiries": "Demandes reçues depuis le site web.",
+
+"adminFrom": "De",
+"adminSubject": "Sujet",
+"adminRead": "Lu",
+"adminDate": "Date",
+
+"adminYes": "Oui",
+"adminNo": "Non",
+
+"adminNoMessages": "Aucun message pour le moment.",
+
+"adminPublishedEntries": "Éléments du portfolio publiés.",
+
+"adminCategory": "Catégorie",
+"adminPublished": "Publié",
+"adminPublic": "Public",
+"adminView": "Voir",
+
+"adminNoProjects": "Aucun projet disponible dans la base de données.",
+
+"adminSeedTip": "Astuce : ajoutez des projets via SQL ou l'outil d'administration de la base de données.",
+
+"adminServicesPricing": "Services et tarification",
+
+"adminCatalogActiveRules": "Éléments du catalogue et règles tarifaires actives.",
+
+"adminServiceCatalog": "Catalogue des services",
+
+"adminTitle": "Titre",
+"adminSlug": "Identifiant URL",
+"adminBasePrice": "Prix de base",
+"adminActive": "Actif",
+
+"adminNoServices": "Aucun service disponible.",
+
+"adminPricingRules": "Règles de tarification",
+
+"adminPriority": "Priorité",
+"adminPriceHint": "Indication de prix",
+
+"adminNoPricingRules": "Aucune règle tarifaire disponible.",
+
+"adminCustomerBillingRecords": "Dossiers de facturation clients.",
+
+"adminStaffInvoiceHint": "Le personnel peut créer des factures via POST /api/admin/invoices (corps JSON). Portail client :",
+
+"adminCustomer": "Client",
+"adminStatus": "Statut",
+"adminTotal": "Total",
+
+"adminPdf": "PDF",
+"adminDownload": "Télécharger",
+
+"adminNoInvoices": "Aucune facture disponible.",
+
+"analyticsTrafficSummary": "Trafic, utilisation IA et activité du chat sur les 7 derniers jours.",
+
+"analyticsPageViews7d": "Pages vues (7 jours)",
+"analyticsAiCalls7d": "Appels IA (7 jours)",
+"analyticsChatMessages7d": "Messages du chat (7 jours)",
+
+"analyticsDailyPageViews": "Pages vues quotidiennes",
+
+"analyticsTopPaths": "Pages les plus visitées",
+
+"analyticsPath": "Chemin",
+"analyticsViews": "Vues",
+
+"analyticsNoPageViewData": "Aucune donnée de consultation disponible pour cette période.",
+
+"portalYourInvoices": "Vos factures",
+
+"portalDownloadPdf": "Téléchargez vos copies PDF pour vos archives.",
+
+"portalInvoice": "Facture",
+
+"portalNoInvoices": "Aucune facture disponible.",
+
+"portalMessagesTitle": "Contacter l'administration",
+
+"portalMessagesDescription": "Envoyez vos messages et conservez l'historique de vos demandes.",
+
+"portalSubjectOptional": "Sujet (optionnel)",
+
+"portalMessage": "Message",
+
+"portalCouldNotSend": "Impossible d'envoyer le message.",
+
+"portalSending": "Envoi en cours...",
+
+"portalSendToAdmin": "Envoyer à l'administration",
+
+"portalNoMessagesSent": "Aucun message envoyé.",
+
+"portalAccountTitle": "Suivi du compte",
+
+"portalAccountDescription": "Consultez les informations de votre compte et l'historique des activités.",
+
+"portalAccountEmail": "E-mail du compte",
+
+"portalNotAvailable": "Non disponible",
+
+"portalTotalInvoices": "Nombre total de factures",
+
+"portalMessagesToAdmin": "Messages envoyés à l'administration",
+
+"portalRecentActivity": "Activité récente du compte",
+
+"portalAction": "Action",
+
+"portalNoAuditEvents": "Aucun événement d'activité trouvé."
+
+
+"coverageTitle": "Calculateur de couverture Wi-Fi intelligent",
+"coverageDescription": "Estimez votre configuration Wi-Fi, vos besoins en équipements et votre coût d'installation. Une validation sur site est recommandée avant le devis final.",
+
+"coverageIndoorArea": "Surface du logement (m²)",
+"coverageRooms": "Nombre de pièces",
+"coverageFloors": "Nombre d'étages",
+
+"coverageWallType": "Type de murs",
+"coverageWallStandard": "Murs standards",
+"coverageWallConcrete": "Béton armé",
+
+"coverageDesiredSpeed": "Débit Internet souhaité (Mbps)",
+"coverageDeviceCount": "Nombre d'utilisateurs / appareils",
+
+"coverageCalculate": "Calculer",
+"coverageCalculating": "Calcul en cours...",
+
+"coverageFloorPlan": "Plan estimatif de couverture",
+"coverageFloor": "Étage",
+
+"coverageResultsTitle": "Votre estimation",
+
+"coverageOutlets": "Prises réseau",
+
+"coverageQuality": "Qualité de couverture",
+"coverageQuality_excellent": "Excellente",
+"coverageQuality_good": "Bonne",
+"coverageQuality_fair": "Moyenne",
+
+"coverageEquipmentCost": "Coût des équipements",
+"coverageInstallCost": "Estimation d'installation",
+"coverageTotalCost": "Estimation totale du projet",
+
+"coverageRequestSent": "Votre demande a été envoyée. Notre équipe vous contactera prochainement.",
+
+"coverageExportPrint": "Exporter / Imprimer",
+
+"coverageCouldNotSave": "Impossible d'enregistrer le plan.",
+"coverageSaved": "Le plan a été enregistré dans votre compte.",
+
+"coverageSavePlan": "Enregistrer le plan",
+"coverageSignInSave": "Connectez-vous pour enregistrer",
+
+"coverageYourSavedPlans": "Vos plans enregistrés",
+
+"coverageAps": "Points d'accès",
+"coverageSwitches": "Commutateurs réseau",
+
+"coverageNetworkDesign": "Aperçu de la conception réseau",
+
+"coveragePreviewTitle": "Aperçu de l'installation",
+
+"coveragePreviewDescription": "Visualisez l'emplacement du routeur, des points d'accès, du câblage structuré et la puissance du signal avant notre visite sur site.",
+
+"coverageHeatmapLegend": "Carte thermique du signal",
+
+"coverageSignalStrong": "Couverture forte",
+"coverageSignalMedium": "Couverture moyenne",
+"coverageSignalWeak": "Zones faibles ou limites",
+
+"coverageLegendDevices": "Légende des équipements",
+
+"coverageLegendRouter": "Routeur / passerelle dans le local technique",
+
+"coverageLegendAp": "Points d'accès Wi-Fi au plafond",
+
+"coverageLegendMesh": "Nœuds Mesh pour logements à plusieurs étages",
+
+"coverageLegendCabling": "Câbles Cat6 depuis l'armoire réseau",
+
+"chatLive": "Chat en direct",
+
+"chatTitle": "{brand} Live",
+
+"chatSubtitle": "Espace de discussion Socket.io (démo publique)",
+
+"chatClose": "Fermer le chat",
+
+"chatPlaceholder": "Votre message...",
+
+"chatSend": "Envoyer",
+
+"aiToggle": "IA",
+
+"aiDialogLabel": "Assistant IA",
+
+"aiTitle": "Assistant IA réseau et connectivité",
+
+"aiSubtitle": "Les réponses sont fournies à titre informatif. Une étude sur site est nécessaire pour les devis définitifs.",
+
+"aiSignInHint": "Connectez-vous pour associer l'utilisation à votre compte. Les visiteurs peuvent également poser des questions techniques.",
+
+"aiQuestionLabel": "Votre question",
+
+"aiQuestionPlaceholder": "Exemple : Comment calculer le budget de perte d'une liaison fibre de 2 km ?",
+
+"aiAnswerLabel": "Réponse",
+
+"aiUnavailable": "Service IA indisponible",
+
+"aiStreamError": "Impossible de lire la réponse IA",
+
+"aiThinking": "Réflexion en cours...",
+
+"aiAsk": "Demander"
 }
+
+ 
