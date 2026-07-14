@@ -9,18 +9,18 @@ export async function GET() {
       "product.template",
       "search_read",
       [
-        [],
-        {
-          fields: [
-            "id",
-            "name",
-            "sale_ok",
-            "list_price",
-            "qty_available"
-          ],
-          limit: 10
-        }
-      ]
+        []
+      ],
+      {
+        fields: [
+          "id",
+          "name",
+          "sale_ok",
+          "list_price",
+          "qty_available"
+        ],
+        limit: 10
+      }
     );
 
 
