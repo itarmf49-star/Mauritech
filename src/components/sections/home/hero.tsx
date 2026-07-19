@@ -45,7 +45,7 @@ export function HomeHero({ locale }: HomeHeroProps) {
               href={`/${locale}/projects`}
               variant="ghost"
             >
-              {t(locale, "heroSecondaryCta")}
+              {t(locale, "heroSecondaryCta"as any)}
             </LinkButton>
           </div>
 
