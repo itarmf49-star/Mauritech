@@ -9,12 +9,12 @@ export function TrustStrip({
 }: TrustStripProps) {
   const items = [
     {
-      title: t(locale, "trustItem1Title"),
+      title: t(locale, "trustItem1Title"as any)}
       description: t(locale, "trustItem1Description"),
     },
     {
-      title: t(locale, "trustItem2Title"),
-      description: t(locale, "trustItem2Description"),
+      title: t(locale, "trustItem2Title"as any)}
+      description: t(locale, "trustItem2Description"as any)}
     },
     {
       title: t(locale, "trustItem3Title"),
