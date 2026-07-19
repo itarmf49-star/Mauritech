@@ -10,19 +10,19 @@ export function TrustStrip({
   const items = [
     {
       title: t(locale, "trustItem1Title"as any)}
-      description: t(locale, "trustItem1Description"),
+      description: t(locale, "trustItem1Description"as any)}
     },
     {
       title: t(locale, "trustItem2Title"as any)}
       description: t(locale, "trustItem2Description"as any)}
     },
     {
-      title: t(locale, "trustItem3Title"),
-      description: t(locale, "trustItem3Description"),
+      title: t(locale, "trustItem3Title"as any)}
+      description: t(locale, "trustItem3Description"as any)}
     },
     {
       title: t(locale, "trustItem4Title"),
-      description: t(locale, "trustItem4Description"),
+      description: t(locale, "trustItem4Description"as any)}
     },
   ];
 
