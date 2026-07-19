@@ -41,10 +41,9 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
     stats = { messages: messagesCount, projects: projectsCount, revenue: revenueAgg._sum.total ?? 0 };
     recentMessages = msgs;
     recentProjects = projs;
-  } catch {
-    // keep zeros
+  } catch (error) {
+    console.error("ADMIN_DASHBOARD_ERROR:", error); // هذا سيظهر الخطأ في Vercel Logs
   }
-
   return (
     <section className="space-y-6">
       <div>
