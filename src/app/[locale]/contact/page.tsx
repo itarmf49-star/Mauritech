@@ -38,9 +38,9 @@ export default async function ContactPage({ params }: Props) {
         </article>
         <article className="card">
           <h2 className="h2">Support availability</h2>
-          <p>Office hours: {siteConfig.officeHours}</p>
-          <p>Availability: {siteConfig.availability}</p>
-          <p>Response time: {siteConfig.responseTime}</p>
+          <p>Office hours: {siteConfig.officeHours[locale as 'fr' | 'ar']}</p>
+          <p>Availability: {siteConfig.availability[locale as 'fr' | 'ar']}</p>
+         <p>Response time: {siteConfig.responseTime[locale as 'fr' | 'ar']}</p>
         </article>
       </div>
 
