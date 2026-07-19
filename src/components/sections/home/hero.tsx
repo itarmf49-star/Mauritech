@@ -38,7 +38,7 @@ export function HomeHero({ locale }: HomeHeroProps) {
             <LinkButton
               href={`/${locale}/contact`}
             >
-              {t(locale, "heroPrimaryCta")}
+              {t(locale, "heroPrimaryCta" as any)}
             </LinkButton>
 
             <LinkButton
