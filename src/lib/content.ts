@@ -131,3 +131,16 @@ export const testimonials: Testimonial[] = [
 export function getProjectBySlug(slug: string) { return projects.find((p) => p.slug === slug); }
 export function getProjectsByCategory(cat: string) { return projects.filter((p) => JSON.stringify(p.category).includes(cat)); }
 export function getFeaturedProjects() { return projects.filter((p) => p.featured); }
+
+// تعريف قائمة المشاريع الخاصة بالشبكات
+const NETWORKING_PROJECT_SLUGS = new Set([
+  "enterprise-network-deployment",
+  "multi-site-wifi-infrastructure",
+  "structured-enterprise-network-infrastructure"
+]);
+
+export const networkingProjectSlugs = NETWORKING_PROJECT_SLUGS;
+
+export const networkingProjects = projects.filter((project) =>
+  NETWORKING_PROJECT_SLUGS.has(project.slug)
+);
