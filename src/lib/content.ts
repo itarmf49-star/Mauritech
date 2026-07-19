@@ -11,7 +11,17 @@ export const siteConfig = {
   whatsappMessage: { fr: "Bonjour, je voudrais des informations.", ar: "مرحباً، أود الحصول على معلومات." },
   email: "mauritech@mauritech.tech",
   officeHours: { fr: "Lun-Sam, 08:30-19:00", ar: "الإثنين - السبت، 08:30 - 19:00" },
+  },
+  availability: {
+    fr: "24/7 pour les urgences",
+    ar: "متاح 24/7 للحالات الطارئة",
+  },
+  responseTime: {
+    fr: "Réponse en moins de 2h",
+    ar: "الرد خلال أقل من ساعتين",
+  },
   location: "Nouakchott, Mauritania",
+  
 };
 
 export const services: Service[] = [
