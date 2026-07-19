@@ -12,7 +12,7 @@ export default async function ContactPage({ params }: Props) {
     <section className="container section">
       <p className="eyebrow">Contact MauriTech</p>
       <h1 className="h1">{t(locale, "contactFormTitle")}</h1>
-      <p className="muted">{siteConfig.description}</p>
+     <p className="muted">{siteConfig.description[locale as 'fr' | 'ar']}</p>
 
       <div className="card-grid" style={{ marginTop: "1.25rem", alignItems: "start", gap: "1rem" }}>
         <article className="card">
