@@ -1,57 +1,37 @@
 "use client";
 
-import type { ReactNode } from "react";
-
-// التعديل: استبدلنا render بدالة اختيارية أو سنمرر المكونات بشكل مختلف
-export type DataTableColumn<T> = {
-  key: string;
-  header: string;
-  // التعديل هنا: نستخدم مسميات واضحة أو نقوم بتمرير المكونات في صفحة الإدارة
-  render: (row: T) => ReactNode;
-};
-
 export function DataTable<T extends { id: string | number }>({
   columns,
   rows,
   empty,
 }: {
-  columns: DataTableColumn<T>[];
+  columns: { key: string; header: string }[];
   rows: T[];
   empty: string;
 }) {
   return (
-    <div className="rounded-xl bg-[#111827] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.35)] overflow-hidden">
-      <div className="overflow-auto">
-        <table className="min-w-[720px] w-full text-sm">
-          <thead className="bg-white/[0.02]">
-            <tr>
+    <div className="overflow-hidden bg-[#111827] rounded-xl border border-white/10">
+      <table className="w-full text-sm">
+        <thead className="bg-white/[0.02]">
+          <tr>
+            {columns.map((c) => (
+              <th key={c.key} className="px-5 py-3 text-left font-extrabold text-white/70">{c.header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id} className="hover:bg-white/[0.03]">
               {columns.map((c) => (
-                <th key={c.key} className="text-left font-extrabold tracking-wide text-white/70 px-5 py-3 border-b border-white/10">
-                  {c.header}
-                </th>
+                // هنا نستخدم خاصية الوصول للبيانات مباشرة
+                <td key={c.key} className="px-5 py-3 border-t border-white/5 text-white/85">
+                  {(r as any)[c.key]}
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className="hover:bg-white/[0.03] transition">
-                {columns.map((c) => (
-                  <td key={c.key} className="px-5 py-3 border-b border-white/5 text-white/85 align-top">
-                    {c.render(r)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-            {rows.length === 0 ? (
-              <tr>
-                <td colSpan={columns.length} className="px-5 py-6 text-white/55">
-                  {empty}
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
