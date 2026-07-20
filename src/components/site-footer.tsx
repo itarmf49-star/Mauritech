@@ -73,12 +73,12 @@ export function SiteFooter({
 
 
             <li>
-              {siteConfig.officeHours}
+              {siteConfig.officeHours[locale as 'fr' | 'ar']}
             </li>
 
 
             <li>
-              {siteConfig.responseTime}
+             {siteConfig.responseTime[locale as 'fr' | 'ar']}
             </li>
 
 
