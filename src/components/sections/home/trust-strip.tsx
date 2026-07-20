@@ -22,9 +22,9 @@ export function TrustStrip({
       description: t(locale, "trustItem3Description"as any)
     },
     {
-      title: t(locale, "trustItem4Title"),
-      description: t(locale, "trustItem4Description"as any)
-    },
+   title: t(locale, "trustItem4Title" as any),
+     description: t(locale, "trustItem4Description"as any)
+       },
   ];
 
   return (
