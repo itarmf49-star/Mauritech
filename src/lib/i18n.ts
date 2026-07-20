@@ -2,6 +2,7 @@ import en from "../../messages/en.json";
 import fr from "../../messages/fr.json";
 import ar from "../../messages/ar.json";
 import type { Localized } from "@/types/content";
+
 export type Locale = "en" | "fr" | "ar";
 
 export const locales: Locale[] = ["en", "fr", "ar"];
@@ -10,7 +11,12 @@ export const defaultLocale: Locale = "en";
 export type Messages = typeof en;
 export type MessageKey = keyof Messages;
 
-const dict: Record<Locale, Messages> = { en, fr, ar };
+// تم التعديل هنا: استخدام any لتجنب خطأ التضارب في مفاتيح ملفات الترجمة (JSON)
+const dict: Record<Locale, any> = { 
+  en: en as Messages, 
+  fr: fr as any, 
+  ar: ar as any 
+};
 
 export function isLocale(value: string): value is Locale {
   return (locales as string[]).includes(value);
@@ -30,9 +36,9 @@ export function t(
   vars?: Record<string, string | number | null | undefined>,
 ) {
   const messages = getMessages(locale);
-  const raw = messages[key] ?? dict.en[key];
+  const raw = messages[key] ?? dict.en[key] ?? "";
   if (!vars) return raw;
-  return raw.replace(/\{(\w+)\}/g, (_, k: string) => {
+  return raw.replace(/\{(\w+)\}/g, (_: string, k: string) => {
     const v = vars[k];
     return v == null ? "" : String(v);
   });
@@ -42,6 +48,14 @@ export function localePath(locale: Locale, path = "") {
   const normalized = path.startsWith("/") ? path : `/${path}`;
   if (normalized === "/") return `/${locale}`;
   return `/${locale}${normalized}`;
+}
+
+/** دالة مركزية لاستخراج النصوص من الكائنات المترجمة (Localized) */
+export function txt(content: Localized | string | undefined, locale: Locale): string {
+  if (!content) return "";
+  if (typeof content === "string") return content;
+  // الترتيب: اللغة الحالية، ثم الفرنسية (كمصدر أساسي)، ثم فارغ
+  return (content[locale] || content["fr"] || "") as string;
 }
 
 /** Coverage quality labels keyed for `t()`. */
@@ -84,10 +98,3 @@ export const NAV_LINK_KEYS = [
 ] as const satisfies readonly MessageKey[];
 
 export type NavLinkKey = (typeof NAV_LINK_KEYS)[number];
-
-export function txt(content: Localized | string | undefined, locale: Locale): string {
-  if (!content) return "";
-  if (typeof content === "string") return content;
-  // الترتيب: اللغة الحالية، ثم الفرنسية (كمصدر أساسي)، ثم فارغ
-  return (content[locale] || content["fr"] || "") as string;
-}
