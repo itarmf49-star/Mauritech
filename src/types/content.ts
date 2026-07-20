@@ -1,7 +1,8 @@
-// تعريف نوع للقيم المترجمة
+// تعريف نوع للقيم المترجمة بشكل مرن لمنع أخطاء النوع
 export type Localized = {
   fr: string;
   ar: string;
+  [key: string]: string; // يسمح بالوصول لأي مفتاح لغة آخر دون خطأ
 };
 
 export type Service = {
