@@ -4,6 +4,15 @@ import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n";
 import { getServiceI18n } from "@/lib/service-i18n";
 import { Building2, Cable, Home, LifeBuoy, Network, Wifi } from "lucide-react";
+import type { Localized } from "@/types/content";
+
+// دالة مساعدة لضمان الحصول على نص (string) دائماً
+function getTxt(val: Localized | string | undefined, locale: Locale): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  // تحويل الكائن إلى نص بناءً على اللغة
+  return (val[locale] || val["fr"] || "") as string;
+}
 
 type ServicesGridProps = {
   items: Service[];
@@ -32,8 +41,10 @@ export function ServicesGrid({ items, locale }: ServicesGridProps) {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {items.map((item, i) => {
           const i18n = getServiceI18n(item.id);
-          const title = i18n ? t(locale, i18n.title) : item.title;
-          const description = i18n ? t(locale, i18n.description) : item.description;
+          
+          // استخدام getTxt لضمان أننا نحصل على string وليس كائن
+          const title = i18n ? t(locale, i18n.title) : getTxt(item.title, locale);
+          const description = i18n ? t(locale, i18n.description) : getTxt(item.description, locale);
           const Icon = iconMap[item.icon as keyof typeof iconMap] ?? Network;
 
           return (
