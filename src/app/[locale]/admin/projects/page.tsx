@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
+import { deleteProject } from "@/actions/admin-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -9,31 +10,19 @@ type PageProps = { params: Promise<{ locale: string }> };
 export default async function AdminProjectsPage({ params }: PageProps) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
-  let rows: {
-    id: string;
-    slug: string;
-    category: string | null;
-    isPublished: boolean;
-    translations: { locale: string; title: string }[];
-    images: { url: string }[];
-  }[] = [];
 
-  try {
-    rows = await prisma.project.findMany({
-      orderBy: { updatedAt: "desc" },
-      take: 100,
-      select: {
-        id: true,
-        slug: true,
-        category: true,
-        isPublished: true,
-        translations: { select: { locale: true, title: true } },
-        images: { select: { url: true }, take: 1, orderBy: { createdAt: "desc" } },
-      },
-    });
-  } catch {
-    rows = [];
-  }
+  const rows = await prisma.project.findMany({
+    orderBy: { updatedAt: "desc" },
+    take: 100,
+    select: {
+      id: true,
+      slug: true,
+      category: true,
+      isPublished: true,
+      translations: { select: { locale: true, title: true } },
+      images: { select: { url: true }, take: 1, orderBy: { createdAt: "desc" } },
+    },
+  });
 
   return (
     <section className="admin-page">
@@ -54,30 +43,23 @@ export default async function AdminProjectsPage({ params }: PageProps) {
               <th>{t(locale, "adminCategory")}</th>
               <th>{t(locale, "adminPublished")}</th>
               <th>{t(locale, "adminPublic")}</th>
-              <th>Edit</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((p) => {
-              const title =
-                p.translations.find((tr) => tr.locale === locale)?.title ??
-                p.translations.find((tr) => tr.locale === "en")?.title ??
-                p.slug;
+              const title = p.translations.find((tr) => tr.locale === locale)?.title ?? 
+                            p.translations.find((tr) => tr.locale === "en")?.title ?? p.slug;
               const thumb = p.images[0]?.url ?? null;
 
               return (
                 <tr key={p.id}>
                   <td>
                     <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-                      {thumb ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={thumb} alt="" style={{ width: 44, height: 32, objectFit: "cover", borderRadius: 6 }} />
-                      ) : null}
+                      {thumb ? <img src={thumb} alt="" style={{ width: 44, height: 32, objectFit: "cover", borderRadius: 6 }} /> : null}
                       <div>
                         <div>{title}</div>
-                        <div className="muted" style={{ fontSize: "0.85rem" }}>
-                          {p.slug}
-                        </div>
+                        <div className="muted" style={{ fontSize: "0.85rem" }}>{p.slug}</div>
                       </div>
                     </div>
                   </td>
@@ -88,28 +70,28 @@ export default async function AdminProjectsPage({ params }: PageProps) {
                       {t(locale, "adminView")}
                     </Link>
                   </td>
-                  <td>
-                    <Link className="inline-link" href={`/${locale}/admin/projects/${p.id}/edit`}>
-                      Edit
-                    </Link>
+                  <td style={{ display: "flex", gap: "10px" }}>
+                    <Link className="inline-link" href={`/${locale}/admin/projects/${p.id}/edit`}>Edit</Link>
+                    <form action={deleteProject.bind(null, p.id)}>
+                      <button 
+                        type="submit" 
+                        className="inline-link" 
+                        style={{ color: "#ef4444", background: "none", border: "none", cursor: "pointer" }}
+                        onClick={(e) => !confirm("Are you sure?") && e.preventDefault()}
+                      >
+                        Delete
+                      </button>
+                    </form>
                   </td>
                 </tr>
               );
             })}
-            {rows.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="muted">
-                  {t(locale, "adminNoProjects")}
-                </td>
-              </tr>
-            ) : null}
+            {rows.length === 0 && (
+              <tr><td colSpan={5} className="muted">{t(locale, "adminNoProjects")}</td></tr>
+            )}
           </tbody>
         </table>
       </div>
-
-      <p className="muted" style={{ fontSize: "0.9rem" }}>
-        {t(locale, "adminSeedTip")}
-      </p>
     </section>
   );
 }
