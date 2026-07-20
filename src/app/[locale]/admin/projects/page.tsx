@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
-import { deleteProject } from "@/actions/admin-actions";
+import { deleteProject, createProject } from "@/actions/admin-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -29,10 +29,23 @@ export default async function AdminProjectsPage({ params }: PageProps) {
       <h1 className="h1">{t(locale, "adminProjects")}</h1>
       <p className="muted">{t(locale, "adminPublishedEntries")}</p>
 
-      <div style={{ display: "flex", justifyContent: "flex-end", margin: "0 0 1rem" }}>
-        <Link className="btn btn-primary btn-md" href={`/${locale}/admin/projects/new`}>
-          New project
-        </Link>
+      {/* نموذج إضافة مشروع جديد سريع */}
+      <div style={{ background: "#111827", padding: "1.5rem", borderRadius: "12px", marginBottom: "2rem", border: "1px solid rgba(255,255,255,0.1)" }}>
+        <h3 style={{ color: "white", marginBottom: "1rem", fontSize: "1.1rem" }}>Add New Project</h3>
+        <form action={createProject} style={{ display: "flex", gap: "10px" }}>
+          <input 
+            name="slug" 
+            placeholder="Project Slug (e.g. mauri-project)" 
+            required 
+            style={{ padding: "0.6rem", borderRadius: "6px", flex: 1, background: "#000", color: "#fff", border: "1px solid #333" }}
+          />
+          <input 
+            name="category" 
+            placeholder="Category" 
+            style={{ padding: "0.6rem", borderRadius: "6px", flex: 1, background: "#000", color: "#fff", border: "1px solid #333" }}
+          />
+          <button type="submit" className="btn btn-primary" style={{ padding: "0.6rem 1.5rem" }}>Add</button>
+        </form>
       </div>
 
       <div className="admin-table-wrap">
