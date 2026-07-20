@@ -14,25 +14,17 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
-  // قيم افتراضية آمنة
   let stats = { messages: 0, projects: 0, revenue: 0 };
   let recentMessages: any[] = [];
   let recentProjects: any[] = [];
 
   try {
-    // تنفيذ الاستعلامات مع حماية
     const [messagesCount, projectsCount, revenueAgg, msgs, projs] = await Promise.all([
       prisma.contactMessage.count().catch(() => 0),
       prisma.project.count().catch(() => 0),
       prisma.billingInvoice.aggregate({ _sum: { total: true } }).catch(() => ({ _sum: { total: 0 } })),
-      prisma.contactMessage.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 8,
-      }).catch(() => []),
-      prisma.project.findMany({
-        orderBy: { updatedAt: "desc" },
-        take: 6,
-      }).catch(() => []),
+      prisma.contactMessage.findMany({ orderBy: { createdAt: "desc" }, take: 8 }).catch(() => []),
+      prisma.project.findMany({ orderBy: { updatedAt: "desc" }, take: 6 }).catch(() => []),
     ]);
 
     stats = { 
@@ -45,6 +37,43 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
   } catch (error) {
     console.error("ADMIN_DASHBOARD_FATAL_ERROR:", error);
   }
+
+  // تعريف الأعمدة كمكونات ثابتة لتجنب خطأ الـ Serialization
+  const messageColumns = [
+    {
+      key: "from",
+      header: t(locale, "adminFrom"),
+      render: (m: any) => (
+        <div>
+          <div className="font-bold text-white/90">{m.name}</div>
+          <div className="text-white/55 text-xs">{m.email ?? "-"}</div>
+        </div>
+      ),
+    },
+    {
+      key: "subject",
+      header: t(locale, "adminSubject"),
+      render: (m: any) => (
+        <div className="flex items-center gap-2">
+          <span className={m.isRead ? "text-white/70" : "text-[#F5C542]"}>{m.subject ?? "-"}</span>
+          {!m.isRead ? <span className="text-[10px] font-extrabold tracking-widest text-[#F5C542]">NEW</span> : null}
+        </div>
+      ),
+    },
+  ];
+
+  const projectColumns = [
+    { key: "slug", header: "Slug", render: (p: any) => <span className="font-bold text-white/90">{p.slug}</span> },
+    {
+      key: "status",
+      header: t(locale, "adminPublished"),
+      render: (p: any) => (
+        <span className={["inline-flex px-2 py-1 rounded-lg border text-xs", p.isPublished ? "border-[#F5C542]/25 text-[#F5C542]" : "border-white/10 text-white/55"].join(" ")}>
+          {p.isPublished ? t(locale, "adminYes") : t(locale, "adminNo")}
+        </span>
+      ),
+    },
+  ];
 
   return (
     <section className="space-y-6">
@@ -62,52 +91,12 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="space-y-3">
           <h2 className="text-lg font-extrabold tracking-tight text-white">{t(locale, "adminRecentMessages")}</h2>
-          <DataTable
-            empty={t(locale, "adminNoMessages")}
-            rows={recentMessages}
-            columns={[
-              {
-                key: "from",
-                header: t(locale, "adminFrom"),
-                render: (m) => (
-                  <div>
-                    <div className="font-bold text-white/90">{m.name}</div>
-                    <div className="text-white/55 text-xs">{m.email ?? "-"}</div>
-                  </div>
-                ),
-              },
-              {
-                key: "subject",
-                header: t(locale, "adminSubject"),
-                render: (m) => (
-                  <div className="flex items-center gap-2">
-                    <span className={m.isRead ? "text-white/70" : "text-[#F5C542]"}>{m.subject ?? "-"}</span>
-                    {!m.isRead ? <span className="text-[10px] font-extrabold tracking-widest text-[#F5C542]">NEW</span> : null}
-                  </div>
-                ),
-              },
-            ]}
-          />
+          <DataTable empty={t(locale, "adminNoMessages")} rows={recentMessages} columns={messageColumns} />
         </div>
 
         <div className="space-y-3">
           <h2 className="text-lg font-extrabold tracking-tight text-white">{t(locale, "adminRecentProjects")}</h2>
-          <DataTable
-            empty={t(locale, "adminNoProjects")}
-            rows={recentProjects}
-            columns={[
-              { key: "slug", header: "Slug", render: (p) => <span className="font-bold text-white/90">{p.slug}</span> },
-              {
-                key: "status",
-                header: t(locale, "adminPublished"),
-                render: (p) => (
-                  <span className={["inline-flex px-2 py-1 rounded-lg border text-xs", p.isPublished ? "border-[#F5C542]/25 text-[#F5C542]" : "border-white/10 text-white/55"].join(" ")}>
-                    {p.isPublished ? t(locale, "adminYes") : t(locale, "adminNo")}
-                  </span>
-                ),
-              },
-            ]}
-          />
+          <DataTable empty={t(locale, "adminNoProjects")} rows={recentProjects} columns={projectColumns} />
         </div>
       </div>
     </section>
