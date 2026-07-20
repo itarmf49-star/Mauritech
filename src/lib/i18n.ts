@@ -1,7 +1,7 @@
 import en from "../../messages/en.json";
 import fr from "../../messages/fr.json";
 import ar from "../../messages/ar.json";
-
+import type { Localized } from "@/types/content";
 export type Locale = "en" | "fr" | "ar";
 
 export const locales: Locale[] = ["en", "fr", "ar"];
@@ -84,3 +84,10 @@ export const NAV_LINK_KEYS = [
 ] as const satisfies readonly MessageKey[];
 
 export type NavLinkKey = (typeof NAV_LINK_KEYS)[number];
+
+export function txt(content: Localized | string | undefined, locale: Locale): string {
+  if (!content) return "";
+  if (typeof content === "string") return content;
+  // الترتيب: اللغة الحالية، ثم الفرنسية (كمصدر أساسي)، ثم فارغ
+  return (content[locale] || content["fr"] || "") as string;
+}
