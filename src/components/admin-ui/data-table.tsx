@@ -2,13 +2,15 @@
 
 import type { ReactNode } from "react";
 
+// التعديل: استبدلنا render بدالة اختيارية أو سنمرر المكونات بشكل مختلف
 export type DataTableColumn<T> = {
   key: string;
   header: string;
+  // التعديل هنا: نستخدم مسميات واضحة أو نقوم بتمرير المكونات في صفحة الإدارة
   render: (row: T) => ReactNode;
 };
 
-export function DataTable<T>({
+export function DataTable<T extends { id: string | number }>({
   columns,
   rows,
   empty,
@@ -31,8 +33,8 @@ export function DataTable<T>({
             </tr>
           </thead>
           <tbody>
-            {rows.map((r, idx) => (
-              <tr key={idx} className="hover:bg-white/[0.03] transition">
+            {rows.map((r) => (
+              <tr key={r.id} className="hover:bg-white/[0.03] transition">
                 {columns.map((c) => (
                   <td key={c.key} className="px-5 py-3 border-b border-white/5 text-white/85 align-top">
                     {c.render(r)}
@@ -53,4 +55,3 @@ export function DataTable<T>({
     </div>
   );
 }
-
