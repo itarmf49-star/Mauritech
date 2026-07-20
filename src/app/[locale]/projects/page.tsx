@@ -5,6 +5,7 @@ import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import { projects as fallbackProjects, networkingProjects, networkingProjectSlugs } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import type { ProjectTranslation } from "@prisma/client";
+import type { Localized } from "@/types/content";
 
 export const dynamic = "force-dynamic";
 
@@ -44,37 +45,56 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
     rows = [];
   }
 
-  const dbItems = rows.map(
-    (p: ProjectListRow) => {
+  const dbItems = rows.map((p: ProjectListRow) => {
     const tr =
       p.translations.find((x: ProjectTranslation) => x.locale === locale) ??
       p.translations.find((x: ProjectTranslation) => x.locale === "en") ??
       null;
+
+    // تحويل البيانات من DB لتتطابق مع هيكل Localized
+    const localizedTitle: Localized = {
+      fr: (tr?.title || (typeof p.title === 'string' ? p.title : (p.title as any)?.fr) || p.slug),
+      ar: ((p.title as any)?.ar || ""),
+    };
+
+    const localizedCategory: Localized = {
+      fr: (typeof p.category === 'string' ? p.category : (p.category as any)?.fr || "Project"),
+      ar: ((p.category as any)?.ar || "مشروع"),
+    };
+
     return {
       id: p.id,
       slug: p.slug,
-      title: tr?.title ?? p.title ?? p.slug,
-      description: tr?.description ?? p.description ?? "",
-      summary: tr?.description ?? p.description ?? "",
-      overview: tr?.description ?? p.description ?? "",
-      problem: "",
-      solution: "",
+      title: localizedTitle,
+      category: localizedCategory,
+      description: { fr: tr?.description ?? "", ar: "" },
+      summary: { fr: tr?.description ?? "", ar: "" },
+      overview: { fr: tr?.description ?? "", ar: "" },
+      problem: { fr: "", ar: "" },
+      solution: { fr: "", ar: "" },
       technologies: [],
       scope: [],
-      outcome: "",
+      outcome: { fr: "", ar: "" },
       gallery: [],
-      image: p.images[0]?.url ?? p.imageUrl ?? "/images/hero-en.svg",
-      youtubeId: p.videoUrl ?? "",
-      category: p.category ?? "project",
+      image: p.images[0]?.url ?? (p as any).imageUrl ?? "/images/hero-en.svg",
+      youtubeId: (p as any).videoUrl ?? "",
     };
   });
+
   const bySlug = new Map<string, (typeof fallbackProjects)[number]>();
-  for (const item of networkingProjects) bySlug.set(item.slug, item);
+  
+  // إضافة المشاريع المحلية
+  for (const item of networkingProjects) {
+    bySlug.set(item.slug, item);
+  }
+  
+  // دمج مشاريع قاعدة البيانات
   for (const item of dbItems) {
     if (networkingProjectSlugs.has(item.slug) && !bySlug.has(item.slug)) {
       bySlug.set(item.slug, item as (typeof fallbackProjects)[number]);
     }
   }
+  
   const items = Array.from(bySlug.values());
 
   return (
@@ -87,4 +107,3 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
     </>
   );
 }
-
