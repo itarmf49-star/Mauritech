@@ -14,36 +14,38 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
+  // قيم افتراضية آمنة
   let stats = { messages: 0, projects: 0, revenue: 0 };
-  let recentMessages: { id: string; name: string; email: string | null; subject: string | null; createdAt: Date; isRead: boolean }[] = [];
-  let recentProjects: { id: string; slug: string; updatedAt: Date; isPublished: boolean; category: string | null }[] = [];
-
-  const sinceDate = new Date();
-  sinceDate.setHours(sinceDate.getHours() - 24);
+  let recentMessages: any[] = [];
+  let recentProjects: any[] = [];
 
   try {
+    // تنفيذ الاستعلامات مع حماية
     const [messagesCount, projectsCount, revenueAgg, msgs, projs] = await Promise.all([
-      prisma.contactMessage.count(),
-      prisma.project.count(),
-      prisma.billingInvoice.aggregate({ _sum: { total: true } }),
+      prisma.contactMessage.count().catch(() => 0),
+      prisma.project.count().catch(() => 0),
+      prisma.billingInvoice.aggregate({ _sum: { total: true } }).catch(() => ({ _sum: { total: 0 } })),
       prisma.contactMessage.findMany({
         orderBy: { createdAt: "desc" },
         take: 8,
-        select: { id: true, name: true, email: true, subject: true, createdAt: true, isRead: true },
-      }),
+      }).catch(() => []),
       prisma.project.findMany({
         orderBy: { updatedAt: "desc" },
         take: 6,
-        select: { id: true, slug: true, updatedAt: true, isPublished: true, category: true },
-      }),
+      }).catch(() => []),
     ]);
 
-    stats = { messages: messagesCount, projects: projectsCount, revenue: revenueAgg._sum.total ?? 0 };
+    stats = { 
+      messages: messagesCount, 
+      projects: projectsCount, 
+      revenue: revenueAgg?._sum?.total ?? 0 
+    };
     recentMessages = msgs;
     recentProjects = projs;
   } catch (error) {
-    console.error("ADMIN_DASHBOARD_ERROR:", error); // هذا سيظهر الخطأ في Vercel Logs
+    console.error("ADMIN_DASHBOARD_FATAL_ERROR:", error);
   }
+
   return (
     <section className="space-y-6">
       <div>
@@ -54,7 +56,7 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <DashboardCard title={t(locale, "adminCmsProjects")} value={stats.projects.toString()} icon={<FolderKanban className="h-5 w-5" />} />
         <DashboardCard title={t(locale, "adminContactMessages")} value={stats.messages.toString()} icon={<MessageSquare className="h-5 w-5" />} />
-        <DashboardCard title={t(locale, "adminRevenue")} value={`${stats.revenue} MRU`} icon={<DollarSign className="h-5 w-5" />} sub="Billing invoices total" />
+        <DashboardCard title={t(locale, "adminRevenue")} value={`${stats.revenue.toLocaleString()} MRU`} icon={<DollarSign className="h-5 w-5" />} sub="Total revenue" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -84,11 +86,6 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
                   </div>
                 ),
               },
-              {
-                key: "date",
-                header: t(locale, "adminDate"),
-                render: (m) => <span className="text-white/65">{m.createdAt.toISOString().slice(0, 16).replace("T", " ")}</span>,
-              },
             ]}
           />
         </div>
@@ -100,12 +97,11 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
             rows={recentProjects}
             columns={[
               { key: "slug", header: "Slug", render: (p) => <span className="font-bold text-white/90">{p.slug}</span> },
-              { key: "category", header: t(locale, "adminCategory"), render: (p) => <span className="text-white/70">{p.category ?? "-"}</span> },
               {
                 key: "status",
                 header: t(locale, "adminPublished"),
                 render: (p) => (
-                  <span className={["inline-flex px-2 py-1 rounded-lg border text-xs font-extrabold tracking-widest", p.isPublished ? "border-[#F5C542]/25 text-[#F5C542] bg-white/5" : "border-white/10 text-white/55 bg-white/[0.02]"].join(" ")}>
+                  <span className={["inline-flex px-2 py-1 rounded-lg border text-xs", p.isPublished ? "border-[#F5C542]/25 text-[#F5C542]" : "border-white/10 text-white/55"].join(" ")}>
                     {p.isPublished ? t(locale, "adminYes") : t(locale, "adminNo")}
                   </span>
                 ),
