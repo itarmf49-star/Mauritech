@@ -3,6 +3,14 @@ import { notFound } from "next/navigation";
 import { services } from "@/lib/content";
 import { defaultLocale, HOW_IT_WORKS_STEPS, isLocale, t, type Locale } from "@/lib/i18n";
 import { getServiceI18n, SERVICE_IDS } from "@/lib/service-i18n";
+import type { Localized } from "@/types/content";
+
+// دالة مساعدة لاستخراج النص بناءً على اللغة
+function getTxt(obj: Localized | string | undefined, locale: string): string {
+  if (!obj) return "";
+  if (typeof obj === "string") return obj;
+  return (obj[locale] || obj["fr"] || "") as string;
+}
 
 export function generateStaticParams() {
   return SERVICE_IDS.map((slug) => ({ slug }));
@@ -16,9 +24,12 @@ export default async function ServiceLandingPage({ params }: Props) {
   const service = services.find((s) => s.id === slug);
   if (!service) notFound();
 
+  // الحصول على العناوين والوصف
   const i18n = getServiceI18n(service.id);
-  const title = i18n ? t(locale, i18n.title) : service.title;
-  const description = i18n ? t(locale, i18n.description) : service.description;
+  
+  // نستخدم getTxt لضمان استخراج النص كـ string بدلاً من كائن Localized
+  const title = i18n ? t(locale, i18n.title) : getTxt(service.title, locale);
+  const description = i18n ? t(locale, i18n.description) : getTxt(service.description, locale);
 
   const schema = {
     "@context": "https://schema.org",
