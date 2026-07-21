@@ -62,9 +62,12 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
 
       {/* التذييل المستقل */}
 <div className="mt-auto p-4 border-t border-white/5 bg-[#0B0F14]">
-  <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#F5C542]/10 to-transparent border border-[#F5C542]/20 text-[#F5C542] hover:bg-[#F5C542]/20 transition">
+  <Link 
+    href={`/${locale}/admin/studio`} 
+    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#F5C542]/10 to-transparent border border-[#F5C542]/20 text-[#F5C542] hover:bg-[#F5C542]/20 transition"
+  >
     <span className="text-xs font-bold uppercase tracking-widest">MauriStudio V1</span>
-  </button>
+  </Link>
 </div>
     </aside>
   );
