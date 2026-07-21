@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 export async function getGlobalSettings() {
   try {
     // محاولة جلب الإعدادات من القاعدة
-    const settings = await prisma.globalSettings.findFirst();
+   const settings = await (prisma as any).globalSettings.findFirst();
     
     // إرجاع القيم أو قيم افتراضية إذا كانت القاعدة فارغة
     return settings || {
