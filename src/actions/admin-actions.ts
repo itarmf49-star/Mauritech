@@ -1,25 +1,31 @@
-// src/actions/admin-actions.ts
+"use server";
 
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+
+// --- دالة الحذف (تأكد من وجود export قبلها) ---
+export async function deleteProject(id: string) {
+  try {
+    await prisma.project.delete({ where: { id } });
+    revalidatePath("/[locale]/admin/projects", "page");
+  } catch (error) {
+    console.error("Error deleting project:", error);
+  }
+}
+
+// --- دالة الإنشاء (تأكد من وجود export قبلها) ---
 export async function createProject(formData: FormData) {
-  "use server"; // تأكد من وجود هذا السطر في الأعلى أو هنا
-  
   const slug = formData.get("slug") as string;
   const category = formData.get("category") as string;
 
-  if (!slug) return; // ببساطة لا تفعل شيئاً إذا لم يوجد slug
+  if (!slug) return;
 
   try {
     await prisma.project.create({
-      data: { 
-        slug, 
-        category, 
-        isPublished: false 
-      },
+      data: { slug, category, isPublished: false },
     });
     revalidatePath("/[locale]/admin/projects", "page");
   } catch (e) {
     console.error("Failed to create project", e);
-    // في TypeScript للـ form action، يفضل تسجيل الخطأ هنا 
-    // أو استخدام useFormState للتعامل مع رسائل الخطأ في الواجهة
   }
 }
