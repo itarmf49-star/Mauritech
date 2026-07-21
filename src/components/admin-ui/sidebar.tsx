@@ -46,7 +46,7 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
       </div>
 
       {/* الروابط */}
-      <nav className="p-4 grid gap-1.5">
+      <nav className="p-4 grid gap-1.5flex-1">
         {items.map((it) => {
           const active = isActive(it.href);
           return (
@@ -60,12 +60,12 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
         })}
       </nav>
 
-      {/* لمسة نهائية: الـ Studio */}
-      <div className="absolute bottom-0 w-full p-4 border-t border-white/5">
-        <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#F5C542]/10 to-transparent border border-[#F5C542]/20 text-[#F5C542] hover:bg-[#F5C542]/20 transition">
-          <span className="text-xs font-bold uppercase tracking-widest">MauriStudio V1</span>
-        </button>
-      </div>
+      {/* التذييل المستقل */}
+<div className="mt-auto p-4 border-t border-white/5 bg-[#0B0F14]">
+  <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#F5C542]/10 to-transparent border border-[#F5C542]/20 text-[#F5C542] hover:bg-[#F5C542]/20 transition">
+    <span className="text-xs font-bold uppercase tracking-widest">MauriStudio V1</span>
+  </button>
+</div>
     </aside>
   );
 }
