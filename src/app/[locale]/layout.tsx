@@ -10,8 +10,7 @@ import { FiberNetworkBackground } from "@/components/three/FiberNetworkBackgroun
 import { AppProviders } from "@/components/providers/app-providers";
 import { ChatDock } from "@/components/chat/chat-dock";
 import { AiAssistant } from "@/components/chat/ai-assistant";
-
-
+import { getGlobalSettings } from "@/lib/settings"; // تأكد من وجود هذا المسار
 
 const inter = Inter({
   subsets: ["latin"],
@@ -78,6 +77,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
   const dir = getDirection(locale);
   const fontClass = locale === "ar" ? cairo.variable : inter.variable;
+  
+  // جلب الإعدادات من قاعدة البيانات للتحكم الديناميكي
+  const settings = await getGlobalSettings();
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -91,7 +94,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <html lang={locale} dir={dir} className={`${inter.variable} ${cairo.variable} ${fontClass}`}>
-      <body>
+      <body
+        style={{
+          "--primary-color": settings.primaryColor || "#F5C542",
+          "--card-radius": `${settings.cardRadius || 16}px`,
+          "--glass-opacity": settings.glassOpacity || 0.15,
+        } as React.CSSProperties}
+        className="theme-container"
+      >
         <FiberNetworkBackground />
         <AppProviders>
           <a href="#main-content" className="skip-link">
@@ -104,9 +114,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           <ChatDock locale={locale} />
           <AiAssistant locale={locale} />
         </AppProviders>
-        
       </body>
     </html>
   );
 }
-
