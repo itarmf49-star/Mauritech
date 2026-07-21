@@ -49,11 +49,6 @@ export async function uploadImageAction(formData: FormData) {
   
   await writeFile(filePath, buffer);
 
-  // تحديث قاعدة البيانات برابط الصورة
-  await prisma.globalSettings.update({
-    where: { id: "singleton" },
-    data: { bannerImage: `/images/${filename}` }
-  });
-  
+ 
   revalidatePath("/[locale]/admin");
 }
