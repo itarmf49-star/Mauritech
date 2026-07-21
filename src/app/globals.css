@@ -1847,7 +1847,30 @@ body {
   animation:
     networkMove 20s linear infinite;
 }
+:root {
+  /* هذه المتغيرات هي التي سيتحكم فيها الاستوديو */
+  --primary-color: #F5C542;
+  --card-radius: 16px;
+  --glass-opacity: 0.15;
+  --font-main: 'Cairo', sans-serif;
+}
 
+/* تطبيق المتغيرات على الموقع */
+.custom-theme {
+  --main-accent: var(--primary-color);
+  --radius-card: var(--card-radius);
+  --bg-glass: rgba(255, 255, 255, var(--glass-opacity));
+}
+
+.card {
+  border-radius: var(--radius-card);
+  background: var(--bg-glass);
+  border: 1px solid var(--main-accent);
+}
+
+.btn-primary {
+  background-color: var(--main-accent);
+}
 
 @keyframes networkMove {
 
