@@ -83,25 +83,25 @@ export default function AdminInventoryPage() {
     <AdminShell locale={locale}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Inventory</h1>
-          <p className="text-white/50 text-sm mt-1">Monitor stock levels and manage inventory.</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">إدارة المخزون</h1>
+          <p className="text-white/50 text-sm mt-1">مراقبة مستويات المخزون وإدارة الكميات.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Total Products</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">إجمالي المنتجات</p>
             <p className="text-3xl font-black text-white mt-2">{stats.total}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">In Stock</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">متوفر</p>
             <p className="text-3xl font-black text-green-400 mt-2">{stats.inStock}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Low Stock</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مخزون منخفض</p>
             <p className="text-3xl font-black text-yellow-400 mt-2">{stats.lowStock}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Out of Stock</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">نفذ من المخزون</p>
             <p className="text-3xl font-black text-red-400 mt-2">{stats.outOfStock}</p>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function AdminInventoryPage() {
         {stats.lowStock > 0 && (
           <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-4">
             <p className="text-yellow-400 text-sm font-medium">
-              ⚠️ {stats.lowStock} product{stats.lowStock > 1 ? "s" : ""} running low on stock. Consider restocking soon.
+              ⚠️ يوجد {stats.lowStock} منتج بمخزون منخفض. يُنصح بإعادة التوريد قريباً.
             </p>
           </div>
         )}
@@ -117,27 +117,27 @@ export default function AdminInventoryPage() {
         <div className="flex gap-3">
           <input
             className="input flex-1"
-            placeholder="Search inventory..."
+            placeholder="البحث في المخزون..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
-        {loading && <p className="text-white/60">Loading inventory...</p>}
+        {loading && <p className="text-white/60">جارٍ تحميل المخزون...</p>}
 
         <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Product</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">SKU</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Quantity</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Reserved</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Available</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Threshold</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Actions</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">المنتج</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">رمز المنتج</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">الكمية</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">محجوز</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">متاح</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">حد التنبيه</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">إجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -178,7 +178,7 @@ export default function AdminInventoryPage() {
                   );
                 })}
                 {inventory.length === 0 && !loading && (
-                  <tr><td colSpan={7} className="px-4 py-8 text-center text-white/40">No inventory items found</td></tr>
+                  <tr><td colSpan={7} className="px-4 py-8 text-center text-white/40">لا توجد عناصر في المخزون</td></tr>
                 )}
               </tbody>
             </table>

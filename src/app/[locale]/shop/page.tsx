@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import ShopHero from "@/components/shop/ShopHero";
 import ProductCard from "@/components/shop/ProductCard";
 import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
@@ -17,16 +18,9 @@ type Product = {
   inventory: { quantity: number } | null;
 };
 
-type ShopPageProps = {
-  params: Promise<{
-    locale: string;
-  }>;
-};
-
-export default function ShopPage({
-  params,
-}: ShopPageProps) {
-  const { locale: rawLocale } = await params;
+export default function ShopPage() {
+  const params = useParams();
+  const rawLocale = typeof params?.locale === "string" ? params.locale : defaultLocale;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
 
   const [products, setProducts] = useState<Product[]>([]);

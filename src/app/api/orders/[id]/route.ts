@@ -6,10 +6,11 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const order = await prisma.order.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { items: { include: { product: true } } },
     });
 
@@ -21,11 +22,12 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const staff = await getStaffSession();
   if (!staff.ok) return staff.response;
 
   try {
+    const { id } = await params;
     const body = await req.json().catch(() => null);
     if (!body) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
@@ -37,7 +39,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     if (notes !== undefined) data.notes = notes?.trim() || null;
 
     const order = await prisma.order.update({
-      where: { id: params.id },
+      where: { id },
       data,
     });
 

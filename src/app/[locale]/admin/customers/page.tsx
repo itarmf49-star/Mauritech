@@ -60,8 +60,8 @@ export default function AdminCustomersPage() {
     <AdminShell locale={locale}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Customers</h1>
-          <p className="text-white/50 text-sm mt-1">Manage customer accounts and view activity.</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">إدارة العملاء</h1>
+          <p className="text-white/50 text-sm mt-1">إدارة بيانات العملاء والتواصل معهم.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -91,13 +91,13 @@ export default function AdminCustomersPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Name</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Email</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Phone</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Orders</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Spent</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Date</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Actions</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">الاسم</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">البريد الإلكتروني</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">الهاتف</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">الطلبات</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">إجمالي الإنفاق</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">تاريخ التسجيل</th>
+              <th className="px-4 py-3 text-left font-bold text-white/70">إجراءات</th>
                 </tr>
               </thead>
               <tbody>

@@ -110,15 +110,15 @@ export default function AdminSettingsPage() {
     });
   }
 
-  if (loading) return <AdminShell locale={locale}><p className="text-white/60">Loading settings...</p></AdminShell>;
-  if (!settings) return <AdminShell locale={locale}><p className="text-red-400">Failed to load settings</p></AdminShell>;
+  if (loading) return <AdminShell locale={locale}><p className="text-white/60">{t(locale, "adminLoading")}</p></AdminShell>;
+  if (!settings) return <AdminShell locale={locale}><p className="text-red-400">{t(locale, "adminSettingsError")}</p></AdminShell>;
 
   return (
     <AdminShell locale={locale}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Settings</h1>
-          <p className="text-white/50 text-sm mt-1">Configure your site, integrations, and AI assistant.</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">{t(locale, "adminSettings")}</h1>
+          <p className="text-white/50 text-sm mt-1">{t(locale, "adminSettingsManagement")}</p>
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -126,53 +126,53 @@ export default function AdminSettingsPage() {
 
         <form onSubmit={handleSave} className="space-y-8">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4">
-            <h3 className="text-lg font-bold text-white">Site Settings</h3>
+            <h3 className="text-lg font-bold text-white">{t(locale, "adminSettingsSiteSettings")}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Site Name</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsSiteName")}</label>
                 <input className="input w-full" value={settings.siteSettings.siteName} onChange={(e) => updateSiteSettings("siteName", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">SEO Title</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsSeoTitle")}</label>
                 <input className="input w-full" value={settings.siteSettings.seoTitle} onChange={(e) => updateSiteSettings("seoTitle", e.target.value)} />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-white/60 mb-1">SEO Description</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsSeoDesc")}</label>
                 <textarea className="input w-full h-20" value={settings.siteSettings.seoDesc} onChange={(e) => updateSiteSettings("seoDesc", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Facebook</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsFacebook")}</label>
                 <input className="input w-full" value={settings.siteSettings.facebook} onChange={(e) => updateSiteSettings("facebook", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Instagram</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsInstagram")}</label>
                 <input className="input w-full" value={settings.siteSettings.instagram} onChange={(e) => updateSiteSettings("instagram", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Twitter / X</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsTwitter")}</label>
                 <input className="input w-full" value={settings.siteSettings.x} onChange={(e) => updateSiteSettings("x", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">YouTube</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsYouTube")}</label>
                 <input className="input w-full" value={settings.siteSettings.youtube} onChange={(e) => updateSiteSettings("youtube", e.target.value)} />
               </div>
             </div>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4">
-            <h3 className="text-lg font-bold text-white">WhatsApp Integration</h3>
+            <h3 className="text-lg font-bold text-white">{t(locale, "adminSettingsWhatsApp")}</h3>
             {settings.socialIntegrations.filter((s) => s.platform === "WHATSAPP").map((w) => (
               <div key={w.id} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">Phone Number</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsWhatsAppPhone")}</label>
                   <input className="input w-full" value={w.phoneNumber} onChange={(e) => updateSocial("WHATSAPP", "phoneNumber", e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">API Key</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsWhatsAppAPI")}</label>
                   <input className="input w-full" type="password" value={w.apiKey} onChange={(e) => updateSocial("WHATSAPP", "apiKey", e.target.value)} />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-white/60 mb-1">Webhook URL</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsWhatsAppWebhook")}</label>
                   <input className="input w-full" value={w.webhookUrl} onChange={(e) => updateSocial("WHATSAPP", "webhookUrl", e.target.value)} />
                 </div>
               </div>
@@ -180,19 +180,19 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4">
-            <h3 className="text-lg font-bold text-white">Social Media Integrations</h3>
+            <h3 className="text-lg font-bold text-white">{t(locale, "adminSettingsSocialMedia")}</h3>
             {settings.socialIntegrations.filter((s) => s.platform !== "WHATSAPP").map((s) => (
               <div key={s.id} className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">{s.platform} Display Name</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">{s.platform} {t(locale, "adminSettingsSiteName")}</label>
                   <input className="input w-full" value={s.displayName} onChange={(e) => updateSocial(s.platform, "displayName", e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">Webhook URL</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsWhatsAppWebhook")}</label>
                   <input className="input w-full" value={s.webhookUrl} onChange={(e) => updateSocial(s.platform, "webhookUrl", e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">API Key</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsWhatsAppAPI")}</label>
                   <input className="input w-full" type="password" value={s.apiKey} onChange={(e) => updateSocial(s.platform, "apiKey", e.target.value)} />
                 </div>
               </div>
@@ -200,26 +200,26 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4">
-            <h3 className="text-lg font-bold text-white">AI Agent Configuration</h3>
+            <h3 className="text-lg font-bold text-white">{t(locale, "adminSettingsAIAgent")}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Agent Name</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAIAgentName")}</label>
                 <input className="input w-full" value={settings.aiAgent.name} onChange={(e) => updateAiAgent("name", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Model</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAIAgentModel")}</label>
                 <input className="input w-full" value={settings.aiAgent.model} onChange={(e) => updateAiAgent("model", e.target.value)} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Temperature</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAIAgentTemperature")}</label>
                 <input className="input w-full" type="number" step="0.1" min="0" max="2" value={settings.aiAgent.temperature} onChange={(e) => updateAiAgent("temperature", Number(e.target.value))} />
               </div>
               <div>
-                <label className="block text-xs font-bold text-white/60 mb-1">Max Tokens</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAIMaxTokens")}</label>
                 <input className="input w-full" type="number" value={settings.aiAgent.maxTokens} onChange={(e) => updateAiAgent("maxTokens", Number(e.target.value))} />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-white/60 mb-1">System Prompt</label>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAISystemPrompt")}</label>
                 <textarea className="input w-full h-24" value={settings.aiAgent.systemPrompt} onChange={(e) => updateAiAgent("systemPrompt", e.target.value)} />
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function AdminSettingsPage() {
 
           <div className="flex gap-3">
             <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? "Saving..." : "Save All Settings"}
+              {saving ? t(locale, "adminLoading") : t(locale, "adminSaveSettings")}
             </button>
           </div>
         </form>

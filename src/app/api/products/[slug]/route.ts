@@ -6,10 +6,11 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function GET(_req: Request, { params }: { params: { slug: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    const { slug } = await params;
     const product = await prisma.product.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
       include: {
         category: { select: { id: true, name: true, slug: true } },
         inventory: true,
@@ -25,10 +26,11 @@ export async function GET(_req: Request, { params }: { params: { slug: string } 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { slug: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const staff = await getStaffSession();
   if (!staff.ok) return staff.response;
 
+  const { slug } = await params;
   try {
     const body = await req.json().catch(() => null);
     if (!body) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
@@ -54,7 +56,7 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
     if (Array.isArray(tags)) data.tags = tags;
 
     const product = await prisma.product.update({
-      where: { slug: params.slug },
+      where: { slug },
       data,
       include: { category: { select: { id: true, name: true, slug: true } }, inventory: true },
     });
@@ -66,12 +68,13 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
   }
 }
 
-export async function DELETE(_req: Request, { params }: { params: { slug: string } }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const staff = await getStaffSession();
   if (!staff.ok) return staff.response;
 
+  const { slug } = await params;
   try {
-    await prisma.product.delete({ where: { slug: params.slug } });
+    await prisma.product.delete({ where: { slug } });
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("[api/products/[slug] DELETE]", e);

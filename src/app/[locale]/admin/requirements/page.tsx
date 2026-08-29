@@ -190,62 +190,62 @@ export default function AdminRequirementsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">Requirements</h1>
-            <p className="text-white/50 text-sm mt-1">Track customer requirements and requests.</p>
+            <h1 className="text-2xl font-extrabold text-white tracking-tight">إدارة المتطلبات</h1>
+            <p className="text-white/50 text-sm mt-1">تتبع متطلبات العملاء والطلبات.</p>
           </div>
-          <button className="btn btn-primary" onClick={openAdd}>+ Add Requirement</button>
+          <button className="btn btn-primary" onClick={openAdd}>+ إضافة متطلب</button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Total</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">إجمالي المتطلبات</p>
             <p className="text-3xl font-black text-white mt-2">{stats.total}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Open</p>
-            <p className="text-3xl font-black text-blue-400 mt-2">{stats.open}</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مفتوح</p>
+            <p className="text-3xl font-black text-[#3b82f6] mt-2">{stats.open}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">In Progress</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">قيد التنفيذ</p>
             <p className="text-3xl font-black text-indigo-400 mt-2">{stats.inProgress}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Quoted</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مقدر</p>
             <p className="text-3xl font-black text-purple-400 mt-2">{stats.quoted}</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">Completed</p>
+            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مكتمل</p>
             <p className="text-3xl font-black text-green-400 mt-2">{stats.completed}</p>
           </div>
         </div>
 
         <div className="flex gap-3">
           <select className="input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="">All Statuses</option>
-            <option value="OPEN">Open</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="QUOTED">Quoted</option>
-            <option value="ACCEPTED">Accepted</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CANCELLED">Cancelled</option>
+            <option value="">جميع الحالات</option>
+            <option value="OPEN">مفتوح</option>
+            <option value="IN_PROGRESS">قيد التنفيذ</option>
+            <option value="QUOTED">مقدر</option>
+            <option value="ACCEPTED">مقبول</option>
+            <option value="COMPLETED">مكتمل</option>
+            <option value="CANCELLED">ملغى</option>
           </select>
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
-        {loading && <p className="text-white/60">Loading requirements...</p>}
+        {loading && <p className="text-white/60">جارٍ تحميل المتطلبات...</p>}
 
         <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Title</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Category</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Priority</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Status</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Contact</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Date</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">Actions</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">العنوان</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">الفئة</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">الأولوية</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">الحالة</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">جهة الاتصال</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">التاريخ</th>
+                  <th className="px-4 py-3 text-left font-bold text-white/70">إجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -269,7 +269,7 @@ export default function AdminRequirementsPage() {
                     <td className="px-4 py-3 text-white/60 text-xs">{new Date(r.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <button className="text-[#F5C542] hover:underline text-xs" onClick={() => openEdit(r)}>Edit</button>
+                        <button className="text-[#3b82f6] hover:underline text-xs" onClick={() => openEdit(r)}>تعديل</button>
                         <select
                           className="input text-xs py-1 px-2"
                           value={r.status}
@@ -284,7 +284,7 @@ export default function AdminRequirementsPage() {
                   </tr>
                 ))}
                 {requirements.length === 0 && !loading && (
-                  <tr><td colSpan={7} className="px-4 py-8 text-center text-white/40">No requirements found</td></tr>
+                  <tr><td colSpan={7} className="px-4 py-8 text-center text-white/40">لا توجد متطلبات</td></tr>
                 )}
               </tbody>
             </table>
@@ -294,20 +294,20 @@ export default function AdminRequirementsPage() {
         {showDialog && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowDialog(false)}>
             <div className="bg-[#111827] border border-white/10 rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-              <h2 className="text-xl font-bold text-white mb-4">{editingReq ? "Edit Requirement" : "Add Requirement"}</h2>
+              <h2 className="text-xl font-bold text-white mb-4">{editingReq ? "تعديل متطلب" : "إضافة متطلب"}</h2>
               {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">Title</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">العنوان</label>
                   <input className="input w-full" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">Description</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">الوصف</label>
                   <textarea className="input w-full h-20" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Category</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">الفئة</label>
                     <select className="input w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
                       {["PRODUCT", "SERVICE", "SUPPORT", "CONSULTATION", "CUSTOM"].map((c) => (
                         <option key={c} value={c}>{c}</option>
@@ -315,7 +315,7 @@ export default function AdminRequirementsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Priority</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">الأولوية</label>
                     <select className="input w-full" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>
                       {["LOW", "MEDIUM", "HIGH", "URGENT"].map((p) => (
                         <option key={p} value={p}>{p}</option>
@@ -323,7 +323,7 @@ export default function AdminRequirementsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Status</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">الحالة</label>
                     <select className="input w-full" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
                       {["OPEN", "IN_PROGRESS", "QUOTED", "ACCEPTED", "COMPLETED", "CANCELLED"].map((s) => (
                         <option key={s} value={s}>{s}</option>
@@ -333,37 +333,37 @@ export default function AdminRequirementsPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Contact Name</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">اسم جهة الاتصال</label>
                     <input className="input w-full" value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Contact Email</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">البريد الإلكتروني</label>
                     <input className="input w-full" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Contact Phone</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">الهاتف</label>
                     <input className="input w-full" value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Budget (MRU)</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">الميزانية (MRU)</label>
                     <input className="input w-full" type="number" value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">Deadline</label>
+                    <label className="block text-xs font-bold text-white/60 mb-1">الموعد النهائي</label>
                     <input className="input w-full" type="date" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">Assigned To</label>
+                  <label className="block text-xs font-bold text-white/60 mb-1">معين إلى</label>
                   <input className="input w-full" value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} />
                 </div>
                 <div className="flex gap-3 pt-2">
                   <button type="submit" className="btn btn-primary" disabled={saving}>
-                    {saving ? "Saving..." : editingReq ? "Update Requirement" : "Create Requirement"}
+                    {saving ? "جارٍ الحفظ..." : editingReq ? "تحديث المتطلب" : "إنشاء متطلب"}
                   </button>
-                  <button type="button" className="btn" onClick={() => setShowDialog(false)}>Cancel</button>
+                  <button type="button" className="btn" onClick={() => setShowDialog(false)}>إلغاء</button>
                 </div>
               </form>
             </div>

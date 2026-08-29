@@ -136,39 +136,39 @@ export default function AdminChatPage() {
     <AdminShell locale={locale}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Live Chat</h1>
-          <p className="text-white/50 text-sm mt-1">Manage active chat sessions and respond to customers.</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">{t(locale, "adminChatTitle")}</h1>
+          <p className="text-white/50 text-sm mt-1">{t(locale, "adminChatSubtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">Active Sessions ({activeSessions.length})</h3>
+              <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">{t(locale, "adminChatActiveSessions")} ({activeSessions.length})</h3>
               <div className="space-y-2 max-h-[400px] overflow-y-auto">
                 {activeSessions.map((s) => (
                   <div
                     key={s.sessionId}
-                    className={`p-3 rounded-xl cursor-pointer transition-all ${selectedSessionId === s.sessionId ? "bg-[#F5C542]/10 border border-[#F5C542]/20" : "bg-white/5 border border-white/5 hover:bg-white/10"}`}
+                    className={`p-3 rounded-xl cursor-pointer transition-all ${selectedSessionId === s.sessionId ? "bg-[#3b82f6]/10 border border-[#3b82f6]/20" : "bg-white/5 border border-white/5 hover:bg-white/10"}`}
                     onClick={() => selectSession(s)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="text-white/90 text-sm font-medium truncate">{s.customerName || s.customerEmail || "Guest"}</div>
                       {s.aiHandled && <span className="text-[10px] font-bold text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded-full">AI</span>}
                     </div>
-                    <div className="text-white/40 text-xs mt-1">{s._count.messages} messages</div>
+                    <div className="text-white/40 text-xs mt-1">{s._count.messages} {t(locale, "adminChatMessages").toLowerCase()}</div>
                   </div>
                 ))}
-                {activeSessions.length === 0 && <p className="text-white/40 text-sm">No active sessions</p>}
+                {activeSessions.length === 0 && <p className="text-white/40 text-sm">{t(locale, "adminNoData")}</p>}
               </div>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">Closed Sessions ({closedSessions.length})</h3>
+              <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">{t(locale, "adminChatClosedSessions")} ({closedSessions.length})</h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {closedSessions.map((s) => (
                   <div
                     key={s.sessionId}
-                    className={`p-3 rounded-xl cursor-pointer transition-all ${selectedSessionId === s.sessionId ? "bg-[#F5C542]/10 border border-[#F5C542]/20" : "bg-white/5 border border-white/5 hover:bg-white/10"}`}
+                    className={`p-3 rounded-xl cursor-pointer transition-all ${selectedSessionId === s.sessionId ? "bg-[#3b82f6]/10 border border-[#3b82f6]/20" : "bg-white/5 border border-white/5 hover:bg-white/10"}`}
                     onClick={() => selectSession(s)}
                   >
                     <div className="text-white/70 text-sm font-medium truncate">{s.customerName || s.customerEmail || "Guest"}</div>
@@ -193,16 +193,16 @@ export default function AdminChatPage() {
                       value={currentSession.status}
                       onChange={(e) => void updateSession({ status: e.target.value })}
                     >
-                      <option value="ACTIVE">Active</option>
-                      <option value="CLOSED">Closed</option>
-                      <option value="ARCHIVED">Archived</option>
-                      <option value="TRANSFERRED">Transferred</option>
+                      <option value="ACTIVE">{t(locale, "adminChatStatusActive")}</option>
+                      <option value="CLOSED">{t(locale, "adminChatStatusClosed")}</option>
+                      <option value="ARCHIVED">{t(locale, "adminChatStatusArchived")}</option>
+                      <option value="TRANSFERRED">{t(locale, "adminChatStatusTransferred")}</option>
                     </select>
                     <button
-                      className={`text-xs px-3 py-1 rounded-lg border ${currentSession.aiHandled ? "border-red-500/25 text-red-400 bg-red-400/5" : "border-blue-500/25 text-blue-400 bg-blue-400/5"}`}
+                      className={`text-xs px-3 py-1 rounded-lg border ${currentSession.aiHandled ? "border-red-500/25 text-red-400 bg-red-400/5" : "border-[#3b82f6]/25 text-[#3b82f6] bg-[#3b82f6]/5"}`}
                       onClick={() => void updateSession({ aiHandled: !currentSession.aiHandled })}
                     >
-                      AI: {currentSession.aiHandled ? "ON" : "OFF"}
+                      {t(locale, "adminChatAIToggle")}: {currentSession.aiHandled ? "ON" : "OFF"}
                     </button>
                   </div>
                 </div>
@@ -212,7 +212,7 @@ export default function AdminChatPage() {
                       <div className={`max-w-[70%] rounded-2xl px-4 py-2 ${
                         m.isAi ? "bg-blue-500/10 border border-blue-500/20 text-blue-300" :
                         m.senderType === "CUSTOMER" ? "bg-white/10 border border-white/10 text-white/80" :
-                        "bg-[#F5C542]/10 border border-[#F5C542]/20 text-[#F5C542]"
+                        "bg-[#3b82f6]/10 border border-[#3b82f6]/20 text-[#3b82f6]"
                       }`}>
                         {m.senderName && <div className="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70">{m.senderName}</div>}
                         <div className="text-sm">{m.content}</div>
@@ -225,18 +225,18 @@ export default function AdminChatPage() {
                 <form onSubmit={sendMessage} className="p-4 border-t border-white/10 flex gap-3">
                   <input
                     className="input flex-1"
-                    placeholder="Type a message..."
+                    placeholder={t(locale, "adminChatMessages") + "..."}
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                   />
                   <button type="submit" className="btn btn-primary" disabled={sending || !newMessage.trim()}>
-                    {sending ? "Sending..." : "Send"}
+                    {sending ? t(locale, "adminLoading") : t(locale, "adminSend")}
                   </button>
                 </form>
               </>
             ) : (
               <div className="flex-1 flex items-center justify-center text-white/40">
-                Select a chat session to view messages
+                {t(locale, "adminNoData")}
               </div>
             )}
           </div>
