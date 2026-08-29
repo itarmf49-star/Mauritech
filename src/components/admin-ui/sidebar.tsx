@@ -6,14 +6,14 @@ import {
   LayoutDashboard, FolderKanban, MessageSquare, Receipt, Users, 
   Settings, Router, BarChart3, ClipboardList, DollarSign, 
   Palette, Package, ShoppingCart, Truck, ShieldCheck, 
-  ChevronRight, LayoutGrid
+  ChevronRight, LayoutGrid, FileText
 } from "lucide-react";
 import { localePath, t, type Locale } from "@/lib/i18n";
 
 // مكون أيقونة محسّن
 const NavIcon = ({ Icon, active }: { Icon: any; active: boolean }) => (
   <div className={`p-2 rounded-lg transition-all duration-300 ${
-    active ? "bg-[#F5C542]/10 text-[#F5C542]" : "text-white/40 group-hover:text-white/80"
+    active ? "bg-[#3b82f6]/10 text-[#3b82f6]" : "text-white/40 group-hover:text-white/80"
   }`}>
     <Icon className="h-4 w-4" strokeWidth={2.5} />
   </div>
@@ -44,6 +44,7 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
       items: [
         { key: "products", href: localePath(locale, "/admin/products"), label: "Produits", Icon: Package },
         { key: "orders", href: localePath(locale, "/admin/orders"), label: "Commandes", Icon: ShoppingCart },
+        { key: "inventory", href: localePath(locale, "/admin/inventory"), label: "Inventaire", Icon: ClipboardList },
         { key: "shipping", href: localePath(locale, "/admin/shipping"), label: "Livraisons", Icon: Truck },
       ]
     },
@@ -51,6 +52,8 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
       title: "ADMINISTRATION",
       items: [
         { key: "requests", href: localePath(locale, "/admin/requests"), label: "Demandes", Icon: ClipboardList },
+        { key: "requirements", href: localePath(locale, "/admin/requirements"), label: "Requirements", Icon: FileText },
+        { key: "chat", href: localePath(locale, "/admin/chat"), label: "Live Chat", Icon: MessageSquare },
         { key: "customers", href: localePath(locale, "/admin/customers"), label: "Clients", Icon: Users },
         { key: "settings", href: localePath(locale, "/admin/settings"), label: "Paramètres", Icon: Settings },
       ]
@@ -63,7 +66,7 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
       {/* هيدر الاستوديو */}
       <div className="h-20 px-8 flex items-center border-b border-white/5 bg-[#0B0F14]/50 backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#2563eb] rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
             <LayoutGrid className="text-white h-6 w-6" />
           </div>
           <div>
@@ -95,7 +98,7 @@ export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: 
                       <NavIcon Icon={it.Icon} active={active} />
                       {it.label}
                     </div>
-                    {active && <ChevronRight className="h-3 w-3 text-[#F5C542]" />}
+                    {active && <ChevronRight className="h-3 w-3 text-[#3b82f6]" />}
                   </Link>
                 );
               })}

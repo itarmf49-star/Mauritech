@@ -73,26 +73,26 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
       </div>
 
       <section className="space-y-8 max-w-[1600px] mx-auto relative z-10">
-        
-        {/* الترحيب */}
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">{t(locale, "adminOpsOverview")}</h1>
-          <p className="text-white/40 text-sm">نظام التحكم المركزي Mauritech - لوحة المراقبة النشطة</p>
-        </div>
+         
+         {/* الترحيب */}
+         <div>
+           <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">{t(locale, "adminOpsOverview")}</h1>
+           <p className="text-white/40 text-sm">نظام التحكم المركزي Mauritech - لوحة المراقبة النشطة</p>
+         </div>
 
-        {/* البطاقات الإحصائية */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <DashboardCard title={t(locale, "adminCmsProjects")} value={stats.projects.toString()} icon={<FolderKanban className="h-6 w-6 text-blue-400" />} />
-          <DashboardCard title={t(locale, "adminContactMessages")} value={stats.messages.toString()} icon={<MessageSquare className="h-6 w-6 text-green-400" />} />
-          <DashboardCard title={t(locale, "adminRevenue")} value={`${stats.revenue.toLocaleString()} MRU`} icon={<DollarSign className="h-6 w-6 text-[#F5C542]" />} sub="Total revenue" />
-        </div>
+         {/* البطاقات الإحصائية */}
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+           <DashboardCard title={t(locale, "adminCmsProjects")} value={stats.projects.toString()} icon={<FolderKanban className="h-6 w-6 text-[#3b82f6]" />} />
+           <DashboardCard title={t(locale, "adminContactMessages")} value={stats.messages.toString()} icon={<MessageSquare className="h-6 w-6 text-green-400" />} />
+           <DashboardCard title={t(locale, "adminRevenue")} value={`${stats.revenue.toLocaleString()} MRU`} icon={<DollarSign className="h-6 w-6 text-[#3b82f6]" />} sub="Total revenue" />
+         </div>
 
         {/* الجداول الزجاجية */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 p-6 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-blue-500/30 transition-all duration-500">
+          <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 p-6 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-[#3b82f6]/30 transition-all duration-500">
             <h2 className="text-lg font-extrabold text-white mb-4 flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-blue-400" />
+              <MessageSquare className="h-5 w-5 text-[#3b82f6]" />
               {t(locale, "adminRecentMessages")}
             </h2>
             <div className="bg-black/20 rounded-2xl p-2">
@@ -104,9 +104,9 @@ export default async function AdminDashboardPage({ params }: AdminDashboardPageP
             </div>
           </div>
 
-          <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 p-6 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-indigo-500/30 transition-all duration-500">
+          <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 p-6 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-[#3b82f6]/30 transition-all duration-500">
             <h2 className="text-lg font-extrabold text-white mb-4 flex items-center gap-2">
-              <FolderKanban className="h-5 w-5 text-indigo-400" />
+              <FolderKanban className="h-5 w-5 text-[#3b82f6]" />
               {t(locale, "adminRecentProjects")}
             </h2>
             <div className="bg-black/20 rounded-2xl p-2">

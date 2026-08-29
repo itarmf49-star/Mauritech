@@ -26,6 +26,12 @@ export function AdminTopbar({
     if (base.startsWith("/admin/invoices")) return t(locale, "adminInvoices");
     if (base.startsWith("/admin/customers")) return t(locale, "adminCustomers");
     if (base.startsWith("/admin/settings")) return t(locale, "adminSettings");
+    if (base.startsWith("/admin/products")) return "Products";
+    if (base.startsWith("/admin/orders")) return "Orders";
+    if (base.startsWith("/admin/inventory")) return "Inventory";
+    if (base.startsWith("/admin/analytics")) return t(locale, "adminAnalytics");
+    if (base.startsWith("/admin/requirements")) return "Requirements";
+    if (base.startsWith("/admin/chat")) return "Live Chat";
     return t(locale, "adminOverview");
   }, [base, locale]);
 

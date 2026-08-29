@@ -1,21 +1,18 @@
-import en from "../../messages/en.json";
 import fr from "../../messages/fr.json";
 import ar from "../../messages/ar.json";
 import type { Localized } from "@/types/content";
 
-export type Locale = "en" | "fr" | "ar";
+export type Locale = "fr" | "ar";
 
-export const locales: Locale[] = ["en", "fr", "ar"];
-export const defaultLocale: Locale = "en";
+export const locales: Locale[] = ["fr", "ar"];
+export const defaultLocale: Locale = "ar";
 
-export type Messages = typeof en;
+export type Messages = typeof ar;
 export type MessageKey = keyof Messages;
 
-// تم التعديل هنا: استخدام any لتجنب خطأ التضارب في مفاتيح ملفات الترجمة (JSON)
-const dict: Record<Locale, any> = { 
-  en: en as Messages, 
-  fr: fr as any, 
-  ar: ar as any 
+const dict: Record<Locale, any> = {
+  fr: fr as Messages,
+  ar: ar as Messages,
 };
 
 export function isLocale(value: string): value is Locale {
@@ -27,7 +24,7 @@ export function getDirection(locale: Locale) {
 }
 
 export function getMessages(locale: Locale): Messages {
-  return dict[locale] ?? dict.en;
+  return dict[locale] ?? dict.ar;
 }
 
 export function t(
@@ -36,7 +33,7 @@ export function t(
   vars?: Record<string, string | number | null | undefined>,
 ) {
   const messages = getMessages(locale);
-  const raw = messages[key] ?? dict.en[key] ?? "";
+  const raw = messages[key] ?? dict.ar[key] ?? "";
   if (!vars) return raw;
   return raw.replace(/\{(\w+)\}/g, (_: string, k: string) => {
     const v = vars[k];

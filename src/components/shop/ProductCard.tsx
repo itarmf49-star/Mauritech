@@ -1,47 +1,45 @@
-import BuyButton from "@/components/shop/BuyButton";
+"use client";
 
+import BuyButton from "@/components/shop/BuyButton";
 
 type ProductCardProps = {
   product: {
-    id: number;
+    id: string;
     name: string;
-    list_price: number;
-    image_1920?: string | null;
-    qty_available?: number;
+    price: number;
+    comparePrice: number | null;
+    images: string[];
+    inventory: { quantity: number } | null;
   };
 };
-
 
 export default function ProductCard({
   product,
 }: ProductCardProps) {
-
+  const imageSrc = product.images?.[0] || null;
 
   return (
-
     <div
       className="
         group
-        store-glass
-        rounded-3xl
+        bg-white
+        rounded-2xl
         overflow-hidden
         border
-        border-white/10
-        shadow-2xl
-        hover:border-cyan-400/40
+        border-gray-200
+        shadow-lg
+        hover:shadow-xl
+        hover:border-[#F5C542]/40
         transition-all
-        duration-500
-        hover:-translate-y-2
+        duration-300
+        hover:-translate-y-1
       "
     >
-
-
       {/* Product Image */}
-
       <div
         className="
           h-64
-          bg-black/20
+          bg-gray-50
           flex
           items-center
           justify-center
@@ -49,159 +47,63 @@ export default function ProductCard({
           relative
         "
       >
-
-        {product.image_1920 ? (
-
+        {imageSrc ? (
           <img
-
-            src={`data:image/png;base64,${product.image_1920}`}
-
+            src={imageSrc}
             alt={product.name}
-
             className="
               w-full
               h-full
               object-contain
-              p-8
-              group-hover:scale-110
+              p-6
+              group-hover:scale-105
               transition-transform
-              duration-700
-              drop-shadow-2xl
+              duration-500
             "
-
           />
-
         ) : (
-
-          <div
-
-            className="
-              text-gray-400
-              text-sm
-            "
-
-          >
-
-            No Image
-
-          </div>
-
+          <div className="text-gray-400 text-sm">لا توجد صورة</div>
         )}
-
       </div>
 
-
-
       {/* Product Details */}
-
-      <div
-        className="
-          p-5
-          bg-black/10
-        "
-      >
-
-
+      <div className="p-5 bg-white">
         <h2
-
           className="
             text-xl
             font-bold
-            text-white
+            text-gray-900
             line-clamp-2
             min-h-[56px]
           "
-
         >
-
           {product.name}
-
         </h2>
 
-
-
-        <div
-
-          className="
-            mt-4
-            flex
-            items-center
-            justify-between
-          "
-
-        >
-
-          <span
-
-            className="
-              text-2xl
-              font-bold
-              text-cyan-300
-            "
-
-          >
-
-            {product.list_price}
-
-            <span className="text-sm ml-1">
-
-              MRU
-
+        <div className="mt-4 flex items-center justify-between">
+          <div>
+            <span className="text-2xl font-bold text-[#F5C542]">
+              {product.price.toLocaleString()} MRU
             </span>
-
-
-          </span>
-
-
+            {product.comparePrice && (
+              <span className="text-sm text-gray-400 line-through mr-2">
+                {product.comparePrice.toLocaleString()} MRU
+              </span>
+            )}
+          </div>
         </div>
 
-
-
-
-        <div
-
-          className="
-            mt-3
-            text-sm
-            text-gray-300
-          "
-
-        >
-
-          Stock:
-
-          {" "}
-
+        <div className="mt-3 text-sm text-gray-600">
+          المخزون:{" "}
           <span className="font-semibold">
-
-            {product.qty_available ?? 0}
-
+            {product.inventory?.quantity ?? 0}
           </span>
-
-
         </div>
-
-
-
 
         <div className="mt-5">
-
-          <BuyButton
-
-            productId={product.id}
-
-          />
-
+          <BuyButton productId={product.id} />
         </div>
-
-
-
       </div>
-
-
-
     </div>
-
   );
-
 }

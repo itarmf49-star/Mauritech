@@ -2,128 +2,62 @@
 
 import { useState } from "react";
 
-
 interface BuyButtonProps {
-  productId: number;
+  productId: string;
 }
-
-
 
 export default function BuyButton({
   productId,
 }: BuyButtonProps) {
-
-
   const [loading, setLoading] = useState(false);
 
-
-
   async function handleBuy() {
-
     try {
-
       setLoading(true);
 
-
-      const response = await fetch(
-        "/api/odoo/orders",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-
-            product_id: productId,
-
-            quantity: 1,
-
-          }),
-
-        }
-      );
-
-
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId,
+          quantity: 1,
+        }),
+      });
 
       const data = await response.json();
 
-
-
-      if (!response.ok || !data.success) {
-
-        throw new Error(
-          data.error || "فشل إنشاء الطلب"
-        );
-
+      if (!response.ok) {
+        throw new Error(data.error || "فشل إضافة المنتج إلى السلة");
       }
 
-
-
-      alert(
-        `تم إنشاء الطلب بنجاح رقم ${data.orderId}`
-      );
-
-
-
+      alert("تمت إضافة المنتج إلى السلة بنجاح");
     } catch (error: any) {
-
-
-      console.error(
-        "Order error:",
-        error
-      );
-
-
-      alert(
-        error.message ||
-        "حدث خطأ أثناء إنشاء الطلب"
-      );
-
-
+      console.error("Cart error:", error);
+      alert(error.message || "حدث خطأ أثناء إضافة المنتج إلى السلة");
     } finally {
-
       setLoading(false);
-
     }
-
   }
 
-
-
-
   return (
-
     <button
-
       onClick={handleBuy}
-
       disabled={loading}
-
       className="
         w-full
-        bg-blue-600
-        hover:bg-blue-700
-        text-white
+        bg-[#F5C542]
+        hover:bg-[#D4AF2E]
+        text-black
         py-3
         rounded-lg
-        font-semibold
+        font-bold
         transition
         disabled:opacity-50
       "
-
     >
-
-      {
-        loading
-          ? "جاري إنشاء الطلب..."
-          : "شراء"
-      }
-
-
+      {loading ? "جارٍ الإضافة..." : "أضف إلى السلة"}
     </button>
-
   );
-
 }

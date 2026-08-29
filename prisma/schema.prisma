@@ -28,12 +28,19 @@ model User {
   billingInvoices BillingInvoice[]
   clientAccounts ClientAccount[]
   messages Message[]
-  chatMessages ChatMessage[]
   aiConversations AiConversation[]
   coveragePlans CoveragePlan[]
   portalProjects PortalProject[]
   supportTickets SupportTicket[]
   portalDocuments PortalDocument[]
+  
+  cart Cart?
+  orders Order[]
+  reviews Review[]
+  wishlist Wishlist?
+  customer Customer?
+  chatSessions ChatSession[]
+  aiAgentConversations AIAgentConversation[]
 
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -153,16 +160,527 @@ model SiteSettings {
   updatedAt DateTime @updatedAt
 }
 
-model PageView {
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  price       Int      @default(0)
+  comparePrice Int?
+  cost        Int?
+  images      Json?
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  sku         String?  @unique
+  barcode     String?  @unique
+  weight      Float?
+  dimensions  Json?
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  metaTitle   String?
+  metaDesc    String?
+  tags        String[]
+  
+  inventory   Inventory?
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+  wishlistItems WishlistItem[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([slug])
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@map("products")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  image       String?
+  parentId    String?
+  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  isActive    Boolean  @default(true)
+  
+  products    Product[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([parentId])
+  @@index([isActive])
+  @@map("categories")
+}
+
+model Inventory {
+  id              String   @id @default(cuid())
+  productId       String   @unique
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity        Int      @default(0)
+  reservedQty     Int      @default(0)
+  lowStockThreshold Int    @default(5)
+  trackQuantity   Boolean  @default(true)
+  allowBackorder  Boolean  @default(false)
+  lastRestocked   DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("inventory")
+}
+
+model Cart {
   id        String   @id @default(cuid())
-  path      String
-  referrer  String?
-  userAgent String?
-
+  userId    Int?     @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  sessionId String?  @unique
+  items     CartItem[]
+  
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
+  @@map("carts")
+}
 
-  @@index([path])
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  userId          Int?
+  user            User?         @relation(fields: [userId], references: [id])
+  customerName    String
+  customerEmail   String
+  customerPhone   String?
+  shippingAddress Json?
+  billingAddress  Json?
+  
+  subtotal        Int
+  tax             Int           @default(0)
+  shipping        Int           @default(0)
+  discount        Int           @default(0)
+  total           Int
+  
+  status          OrderStatus   @default(PENDING)
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentMethod   String?
+  paymentIntentId String?       @unique
+  
+  notes           String?
+  source          String        @default("web")
+  
+  items           OrderItem[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([orderNumber])
+  @@index([userId])
+  @@index([status])
+  @@index([paymentStatus])
   @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+  productName String
+  productSku  String?
+  quantity    Int
+  unitPrice   Int
+  total       Int
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  userName  String
+  rating    Int
+  comment   String?
+  isVerified Boolean @default(false)
+  isApproved Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([productId])
+  @@index([isApproved])
+  @@map("reviews")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  items     WishlistItem[]
+  
+  createdAt DateTime @default(now())
+  
+  @@map("wishlists")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  wishlistId String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt  DateTime @default(now())
+  
+  @@unique([wishlistId, productId])
+  @@map("wishlist_items")
+}
+
+model Customer {
+  id           String   @id @default(cuid())
+  userId       Int?     @unique
+  user         User?    @relation(fields: [userId], references: [id])
+  email        String   @unique
+  firstName    String
+  lastName     String
+  phone        String?
+  company      String?
+  addresses    Json?
+  totalOrders  Int      @default(0)
+  totalSpent   Int      @default(0)
+  notes        String?
+  tags         String[]
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([email])
+  @@index([userId])
+  @@map("customers")
+}
+
+model Requirement {
+  id          String            @id @default(cuid())
+  title       String
+  description String?
+  category    RequirementCategory @default(PRODUCT)
+  priority    RequirementPriority @default(MEDIUM)
+  status      RequirementStatus  @default(OPEN)
+  source      String?            @default("web")
+  contactName String?
+  contactEmail String?
+  contactPhone String?
+  budget      Int?
+  deadline    DateTime?
+  assignedTo  String?
+  notes       String?
+  metadata    Json?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([status])
+  @@index([priority])
+  @@index([category])
+  @@index([createdAt])
+  @@map("requirements")
+}
+
+model ChatSession {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+  customerName String?
+  customerEmail String?
+  customerPhone String?
+  status      ChatStatus @default(ACTIVE)
+  assignedTo  String?
+  aiHandled   Boolean  @default(false)
+  metadata    Json?
+  
+  messages    ChatMessage[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([sessionId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id          String   @id @default(cuid())
+  sessionId   String
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  senderType  ChatSender @default(CUSTOMER)
+  senderName  String?
+  content     String
+  isAi        Boolean  @default(false)
+  isRead      Boolean  @default(false)
+  attachments Json?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("chat_messages")
+}
+
+model SocialIntegration {
+  id          String   @id @default(cuid())
+  platform    SocialPlatform
+  isActive    Boolean  @default(true)
+  config      Json?
+  webhookUrl  String?
+  apiKey      String?
+  apiSecret   String?
+  phoneNumber String?
+  displayName String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([platform])
+  @@map("social_integrations")
+}
+
+model WhatsAppMessage {
+  id          String   @id @default(cuid())
+  phoneNumber String
+  messageId   String?  @unique
+  direction   MessageDirection @default(INBOUND)
+  content     String
+  status      WhatsAppStatus @default(RECEIVED)
+  orderId     String?
+  customerId  String?
+  metadata    Json?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([phoneNumber])
+  @@index([orderId])
+  @@index([createdAt])
+  @@map("whatsapp_messages")
+}
+
+model AIAgent {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  systemPrompt String
+  model       String   @default("gpt-4o-mini")
+  temperature Float    @default(0.7)
+  maxTokens   Int      @default(1000)
+  capabilities Json?
+  config      Json?
+  
+  conversations AIAgentConversation[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("ai_agents")
+}
+
+model AIAgentConversation {
+  id          String   @id @default(cuid())
+  agentId     String
+  agent       AIAgent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  sessionId   String?
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+  customerEmail String?
+  title       String?
+  context     Json?
+  
+  messages    AIAgentMessage[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([agentId])
+  @@index([sessionId])
+  @@index([userId])
+  @@map("ai_agent_conversations")
+}
+
+model AIAgentMessage {
+  id            String   @id @default(cuid())
+  conversationId String
+  conversation   AIAgentConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role          String
+  content       String
+  tokensUsed    Int      @default(0)
+  metadata      Json?
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([conversationId])
+  @@map("ai_agent_messages")
+}
+
+model Sale {
+  id          String   @id @default(cuid())
+  orderId     String   @unique
+  productId   String?
+  productName String
+  quantity    Int
+  unitPrice   Int
+  total       Int
+  cost        Int?
+  profit      Int?
+  channel     String   @default("web")
+  paymentMethod String?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([orderId])
+  @@index([productId])
+  @@index([createdAt])
+  @@map("sales")
+}
+
+model PageView {
+  id          String   @id @default(cuid())
+  path        String
+  referrer    String?
+  userAgent   String?
+  ipAddress   String?
+  sessionId   String?
+  duration    Int?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([path])
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("page_views")
+}
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  eventType   String
+  eventName   String
+  properties  Json?
+  userId      String?
+  sessionId   String?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([eventType])
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("analytics_events")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum ChatStatus {
+  ACTIVE
+  CLOSED
+  ARCHIVED
+  TRANSFERRED
+}
+
+enum ChatSender {
+  CUSTOMER
+  AGENT
+  SYSTEM
+  AI
+}
+
+enum RequirementCategory {
+  PRODUCT
+  SERVICE
+  SUPPORT
+  CONSULTATION
+  CUSTOM
+}
+
+enum RequirementPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum RequirementStatus {
+  OPEN
+  IN_PROGRESS
+  QUOTED
+  ACCEPTED
+  COMPLETED
+  CANCELLED
+}
+
+enum SocialPlatform {
+  WHATSAPP
+  FACEBOOK
+  INSTAGRAM
+  TWITTER
+  TELEGRAM
+  WECHAT
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum WhatsAppStatus {
+  RECEIVED
+  SENT
+  DELIVERED
+  READ
+  FAILED
 }
 
 model ClientAccount {
@@ -294,31 +812,6 @@ model PricingRule {
   updatedAt DateTime @updatedAt
 
   @@index([isActive])
-}
-
-model ChatThread {
-  id        String        @id @default(cuid())
-  title     String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  messages  ChatMessage[]
-}
-
-model ChatMessage {
-  id        String     @id @default(cuid())
-  threadId  String
-  thread    ChatThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
-
-  senderId  Int?
-  sender    User?      @relation(fields: [senderId], references: [id])
-
-  body      String
-  isAi      Boolean    @default(false)
-
-  createdAt DateTime @default(now())
-
-  @@index([threadId])
-  @@index([createdAt])
 }
 
 model AiConversation {
