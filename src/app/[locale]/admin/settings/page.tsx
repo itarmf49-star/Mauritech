@@ -24,6 +24,7 @@ type Settings = {
     model: string;
     temperature: number;
     maxTokens: number;
+    config: Record<string, unknown>;
   };
   socialIntegrations: {
     id: string;
@@ -205,6 +206,13 @@ export default function AdminSettingsPage() {
               <div>
                 <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAIAgentName")}</label>
                 <input className="input w-full" value={settings.aiAgent.name} onChange={(e) => updateAiAgent("name", e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminAIProvider")}</label>
+                <select className="input w-full" value={(settings.aiAgent.config as any)?.provider || "openai"} onChange={(e) => updateAiAgent("config", { ...(settings.aiAgent.config as any), provider: e.target.value })}>
+                  <option value="openai">OpenAI</option>
+                  <option value="gemini">Google Gemini</option>
+                </select>
               </div>
               <div>
                 <label className="block text-xs font-bold text-white/60 mb-1">{t(locale, "adminSettingsAIAgentModel")}</label>
