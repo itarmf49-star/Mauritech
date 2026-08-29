@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const locales = ["en", "fr", "ar"] as const;
-const defaultLocale = "en" as const;
+const locales = ["ar", "fr"] as const;
+const defaultLocale = "ar" as const;
 
 function isLocale(value: string): value is (typeof locales)[number] {
   return locales.includes(value as (typeof locales)[number]);

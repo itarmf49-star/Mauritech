@@ -104,7 +104,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
             aria-label="MauriTech home"
           >
             <span className="text-white">Mauri</span>
-            <span className="text-[#F5C542]">Tech</span>
+            <span className="text-[#3b82f6]">Tech</span>
           </Link>
 
           {/* Desktop nav */}
@@ -117,7 +117,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                 className={[
                     "text-sm font-semibold transition-all pb-1 border-b-2",
                     isActiveLink(l.href)
-                      ? "text-[#F5C542] border-[#F5C542]/70"
+                      ? "text-[#3b82f6] border-[#3b82f6]/70"
                       : "text-white/80 border-transparent hover:text-white hover:border-white/20",
                   ].join(" ")}
                 >
@@ -136,7 +136,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                   className={[
                     "px-3 py-1 rounded-full text-xs font-extrabold tracking-widest border transition-colors",
                     loc === locale
-                      ? "border-[#F5C542]/70 text-[#F5C542] bg-white/5"
+                      ? "border-[#3b82f6]/70 text-[#3b82f6] bg-white/5"
                       : "border-white/15 text-white/75 hover:text-white hover:border-white/30",
                   ].join(" ")}
                   aria-current={loc === locale}
@@ -157,7 +157,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                   </Link>
                   <Link
                     href={localePath(locale, "/register")}
-                    className="text-sm font-semibold text-[#F5C542] hover:text-[#FFD25A] transition-colors"
+                    className="text-sm font-semibold text-[#3b82f6] hover:text-[#60a5fa] transition-colors"
                   >
                     {t(locale, "authCreateAccount")}
                   </Link>
@@ -165,7 +165,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
               ) : null}
               <Link
                 href={localePath(locale, "/portal-access")}
-                className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
+                className="inline-flex items-center justify-center rounded-xl bg-[#3b82f6] px-4 py-2 text-sm font-bold text-white hover:bg-[#2563eb] transition-colors"
               >
                 {t(locale, "navPortal")}
               </Link>
@@ -208,7 +208,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                   href={l.href}
                   className={[
                     "rounded-xl px-3 py-2 text-sm font-semibold transition flex items-center justify-between",
-                    isActiveLink(l.href) ? "text-[#F5C542] bg-white/5" : "text-white/85 hover:text-white hover:bg-white/5",
+                    isActiveLink(l.href) ? "text-[#3b82f6] bg-white/5" : "text-white/85 hover:text-white hover:bg-white/5",
                   ].join(" ")}
                 >
                   {t(locale, l.key)}
@@ -224,12 +224,12 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                     key={loc}
                     type="button"
                     onClick={() => onSwitchLocale(loc)}
-                    className={[
-                      "px-3 py-1 rounded-full text-xs font-extrabold tracking-widest border transition-colors",
-                      loc === locale
-                        ? "border-[#F5C542]/70 text-[#F5C542] bg-white/5"
-                        : "border-white/15 text-white/75 hover:text-white hover:border-white/30",
-                    ].join(" ")}
+                  className={[
+                    "px-3 py-1 rounded-full text-xs font-extrabold tracking-widest border transition-colors",
+                    loc === locale
+                      ? "border-[#3b82f6]/70 text-[#3b82f6] bg-white/5"
+                      : "border-white/15 text-white/75 hover:text-white hover:border-white/30",
+                  ].join(" ")}
                     aria-current={loc === locale}
                   >
                     {loc.toUpperCase()}
@@ -248,7 +248,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                     </Link>
                     <Link
                       href={localePath(locale, "/register")}
-                      className="rounded-xl border border-[#F5C542]/40 px-3 py-2 text-sm font-semibold text-[#F5C542]"
+                      className="rounded-xl border border-[#3b82f6]/40 px-3 py-2 text-sm font-semibold text-[#3b82f6]"
                     >
                       {t(locale, "authCreateAccount")}
                     </Link>
@@ -256,7 +256,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                 ) : null}
                 <Link
                   href={localePath(locale, "/portal-access")}
-                  className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
+                  className="inline-flex items-center justify-center rounded-xl bg-[#3b82f6] px-4 py-2 text-sm font-bold text-white hover:bg-[#2563eb] transition-colors"
                 >
                   {t(locale, "navPortal")}
                 </Link>

@@ -4,11 +4,13 @@
   --bg: #0b0f14;
   --surface: rgba(255, 255, 255, 0.04);
   --surface-2: rgba(255, 255, 255, 0.06);
-  --border: rgba(212, 175, 55, 0.18);
+  --border: rgba(37, 99, 235, 0.18);
   --text: rgba(255, 255, 255, 0.92);
   --muted: rgba(255, 255, 255, 0.66);
-  --gold: #d4af37;
-  --gold-2: #f2de9a;
+  --primary: #2563eb;
+  --primary-2: #3b82f6;
+  --gold: #f59e0b;
+  --gold-2: #fbbf24;
   --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
 }
 
@@ -19,8 +21,8 @@
 }
 
 body {
-  background: radial-gradient(900px 600px at 30% 20%, rgba(212, 175, 55, 0.12), transparent 60%),
-    radial-gradient(700px 450px at 70% 30%, rgba(242, 222, 154, 0.08), transparent 55%),
+  background: radial-gradient(900px 600px at 30% 20%, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(700px 450px at 70% 30%, rgba(59, 130, 246, 0.08), transparent 55%),
     var(--bg);
   color: var(--text);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
@@ -41,8 +43,8 @@ html[lang="ar"] body {
 .fiber-bg-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(900px 500px at 50% 10%, rgba(212, 175, 55, 0.12), transparent 55%),
-    radial-gradient(900px 550px at 40% 40%, rgba(51, 184, 255, 0.08), transparent 60%),
+  background: radial-gradient(900px 500px at 50% 10%, rgba(37, 99, 235, 0.12), transparent 55%),
+    radial-gradient(900px 550px at 40% 40%, rgba(59, 130, 246, 0.08), transparent 60%),
     linear-gradient(180deg, rgba(11, 15, 20, 0.5), rgba(11, 15, 20, 0.92));
 }
 
@@ -67,7 +69,7 @@ a {
   top: 0;
   z-index: 20;
   background: rgba(11, 15, 20, 0.75);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.16);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.16);
   backdrop-filter: blur(10px);
 }
 
@@ -76,7 +78,7 @@ a {
   font-weight: 800;
   letter-spacing: 0.04em;
   padding: 1rem 0;
-  color: var(--gold);
+  color: var(--primary-2);
 }
 
 .nav {
@@ -120,8 +122,8 @@ a {
 }
 
 .lang-link.is-active {
-  border-color: rgba(212, 175, 55, 0.8);
-  color: var(--gold);
+  border-color: rgba(37, 99, 235, 0.8);
+  color: var(--primary-2);
 }
 
 .hero {
@@ -147,7 +149,7 @@ a {
 }
 
 .h1-accent {
-  color: var(--gold);
+  color: var(--primary-2);
 }
 
 .h2 {
@@ -207,9 +209,9 @@ p {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.92), rgba(212, 175, 55, 0.78));
-  color: #0b0f14;
-  border-color: rgba(242, 222, 154, 0.3);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.92), rgba(59, 130, 246, 0.78));
+  color: #ffffff;
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 .btn-ghost {
@@ -1594,8 +1596,8 @@ body {
   overflow: hidden;
   background:
     radial-gradient(circle at top right, rgba(37,99,235,0.35), transparent 40%),
-    radial-gradient(circle at bottom left, rgba(212,175,55,0.25), transparent 45%),
-    #050b16;
+    radial-gradient(circle at bottom left, rgba(59,130,246,0.25), transparent 45%),
+    #0b1220;
 }
 
 
