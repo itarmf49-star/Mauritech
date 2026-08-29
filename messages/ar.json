@@ -341,6 +341,7 @@
   "aiQuestionPlaceholder": "مثال: كيف اقدر ميزانية فقد الالياف لوصلة بطول 2 كم؟",
   "aiAnswerLabel": "الاجابة",
   "aiUnavailable": "خدمة الذكاء غير متاحة",
+  "aiUnavailableConfigured": "خدمة الذكاء غير متاحة حالياً. يرجى تكوين مفتاح API للذكاء الاصطناعي في الإعدادات.",
   "aiStreamError": "تعذر قراءة تدفق الذكاء",
   "aiThinking": "جار التفكير...",
   "aiAsk": "اسأل",

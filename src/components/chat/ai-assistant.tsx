@@ -77,7 +77,18 @@ export function AiAssistant({ locale = defaultLocale }: AiAssistantProps) {
                     body: JSON.stringify({ prompt }),
                   });
                   if (!res.ok || !res.body) {
-                    setError(t(locale, "aiUnavailable"));
+                    let errMsg = t(locale, "aiUnavailable");
+                    try {
+                      const errData = await res.json();
+                      if (errData.error === "ai_unavailable") {
+                        errMsg = t(locale, "aiUnavailableConfigured");
+                      } else if (errData.error) {
+                        errMsg = errData.error;
+                      }
+                    } catch {
+                      // keep default message
+                    }
+                    setError(errMsg);
                     setLoading(false);
                     return;
                   }

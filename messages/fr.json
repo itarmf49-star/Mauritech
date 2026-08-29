@@ -516,6 +516,8 @@
 
 "aiUnavailable": "Service IA indisponible",
 
+"aiUnavailableConfigured": "Service IA indisponible. Veuillez configurer la clé API dans les paramètres.",
+
 "aiStreamError": "Impossible de lire la réponse IA",
 
 "aiThinking": "Réflexion en cours...",

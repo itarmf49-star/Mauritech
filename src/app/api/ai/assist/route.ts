@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return NextResponse.json({ error: "Missing OPENAI_API_KEY" }, { status: 503 });
+    return NextResponse.json({ error: "ai_unavailable" }, { status: 503 });
   }
 
   const body = (await req.json().catch(() => null)) as { prompt?: string } | null;
