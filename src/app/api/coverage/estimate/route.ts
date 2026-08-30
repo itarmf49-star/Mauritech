@@ -28,19 +28,21 @@ export async function POST(req: Request) {
 
   try {
     const [equipment, pricing] = await Promise.all([
-      prisma.networkEquipment.findMany({ where: { isActive: true }, orderBy: { price: "asc" }, take: 100 }).catch(() => []),
+      prisma.networkEquipment.findMany({ where: { isActive: true }, orderBy: { priceMRU: "asc" }, take: 100 }).catch(() => []),
       prisma.installationPricing.findMany({ where: { isActive: true }, take: 50 }).catch(() => []),
     ]);
 
-    const equipmentRecords = equipment.map((e) => ({
-      id: e.id,
-      name: e.name,
-      manufacturer: e.manufacturer,
-      deviceType: e.deviceType,
-      price: e.price,
-      coverageRadiusM: e.coverageRadiusM,
-      maxUsers: e.maxUsers,
-    }));
+    const equipmentRecords = equipment
+      .filter((e) => e.coverageRadiusM != null && e.maxUsers != null)
+      .map((e) => ({
+        id: e.id,
+        name: e.name,
+        manufacturer: e.manufacturer,
+        deviceType: e.deviceType,
+        price: e.priceMRU,
+        coverageRadiusM: e.coverageRadiusM as number,
+        maxUsers: e.maxUsers as number,
+      }));
 
     const pricingRecords = pricing.map((p) => ({ unit: p.unit, basePrice: p.basePrice }));
 

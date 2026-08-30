@@ -8,11 +8,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   const equipment = [
-    { name: "UniFi Dream Router", manufacturer: "Ubiquiti", deviceType: "ROUTER" as const, price: 45000, coverageRadiusM: 15, maxUsers: 50 },
-    { name: "UniFi U6 Lite", manufacturer: "Ubiquiti", deviceType: "ACCESS_POINT" as const, price: 28000, coverageRadiusM: 12, maxUsers: 32 },
-    { name: "UniFi U6 Mesh", manufacturer: "Ubiquiti", deviceType: "MESH_NODE" as const, price: 32000, coverageRadiusM: 10, maxUsers: 24 },
-    { name: "TP-Link Archer AX73", manufacturer: "TP-Link", deviceType: "ROUTER" as const, price: 22000, coverageRadiusM: 12, maxUsers: 40 },
-    { name: "MikroTik hAP ax3", manufacturer: "MikroTik", deviceType: "ACCESS_POINT" as const, price: 18000, coverageRadiusM: 10, maxUsers: 24 },
+    { name: "UniFi Dream Router", nameFr: "UniFi Dream Router", nameAr: "UniFi Dream Router", manufacturer: "Ubiquiti", deviceType: "ROUTER" as const, priceMRU: 45000, coverageRadiusM: 15, maxUsers: 50 },
+    { name: "UniFi U6 Lite", nameFr: "UniFi U6 Lite", nameAr: "UniFi U6 Lite", manufacturer: "Ubiquiti", deviceType: "ACCESS_POINT" as const, priceMRU: 28000, coverageRadiusM: 12, maxUsers: 32 },
+    { name: "UniFi U6 Mesh", nameFr: "UniFi U6 Mesh", nameAr: "UniFi U6 Mesh", manufacturer: "Ubiquiti", deviceType: "MESH_NODE" as const, priceMRU: 32000, coverageRadiusM: 10, maxUsers: 24 },
+    { name: "TP-Link Archer AX73", nameFr: "TP-Link Archer AX73", nameAr: "TP-Link Archer AX73", manufacturer: "TP-Link", deviceType: "ROUTER" as const, priceMRU: 22000, coverageRadiusM: 12, maxUsers: 40 },
+    { name: "MikroTik hAP ax3", nameFr: "MikroTik hAP ax3", nameAr: "MikroTik hAP ax3", manufacturer: "MikroTik", deviceType: "ACCESS_POINT" as const, priceMRU: 18000, coverageRadiusM: 10, maxUsers: 24 },
   ];
 
   for (const item of equipment) {

@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
     
     const item = await prisma.networkEquipment.create({
       data: {
+        name: body.name ?? body.nameFr,
         nameFr: body.nameFr,
         nameAr: body.nameAr,
         manufacturer: body.manufacturer,

@@ -19,7 +19,7 @@ export function AnimatedBackground() {
       radius: number;
       vx: number;
       vy: number;
-      color: string;
+      color: { r: number; g: number; b: number };
       alpha: number;
     }> = [];
 

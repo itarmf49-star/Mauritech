@@ -70,7 +70,7 @@ export function HomeHero({ locale }: HomeHeroProps) {
                   href={`/${locale}/contact`}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
                 >
-                  {t(locale, "heroPrimaryCta" as any)}
+                  {t(locale, "heroPrimaryCta")}
                 </LinkButton>
 
                 <LinkButton
@@ -78,7 +78,7 @@ export function HomeHero({ locale }: HomeHeroProps) {
                   variant="ghost"
                   className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-4 rounded-xl font-semibold backdrop-blur-md transition-all duration-300"
                 >
-                  {t(locale, "heroSecondaryCta" as any)}
+                  {t(locale, "heroSecondaryCta")}
                 </LinkButton>
               </motion.div>
 

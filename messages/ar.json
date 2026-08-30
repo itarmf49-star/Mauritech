@@ -344,5 +344,18 @@
   "aiUnavailable": "خدمة الذكاء غير متاحة",
   "aiStreamError": "تعذر قراءة تدفق الذكاء",
   "aiThinking": "جار التفكير...",
-  "aiAsk": "اسال"
+  "aiAsk": "اسال",
+  "adminActions": "إجراءات",
+  "footerSupportPromise": "دعم فني متاح 24/7 لعملائنا.",
+  "footerNavigate": "التنقل",
+  "heroPrimaryCta": "اطلب استشارة مجانية",
+  "heroSecondaryCta": "شاهد مشاريعنا",
+  "trustItem1Title": "جاهزية 99.9%",
+  "trustItem1Description": "هدف جاهزية الشبكة في مشاريعنا.",
+  "trustItem2Title": "دعم 24/7",
+  "trustItem2Description": "فريق فني متاح في أي وقت.",
+  "trustItem3Title": "استجابة خلال 60 دقيقة",
+  "trustItem3Description": "وقت أول استجابة لطلباتكم.",
+  "trustItem4Title": "أكثر من 50 مشروعاً",
+  "trustItem4Description": "مشاريع شبكات منفذة في موريتانيا."
 }

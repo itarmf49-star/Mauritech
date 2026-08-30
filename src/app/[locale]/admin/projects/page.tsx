@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { deleteProject, createProject } from "@/actions/admin-actions";
 import { Plus, Eye, Pencil, Trash2, ExternalLink } from "lucide-react";
 
@@ -12,25 +13,25 @@ export default async function AdminProjectsPage({ params }: PageProps) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
 
-  let rows = [];
-  let dbError = null;
+  const projectSelect = {
+    id: true,
+    slug: true,
+    category: true,
+    isPublished: true,
+    translations: { select: { locale: true, title: true } },
+    images: { select: { url: true }, take: 1, orderBy: { createdAt: "desc" } },
+  } satisfies Prisma.ProjectSelect;
+
+  let rows: Prisma.ProjectGetPayload<{ select: typeof projectSelect }>[] = [];
+  let dbError: { code?: string } | null = null;
   try {
     rows = await prisma.project.findMany({
       orderBy: { updatedAt: "desc" },
       take: 100,
-      select: {
-        id: true,
-        slug: true,
-        category: true,
-        isPublished: true,
-        translations: { select: { locale: true, title: true } },
-        images: { select: { url: true }, take: 1, orderBy: { createdAt: "desc" } },
-      },
+      select: projectSelect,
     });
-  } catch (error: any) {
-    dbError = error;
-    // Return empty array if database is unavailable
-    rows = [];
+  } catch (error) {
+    dbError = error as { code?: string };
   }
 
   return (

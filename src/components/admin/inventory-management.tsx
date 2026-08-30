@@ -282,7 +282,7 @@ export function InventoryManagement({ locale }: InventoryManagementProps) {
                         <div>
                           <div className="text-gray-900 font-medium">{item.nameFr}</div>
                           <div className="text-sm text-gray-600">{item.nameAr}</div>
-                          {item.isOnSale && item.discountPercent > 0 && (
+                          {item.isOnSale && (item.discountPercent ?? 0) > 0 && (
                             <span className="text-xs text-yellow-600">
                               -{item.discountPercent}%
                             </span>

@@ -21,7 +21,15 @@ export default async function PortalInvoicesPage({ params }: PageProps) {
 
   const uid = typeof session.user.id === "string" ? Number(session.user.id) : session.user.id;
 
-  let invoices = [];
+  type InvoiceRow = {
+    id: string;
+    date: string;
+    status: "PAID" | "OVERDUE" | "PENDING";
+    amount: number;
+    currency: string;
+  };
+
+  let invoices: InvoiceRow[] = [];
   try {
     if (uid && !isNaN(uid)) {
       const invoicesRaw = await prisma.invoice.findMany({

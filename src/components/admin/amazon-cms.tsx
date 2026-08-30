@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Save, X, LayoutGrid, Megaphone, Clock, Image as ImageIcon, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, Edit, Trash2, Save, X, LayoutGrid, Megaphone, Clock, Image as ImageIcon, ArrowUp, ArrowDown, TrendingUp } from "lucide-react";
 
 interface Banner {
   id: string;
@@ -151,7 +151,7 @@ export function AmazonCMS({ locale }: AmazonCMSProps) {
     }
   };
 
-  const handleReorder = async (items: any[]) => {
+  const handleReorder = async (items: { id: string; order: number }[]) => {
     try {
       const endpoint = activeTab === "banners"
         ? "/api/admin/content/banners/reorder"
@@ -172,20 +172,29 @@ export function AmazonCMS({ locale }: AmazonCMSProps) {
   };
 
   const moveItem = (index: number, direction: "up" | "down") => {
-    const items = activeTab === "banners" ? [...banners] : activeTab === "categories" ? [...categoryShowcases] : activeTab === "deals" ? [...flashDeals] : [...promoBlocks];
     const newIndex = direction === "up" ? index - 1 : index + 1;
-    
-    if (newIndex < 0 || newIndex >= items.length) return;
-    
-    [items[index], items[newIndex]] = [items[newIndex], items[index]];
-    items.forEach((item, i) => item.order = i + 1);
-    
-    if (activeTab === "banners") setBanners(items);
-    else if (activeTab === "categories") setCategoryShowcases(items);
-    else if (activeTab === "deals") setFlashDeals(items);
-    else setPromoBlocks(items);
-    
-    handleReorder(items);
+
+    const reorder = <T extends { id: string; order: number }>(list: T[]) => {
+      if (newIndex < 0 || newIndex >= list.length) return null;
+      const items = [...list];
+      [items[index], items[newIndex]] = [items[newIndex], items[index]];
+      return items.map((item, i) => ({ ...item, order: i + 1 }));
+    };
+
+    const apply = <T extends { id: string; order: number }>(
+      list: T[],
+      setList: (next: T[]) => void,
+    ) => {
+      const items = reorder(list);
+      if (!items) return;
+      setList(items);
+      handleReorder(items);
+    };
+
+    if (activeTab === "banners") apply(banners, setBanners);
+    else if (activeTab === "categories") apply(categoryShowcases, setCategoryShowcases);
+    else if (activeTab === "deals") apply(flashDeals, setFlashDeals);
+    else apply(promoBlocks, setPromoBlocks);
   };
 
   const renderItemForm = () => {
@@ -401,26 +410,42 @@ export function AmazonCMS({ locale }: AmazonCMSProps) {
   };
 
   const renderItems = () => {
-    const items = activeTab === "banners" ? banners : activeTab === "categories" ? categoryShowcases : activeTab === "deals" ? flashDeals : promoBlocks;
+    type Row = {
+      id: string;
+      title: string;
+      subtitle: string;
+      data: Banner | CategoryShowcase | FlashDeal | PromoBlock;
+    };
+
+    const rows: Row[] =
+      activeTab === "banners"
+        ? banners.map((b) => ({ id: b.id, title: locale === "fr" ? b.titleFr : b.titleAr, subtitle: "", data: b }))
+        : activeTab === "categories"
+        ? categoryShowcases.map((c) => ({ id: c.id, title: locale === "fr" ? c.nameFr : c.nameAr, subtitle: "", data: c }))
+        : activeTab === "deals"
+        ? flashDeals.map((d) => ({
+            id: d.id,
+            title: locale === "fr" ? d.nameFr : d.nameAr,
+            subtitle: `${d.discountPrice.toLocaleString()} MRU (-${d.discountPercent}%)`,
+            data: d,
+          }))
+        : promoBlocks.map((p) => ({
+            id: p.id,
+            title: locale === "fr" ? p.titleFr : p.titleAr,
+            subtitle: locale === "fr" ? p.descriptionFr : p.descriptionAr,
+            data: p,
+          }));
 
     return (
       <div className="space-y-3">
-        {items.map((item, index) => (
+        {rows.map((item, index) => (
           <div
             key={item.id}
             className="bg-white border border-yellow-500/30 rounded-lg p-4 flex items-center justify-between"
           >
             <div className="flex-1">
-              <p className="text-gray-900 font-medium">
-                {activeTab === "banners" ? (locale === "fr" ? item.titleFr : item.titleAr) :
-                 activeTab === "categories" ? (locale === "fr" ? item.nameFr : item.nameAr) :
-                 activeTab === "deals" ? (locale === "fr" ? item.nameFr : item.nameAr) :
-                 (locale === "fr" ? item.titleFr : item.titleAr)}
-              </p>
-              <p className="text-gray-600 text-sm">
-                {activeTab === "deals" && `${item.discountPrice.toLocaleString()} MRU (-${item.discountPercent}%)`}
-                {activeTab === "promos" && (locale === "fr" ? item.descriptionFr : item.descriptionAr)}
-              </p>
+              <p className="text-gray-900 font-medium">{item.title}</p>
+              <p className="text-gray-600 text-sm">{item.subtitle}</p>
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -432,13 +457,13 @@ export function AmazonCMS({ locale }: AmazonCMSProps) {
               </button>
               <button
                 onClick={() => moveItem(index, "down")}
-                disabled={index === items.length - 1}
+                disabled={index === rows.length - 1}
                 className="p-2 hover:bg-gray-200 rounded text-gray-600 disabled:opacity-30"
               >
                 <ArrowDown className="w-4 h-4" />
               </button>
               <button
-                onClick={() => { setEditingItem(item); setShowForm(true); }}
+                onClick={() => { setEditingItem(item.data); setShowForm(true); }}
                 className="p-2 hover:bg-yellow-500/20 rounded text-yellow-600"
               >
                 <Edit className="w-4 h-4" />
