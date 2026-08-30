@@ -3,7 +3,8 @@ import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { deleteProject, createProject } from "@/actions/admin-actions";
-import { Plus, Eye, Pencil, Trash2, ExternalLink } from "lucide-react";
+import { Plus, Eye, Pencil } from "lucide-react";
+import { DeleteProjectButton } from "@/components/admin/delete-project-button";
 
 export const dynamic = "force-dynamic";
 
@@ -126,13 +127,9 @@ export default async function AdminProjectsPage({ params }: PageProps) {
                       <Pencil className="w-4 h-4" />
                     </Link>
                     <form action={deleteProject.bind(null, p.id)}>
-                      <button 
-                        type="submit" 
-                        className="p-2 hover:bg-red-500/20 rounded-lg text-red-400 transition"
-                        onClick={(e) => !confirm(locale === "fr" ? "Etes-vous sur?" : "هل أنت متأكد؟") && e.preventDefault()}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <DeleteProjectButton
+                        confirmMessage={locale === "fr" ? "Etes-vous sur?" : "هل أنت متأكد؟"}
+                      />
                     </form>
                   </td>
                 </tr>
