@@ -22,7 +22,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: migrateUrl,
+    url: migrateUrl || "postgresql://postgres:password@localhost:5432/mauritech",
     ...(shadowDatabaseUrl ? { shadowDatabaseUrl } : {}),
   },
 });

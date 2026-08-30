@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 
 const BodySchema = z.object({
   email: z.string().email(),
-  locale: z.enum(["en", "fr", "ar"]).optional(),
+  locale: z.enum(["fr", "ar"]).optional(),
 });
 
 export async function POST(req: Request) {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   }
 
   const email = parsed.data.email.toLowerCase().trim();
-  const locale = parsed.data.locale ?? "en";
+  const locale = parsed.data.locale ?? "fr";
 
   const user = await prisma.user.findUnique({
     where: { email },

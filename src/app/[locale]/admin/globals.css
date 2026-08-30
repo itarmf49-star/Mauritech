@@ -1,0 +1,113 @@
+/* Admin-specific styles - completely independent from public site */
+@layer base {
+  :root {
+    --admin-bg-primary: #ffffff;
+    --admin-bg-secondary: #f9fafb;
+    --admin-bg-tertiary: #f3f4f6;
+    --admin-border: rgba(212, 175, 55, 0.3);
+    --admin-border-gold: rgba(212, 175, 55, 0.5);
+    --admin-text-primary: #111827;
+    --admin-text-secondary: #4b5563;
+    --admin-accent: #d4af37;
+    --admin-accent-hover: #f2de9a;
+    --admin-accent-light: rgba(212, 175, 55, 0.2);
+    --admin-success: #10b981;
+    --admin-warning: #f59e0b;
+    --admin-error: #ef4444;
+  }
+
+  .admin-container {
+    @apply min-h-screen bg-white text-gray-900;
+  }
+
+  .admin-card {
+    @apply bg-white border-2 border-gray-200 rounded-xl shadow-md;
+  }
+
+  .admin-button {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  }
+
+  .admin-button-primary {
+    @apply bg-gradient-to-r from-yellow-500 to-yellow-600 text-white hover:from-yellow-600 hover:to-yellow-700 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-white;
+  }
+
+  .admin-button-secondary {
+    @apply bg-gray-100 text-gray-900 hover:bg-gray-200 border-2 border-gray-200;
+  }
+
+  .admin-input {
+    @apply w-full px-4 py-2 bg-white border-2 border-gray-200 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-yellow-500 focus:border-transparent;
+  }
+
+  .admin-table {
+    @apply w-full text-sm text-left;
+  }
+
+  .admin-table-header {
+    @apply px-6 py-3 bg-gray-50 text-gray-900 font-semibold uppercase tracking-wider text-xs;
+  }
+
+  .admin-table-row {
+    @apply px-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors;
+  }
+
+  .admin-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .admin-badge-success {
+    @apply bg-green-500 text-white border border-green-600;
+  }
+
+  .admin-badge-warning {
+    @apply bg-yellow-500 text-white border border-yellow-600;
+  }
+
+  .admin-badge-error {
+    @apply bg-red-500 text-white border border-red-600;
+  }
+
+  .admin-badge-info {
+    @apply bg-blue-500 text-white border border-blue-600;
+  }
+
+  /* Custom scrollbar for admin */
+  .admin-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .admin-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  .admin-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+
+  .admin-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}
+
+@layer utilities {
+  .text-admin-primary {
+    color: var(--admin-text-primary);
+  }
+
+  .text-admin-secondary {
+    color: var(--admin-text-secondary);
+  }
+
+  .bg-admin-primary {
+    background-color: var(--admin-bg-primary);
+  }
+
+  .bg-admin-secondary {
+    background-color: var(--admin-bg-secondary);
+  }
+
+  .border-admin {
+    border-color: var(--admin-border);
+  }
+}

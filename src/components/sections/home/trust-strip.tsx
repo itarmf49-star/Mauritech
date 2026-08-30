@@ -9,22 +9,25 @@ export function TrustStrip({
 }: TrustStripProps) {
   const items = [
     {
+      id: "trust-1",
       title: t(locale, "trustItem1Title"as any),
       description: t(locale, "trustItem1Description"as any)
     },
     {
+      id: "trust-2",
       title: t(locale, "trustItem2Title"as any),
-  description: t(locale, "trustItem2Description" as any)
-},
-     
+      description: t(locale, "trustItem2Description" as any)
+    },
     {
+      id: "trust-3",
       title: t(locale, "trustItem3Title"as any),
       description: t(locale, "trustItem3Description"as any)
     },
     {
-   title: t(locale, "trustItem4Title" as any),
-     description: t(locale, "trustItem4Description"as any)
-       },
+      id: "trust-4",
+      title: t(locale, "trustItem4Title" as any),
+      description: t(locale, "trustItem4Description"as any)
+    },
   ];
 
   return (
@@ -36,7 +39,7 @@ export function TrustStrip({
         <div className="grid gap-6 md:grid-cols-4">
           {items.map((item) => (
             <div
-              key={item.title}
+              key={item.id}
               className="text-center"
             >
               <h3 className="font-semibold text-white">

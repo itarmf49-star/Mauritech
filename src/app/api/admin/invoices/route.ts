@@ -3,6 +3,7 @@ import { z } from "zod";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
+import { notifyInvoiceCreated } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -85,6 +86,14 @@ export async function POST(req: Request) {
         metadata: { invoiceId: invoice.id, userId: invoice.userId },
       },
     });
+
+    // Send notification to user about new invoice
+    try {
+      await notifyInvoiceCreated(invoice.userId, invoice.id, invoice.total);
+    } catch (notificationError) {
+      console.error("[api/admin/invoices] Notification failed:", notificationError);
+      // Don't fail the request if notification fails
+    }
 
     return NextResponse.json({ invoice }, { status: 201 });
   } catch (e) {

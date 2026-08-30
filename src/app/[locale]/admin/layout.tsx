@@ -1,6 +1,6 @@
 import { requireStaff } from "@/lib/admin-session";
-import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
-import { AdminShell } from "@/components/admin-ui/admin-shell";
+import { getAdminLocale, type AdminLocale } from "@/lib/admin-i18n";
+import { AdminShell } from "@/components/admin/admin-shell";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +11,9 @@ type AdminLayoutProps = {
 
 export default async function AdminLayout({ children, params }: AdminLayoutProps) {
   const { locale: raw } = await params;
-  const locale: Locale = isLocale(raw) ? raw : defaultLocale;
+  const locale: AdminLocale = getAdminLocale(raw);
 
-  await requireStaff(locale);
+  await requireStaff(raw);
 
   return <AdminShell locale={locale}>{children}</AdminShell>;
 }

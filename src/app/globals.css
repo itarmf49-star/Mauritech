@@ -1,15 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0b0f14;
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-2: rgba(255, 255, 255, 0.06);
-  --border: rgba(212, 175, 55, 0.18);
-  --text: rgba(255, 255, 255, 0.92);
-  --muted: rgba(255, 255, 255, 0.66);
+  --bg: #ffffff;
+  --bg-slate: #f9fafb;
+  --bg-slate-dark: #f3f4f6;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-2: rgba(255, 255, 255, 0.95);
+  --border: rgba(212, 175, 55, 0.3);
+  --border-gold: rgba(212, 175, 55, 0.5);
+  --text: rgba(17, 24, 39, 0.95);
+  --muted: rgba(75, 85, 99, 0.7);
   --gold: #d4af37;
-  --gold-2: #f2de9a;
-  --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+  --gold-light: #f2de9a;
+  --gold-dark: #b8962e;
+  --gold-glow: rgba(212, 175, 55, 0.4);
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.1);
+  --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.15);
 }
 
 @theme inline {
@@ -18,10 +24,12 @@
   --font-sans: var(--font-inter);
 }
 
+html {
+  background: #ffffff !important;
+}
+
 body {
-  background: radial-gradient(900px 600px at 30% 20%, rgba(212, 175, 55, 0.12), transparent 60%),
-    radial-gradient(700px 450px at 70% 30%, rgba(242, 222, 154, 0.08), transparent 55%),
-    var(--bg);
+  background: #ffffff !important;
   color: var(--text);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   margin: 0;
@@ -41,9 +49,9 @@ html[lang="ar"] body {
 .fiber-bg-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(900px 500px at 50% 10%, rgba(212, 175, 55, 0.12), transparent 55%),
-    radial-gradient(900px 550px at 40% 40%, rgba(51, 184, 255, 0.08), transparent 60%),
-    linear-gradient(180deg, rgba(11, 15, 20, 0.5), rgba(11, 15, 20, 0.92));
+  background: radial-gradient(900px 500px at 50% 10%, rgba(212, 175, 55, 0.08), transparent 55%),
+    radial-gradient(900px 550px at 40% 40%, rgba(51, 184, 255, 0.05), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.95));
 }
 
 a {
@@ -66,8 +74,8 @@ a {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(11, 15, 20, 0.75);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.16);
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
   backdrop-filter: blur(10px);
 }
 
@@ -207,15 +215,16 @@ p {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.92), rgba(212, 175, 55, 0.78));
-  color: #0b0f14;
-  border-color: rgba(242, 222, 154, 0.3);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.95), rgba(184, 150, 46, 0.85));
+  color: #111827;
+  border-color: rgba(242, 222, 154, 0.4);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(212, 175, 55, 0.22);
-  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(212, 175, 55, 0.3);
+  color: rgba(17, 24, 39, 0.9);
 }
 
 .btn:hover,
@@ -272,7 +281,7 @@ p {
   gap: 0.35rem;
   padding: 0.45rem 0.6rem;
   border-radius: 999px;
-  background: rgba(11, 15, 20, 0.72);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.22);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(10px);
@@ -318,7 +327,7 @@ p {
   position: absolute;
   inset: 12px;
   border-radius: 999px;
-  background: rgba(11, 15, 20, 0.75);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.10);
   display: grid;
   place-items: center;
@@ -362,7 +371,7 @@ p {
   padding: 0.65rem 0.85rem;
   border-radius: 999px;
   border: 1px solid rgba(212, 175, 55, 0.14);
-  background: rgba(11, 15, 20, 0.55);
+  background: rgba(255, 255, 255, 0.95);
   min-width: 240px;
 }
 
@@ -396,12 +405,12 @@ p {
 
 .camera-wave-fade-left {
   left: 0;
-  background: linear-gradient(90deg, rgba(11, 15, 20, 1), transparent);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
 }
 
 .camera-wave-fade-right {
   right: 0;
-  background: linear-gradient(270deg, rgba(11, 15, 20, 1), transparent);
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.9), transparent);
 }
 
 .eco-modal-backdrop {
@@ -418,7 +427,7 @@ p {
   width: min(880px, 100%);
   border-radius: 22px;
   border: 1px solid rgba(212, 175, 55, 0.18);
-  background: rgba(11, 15, 20, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
   padding: 1rem;
@@ -470,7 +479,7 @@ p {
 }
 
 .hero-metric {
-  background: rgba(11, 15, 20, 0.55);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.12);
   border-radius: 16px;
   padding: 0.9rem;
@@ -491,7 +500,7 @@ p {
 
 .ticker {
   border-bottom: 1px solid rgba(212, 175, 55, 0.14);
-  background: rgba(11, 15, 20, 0.7);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .ticker-inner {
@@ -591,13 +600,13 @@ p {
   position: relative;
   display: block;
   cursor: pointer;
-  background: #0f172a;
+  background: #ffffff;
 }
 
 .play-button {
   position: absolute;
   inset: auto auto 1rem 1rem;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   color: #fff;
   width: 48px;
   height: 48px;
@@ -608,9 +617,9 @@ p {
 
 .site-footer {
   margin-top: 3rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.12);
-  background: rgba(11, 15, 20, 0.9);
-  color: rgba(255, 255, 255, 0.78);
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  background: #ffffff;
+  color: rgba(17, 24, 39, 0.85);
 }
 
 .footer-grid {
@@ -622,7 +631,7 @@ p {
 
 .footer-title,
 .footer-heading {
-  color: #ffffff;
+  color: #111827;
   margin-top: 0;
 }
 
@@ -641,7 +650,7 @@ p {
   left: 1rem;
   top: 1rem;
   z-index: 100;
-  background: rgba(11, 15, 20, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.22);
   padding: 0.5rem;
 }
@@ -775,7 +784,7 @@ p {
   height: 44px;
   border-radius: 14px;
   padding: 0 12px;
-  background: rgba(11, 15, 20, 0.55);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.16);
   color: rgba(255, 255, 255, 0.92);
 }
@@ -804,7 +813,7 @@ p {
 
 .admin-sidebar {
   border-right: 1px solid rgba(212, 175, 55, 0.14);
-  background: rgba(11, 15, 20, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   padding: 1.25rem 1rem;
   position: sticky;
   top: 0;
@@ -857,7 +866,7 @@ p {
 
 .portal-sidebar {
   border-right: 1px solid rgba(212, 175, 55, 0.14);
-  background: rgba(11, 15, 20, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   padding: 1.25rem 1rem;
   position: sticky;
   top: 0;
@@ -942,7 +951,7 @@ p {
   padding: 0.35rem 0.6rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(11, 15, 20, 0.35);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .portal-user-dot {
@@ -1096,7 +1105,7 @@ p {
 .portal-bubble {
   border-radius: 16px;
   border: 1px solid rgba(212, 175, 55, 0.12);
-  background: rgba(11, 15, 20, 0.45);
+  background: rgba(255, 255, 255, 0.95);
   padding: 0.6rem 0.75rem;
 }
 
@@ -1393,7 +1402,7 @@ p {
   resize: vertical;
   border-radius: 14px;
   padding: 0.75rem 0.85rem;
-  background: rgba(11, 15, 20, 0.55);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(212, 175, 55, 0.16);
   color: rgba(255, 255, 255, 0.92);
 }
@@ -1412,8 +1421,8 @@ p {
 .ai-toggle {
   border-radius: 999px;
   border: 1px solid rgba(212, 175, 55, 0.35);
-  background: rgba(11, 15, 20, 0.85);
-  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.95);
+  color: rgba(17, 24, 39, 0.92);
   padding: 0.65rem 1rem;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -1432,7 +1441,7 @@ p {
   width: min(420px, calc(100vw - 2rem));
   border-radius: 18px;
   border: 1px solid rgba(212, 175, 55, 0.18);
-  background: rgba(11, 15, 20, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   padding: 0.85rem;
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
@@ -1520,24 +1529,15 @@ p {
   white-space: pre-wrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(17, 24, 39, 0.86);
   max-height: 220px;
   overflow: auto;
-}
-
-body {
-  background: #0b0f14;
-  color: white;
 }
 
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 0 20px;
-}
-
-body {
-  background: #0b0f14;
 }
 
 @keyframes projectReveal {

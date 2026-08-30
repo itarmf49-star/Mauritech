@@ -14,12 +14,12 @@ export default function MauriStudioPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0B0F14] text-white p-6">
+    <div className="min-h-screen bg-white text-gray-900 p-6">
       {/* رأس الصفحة */}
       <header className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-black text-[#F5C542]">MauriStudio Pro</h1>
-          <p className="text-white/40">نظام التحكم المركزي في MauriTech</p>
+          <p className="text-gray-600">نظام التحكم المركزي في MauriTech</p>
         </div>
         <button className="bg-[#F5C542] text-black font-bold px-6 py-2 rounded-xl hover:scale-105 transition">
           حفظ التغييرات النهائية
@@ -29,14 +29,14 @@ export default function MauriStudioPage() {
       <div className="grid grid-cols-12 gap-6 h-[calc(100vh-150px)]">
         
         {/* العمود الأيسر: لوحة الإعدادات (Inputs) */}
-        <div className="col-span-4 bg-[#111827] p-6 rounded-3xl border border-white/5 overflow-y-auto space-y-8">
+        <div className="col-span-4 bg-gray-100 p-6 rounded-3xl border border-gray-300 overflow-y-auto space-y-8">
           
           {/* إعدادات الهوية */}
           <section>
             <h2 className="font-bold mb-4 flex items-center gap-2">🎨 الهوية البصرية</h2>
             <div className="space-y-4">
               <input type="color" value={settings.primaryColor} onChange={(e) => setSettings({...settings, primaryColor: e.target.value})} className="w-full h-10 rounded cursor-pointer" />
-              <select onChange={(e) => setSettings({...settings, fontFamily: e.target.value})} className="w-full bg-black/50 p-3 rounded-xl border border-white/10">
+              <select onChange={(e) => setSettings({...settings, fontFamily: e.target.value})} className="w-full bg-white p-3 rounded-xl border border-gray-300">
                 <option>Cairo</option>
                 <option>Tajawal</option>
                 <option>Inter</option>
@@ -70,11 +70,11 @@ export default function MauriStudioPage() {
         </div>
 
         {/* العمود الأيمن: شاشة المعاينة الحية (Live Preview) */}
-        <div className="col-span-8 bg-black rounded-3xl p-8 border border-white/10 flex flex-col items-center justify-center">
-          <h3 className="text-white/20 uppercase tracking-[0.5em] mb-8">معاينة حية للموقع</h3>
+        <div className="col-span-8 bg-gray-50 rounded-3xl p-8 border border-gray-300 flex flex-col items-center justify-center">
+          <h3 className="text-gray-600 uppercase tracking-[0.5em] mb-8">معاينة حية للموقع</h3>
           
           <div 
-            className="w-full max-w-lg p-8 transition-all duration-300 border border-white/10"
+            className="w-full max-w-lg p-8 transition-all duration-300 border border-gray-300"
             style={{ 
               borderRadius: `${settings.borderRadius}px`,
               backgroundColor: `rgba(255, 255, 255, ${settings.glassOpacity})`,
@@ -82,7 +82,7 @@ export default function MauriStudioPage() {
             }}
           >
             <h2 className="text-2xl font-bold mb-4" style={{ color: settings.primaryColor }}>نموذج للمتجر</h2>
-            <p className="text-white/70 mb-6">هذا هو شكل البطاقات في موقعك الآن، سيتم تطبيق جميع التعديلات أعلاه على كامل واجهة المستخدم فور الحفظ.</p>
+            <p className="text-gray-700 mb-6">هذا هو شكل البطاقات في موقعك الآن، سيتم تطبيق جميع التعديلات أعلاه على كامل واجهة المستخدم فور الحفظ.</p>
             <button className="px-6 py-2 rounded-lg text-black font-bold" style={{ backgroundColor: settings.primaryColor }}>
               زر تجريبي
             </button>

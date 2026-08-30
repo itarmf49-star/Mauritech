@@ -18,7 +18,7 @@ export default async function AdminNewProjectPage({ params }: PageProps) {
       </div>
 
       <p className="muted">Create a multilingual project and upload images.</p>
-      <ProjectForm locale={locale as "en" | "fr" | "ar"} />
+      <ProjectForm locale={locale as "fr" | "ar"} />
     </section>
   );
 }

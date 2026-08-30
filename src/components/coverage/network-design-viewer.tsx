@@ -93,7 +93,7 @@ function FloorSvg({ plan }: { plan: FloorPlan }) {
   const cellH = plan.height / plan.heatmap.rows;
 
   return (
-    <svg viewBox={`0 0 ${plan.width} ${plan.height}`} className="w-full h-auto rounded-xl bg-[#0B0F14]" role="img">
+    <svg viewBox={`0 0 ${plan.width} ${plan.height}`} className="w-full h-auto rounded-xl bg-white" role="img">
       <defs>
         <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
           <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(212,175,55,0.06)" strokeWidth="0.5" />

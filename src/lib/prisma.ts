@@ -22,9 +22,17 @@ function createPrismaClient(): PrismaClient {
     dotenv.config({ path: envPath });
   }
 
-  const url = process.env.DATABASE_URL?.trim();
+  const url = process.env.DATABASE_URL?.trim() || process.env.DIRECT_DATABASE_URL?.trim();
+  
   if (!url) {
-    throw new Error("DATABASE_URL is not set");
+    console.warn("DATABASE_URL not configured. Using fallback for development - configure your database in .env file");
+    // Development fallback - should be replaced with actual database URL
+    const fallbackUrl = "postgresql://postgres:password@localhost:5432/mauritech_db";
+    
+    if (isDirectPostgresUrl(fallbackUrl)) {
+      const adapter = new PrismaPg(fallbackUrl);
+      return new PrismaClient({ adapter });
+    }
   }
 
   if (isAccelerateUrl(url)) {

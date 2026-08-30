@@ -34,6 +34,8 @@ model User {
   portalProjects PortalProject[]
   supportTickets SupportTicket[]
   portalDocuments PortalDocument[]
+  notifications Notification[]
+  notificationPreference NotificationPreference?
 
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -149,7 +151,19 @@ model SiteSettings {
   instagram String?
   x         String?
   youtube   String?
-
+  
+  // Dynamic content fields
+  heroTitleFr      String?
+  heroTitleAr      String?
+  heroSubtitleFr   String?
+  heroSubtitleAr   String?
+  bannerTextFr     String?
+  bannerTextAr     String?
+  bannerVisible    Boolean @default(false)
+  ctaButtonFr      String?
+  ctaButtonAr      String?
+  ctaLink          String?
+  
   updatedAt DateTime @updatedAt
 }
 
@@ -413,21 +427,43 @@ enum EquipmentType {
 model NetworkEquipment {
   id              String        @id @default(cuid())
   name            String
+  nameFr          String
+  nameAr          String
   manufacturer    String
   deviceType      EquipmentType
-  price           Int
-  coverageRadiusM Float
-  maxUsers        Int
+  model           String?
+  priceMRU        Int
+  priceUSD        Float?
+  coverageRadiusM Float?
+  maxUsers        Int?
+  wifiStandard    String?
+  ports           Int?
+  powerWatts      Float?
   imageUrl        String?
   specs           Json?
-
-  isActive Boolean @default(true)
+  specifications  String?
+  stockQuantity   Int           @default(0)
+  stockStatus     StockStatus   @default(AVAILABLE)
+  isActive        Boolean       @default(true)
+  isFeatured      Boolean       @default(false)
+  discountPercent Int           @default(0)
+  isOnSale        Boolean       @default(false)
+  saleEndDate     DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([isActive])
   @@index([deviceType])
+  @@index([stockStatus])
+  @@index([manufacturer])
+}
+
+enum StockStatus {
+  AVAILABLE
+  LOW_STOCK
+  OUT_OF_STOCK
+  PRE_ORDER
 }
 
 model InstallationPricing {
@@ -565,4 +601,73 @@ model PortalDocument {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+enum NotificationType {
+  INVOICE_CREATED
+  INVOICE_DUE
+  INVOICE_PAID
+  INVOICE_OVERDUE
+  TICKET_CREATED
+  TICKET_UPDATED
+  TICKET_CLOSED
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  PROJECT_COMPLETED
+  SYSTEM_ANNOUNCEMENT
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+model Notification {
+  id String @id @default(cuid())
+
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type NotificationType
+  status NotificationStatus @default(UNREAD)
+
+  title String
+  message String
+
+  link String?
+  metadata Json?
+
+  emailSent Boolean @default(false)
+  emailSentAt DateTime?
+
+  createdAt DateTime @default(now())
+  readAt DateTime?
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model NotificationPreference {
+  id String @id @default(cuid())
+
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  emailEnabled Boolean @default(true)
+  inAppEnabled Boolean @default(true)
+
+  invoiceNotifications Boolean @default(true)
+  ticketNotifications Boolean @default(true)
+  projectNotifications Boolean @default(true)
+  systemNotifications Boolean @default(true)
+
+  digestMode String @default("immediate") // immediate, daily, weekly
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId])
 }

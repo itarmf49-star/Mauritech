@@ -56,14 +56,13 @@ export default async function AdminEditProjectPage({ params }: PageProps) {
       <p className="muted">Edit translations and images.</p>
 
       <ProjectForm
-        locale={locale as "en" | "fr" | "ar"}
+        locale={locale as "fr" | "ar"}
         initial={{
           id: project.id,
           slug: project.slug,
           category: project.category,
           isPublished: project.isPublished,
           translations: {
-            en: mapTr("en") ? { title: mapTr("en")!.title, description: mapTr("en")!.description } : undefined,
             fr: mapTr("fr") ? { title: mapTr("fr")!.title, description: mapTr("fr")!.description } : undefined,
             ar: mapTr("ar") ? { title: mapTr("ar")!.title, description: mapTr("ar")!.description } : undefined,
           },

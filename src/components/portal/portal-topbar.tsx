@@ -3,6 +3,7 @@
 import { signOut } from "next-auth/react";
 import type { Locale } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { NotificationBell } from "@/components/portal/notification-bell";
 
 type PortalTopbarProps = {
   locale: Locale;
@@ -18,6 +19,7 @@ export function PortalTopbar({ locale, email, title, logoutLabel }: PortalTopbar
         <h1 className="portal-topbar-title">{title}</h1>
       </div>
       <div className="portal-topbar-right">
+        <NotificationBell locale={locale} />
         <div className="portal-user">
           <div className="portal-user-dot" aria-hidden />
           <span className="portal-user-email">{email ?? "-"}</span>

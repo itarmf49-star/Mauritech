@@ -1,92 +1,56 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Container } from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation";
+import { LoginModal } from "@/components/auth/login-modal";
+import { LoginSuccessAnimation } from "@/components/auth/login-success-animation";
 import type { Locale } from "@/lib/i18n";
-import { defaultLocale, isLocale, t } from "@/lib/i18n";
+import { defaultLocale, isLocale } from "@/lib/i18n";
 
 export default function LoginPage() {
   const params = useParams();
-  const search = useSearchParams();
   const rawLocale = typeof params?.locale === "string" ? params.locale : defaultLocale;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
-  const next = search?.get("next") ?? `/${locale}`;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleLoginSuccess = () => {
+    setShowModal(false);
+    setShowSuccess(true);
+  };
+
+  const handleAnimationComplete = () => {
+    // Animation complete, redirect will happen in the modal
+    setShowSuccess(false);
+  };
 
   return (
-    <section className="section auth-page">
-      <Container className="auth-wrap">
-        <div className="auth-card">
-          <h1 className="h1 auth-title">{t(locale, "authSignInTitle")}</h1>
-          <p className="muted">{t(locale, "authSignInDescription")}</p>
-
-          <form
-            className="auth-form"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setLoading(true);
-              setError(null);
-              const res = await signIn("credentials", {
-                redirect: false,
-                email,
-                password,
-                callbackUrl: next,
-              });
-              setLoading(false);
-              if (res?.error) setError(t(locale, "authInvalidCredentials"));
-              if (res?.ok) window.location.href = res.url ?? next;
-            }}
-          >
-            <label className="field">
-              <span className="field-label">{t(locale, "authEmail")}</span>
-              <input
-                className="input"
-                type="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </label>
-            <label className="field">
-              <span className="field-label">{t(locale, "authPassword")}</span>
-              <input
-                className="input"
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </label>
-            {error ? <p className="auth-error">{error}</p> : null}
-            <Button type="submit" disabled={loading}>
-              {loading ? t(locale, "authSigningIn") : t(locale, "authSignIn")}
-            </Button>
-          </form>
-
-          <p className="muted" style={{ marginTop: "0.75rem" }}>
-            <Link className="inline-link" href={`/${locale}/forgot-password`}>
-              {t(locale, "authForgotPassword")}
-            </Link>
-          </p>
-
-          <p className="muted" style={{ marginTop: "1rem" }}>
-            {t(locale, "authNewHere")}{" "}
-            <Link className="inline-link" href={`/${locale}/register`}>
-              {t(locale, "authCreateAccount")}
-            </Link>
+    <>
+      {/* Background content (blurred when modal is open) */}
+      <div className={`min-h-screen bg-white flex items-center justify-center transition-all duration-300 ${showModal ? "blur-sm" : ""}`}>
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">MauriTech</h1>
+          <p className="text-gray-600 font-medium">
+            {locale === "fr" ? "Plateforme de services technologiques" : "منصة الخدمات التكنولوجية"}
           </p>
         </div>
-      </Container>
-    </section>
+      </div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSuccess={handleLoginSuccess}
+      />
+
+      {/* Success Animation */}
+      {showSuccess && (
+        <LoginSuccessAnimation
+          locale={locale as "fr" | "ar"}
+          onComplete={handleAnimationComplete}
+        />
+      )}
+    </>
   );
 }
 

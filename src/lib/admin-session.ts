@@ -1,9 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
-import type { Locale } from "@/lib/i18n";
 
-export async function requireStaff(locale: Locale) {
+export async function requireStaff(locale: string) {
   const session = await getServerSession(authOptions);
   const role = session?.user?.role;
 

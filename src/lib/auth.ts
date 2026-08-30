@@ -27,6 +27,11 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  debug: process.env.NODE_ENV === "development",
 
   providers: [
     CredentialsProvider({
@@ -70,50 +75,56 @@ export const authOptions: NextAuthOptions = {
         }
 
         // البحث عن المستخدم في جدول users الخاص بالمشروع عبر SQL الخام
-        const rows = await prisma.$queryRawUnsafe<Array<{
-          id: number;
-          email: string | null;
-          name: string | null;
-          role: string | null;
-          password: string;
-        }>>(
-          'SELECT id, email, name, role, password FROM users WHERE lower(email) = lower($1) LIMIT 1',
-          email,
-        );
-        const user = rows[0] ?? null;
+        try {
+          const rows = await prisma.$queryRawUnsafe<Array<{
+            id: number;
+            email: string | null;
+            name: string | null;
+            role: string | null;
+            password: string;
+          }>>(
+            'SELECT id, email, name, role, password FROM users WHERE lower(email) = lower($1) LIMIT 1',
+            email,
+          );
+          const user = rows[0] ?? null;
 
-        console.log("AUTH: user found", !!user);
+          console.log("AUTH: user found", !!user);
 
-        if (!user) {
-          console.log("AUTH: authorize failed - no user");
+          if (!user) {
+            console.log("AUTH: authorize failed - no user");
+            return null;
+          }
+
+          const bcryptMatch = await bcrypt.compare(password, user.password).catch(() => false);
+          const normalizedPassword = password.trim();
+          const normalizedStoredPassword = user.password?.trim() ?? "";
+          const plainTextMatch = normalizedPassword === normalizedStoredPassword || normalizedPassword.toLowerCase() === normalizedStoredPassword.toLowerCase();
+          const passwordMatches = bcryptMatch || plainTextMatch;
+          console.log("AUTH: password match", passwordMatches);
+
+          if (!passwordMatches) {
+            console.log("AUTH: authorize failed - bad password");
+            return null;
+          }
+
+          const rawRole = typeof user.role === "string" ? user.role.toUpperCase() : "CUSTOMER";
+          const normalizedRole = rawRole === "ADMIN" || rawRole === "EDITOR" || rawRole === "CUSTOMER" ? (rawRole as Role) : "CUSTOMER";
+          console.log("AUTH: normalized role", rawRole, normalizedRole);
+
+          const result = {
+            id: String(user.id),
+            email: user.email ?? undefined,
+            name: user.name ?? undefined,
+            role: normalizedRole,
+          };
+
+          console.log("AUTH: authorize success role", result.role);
+          return result;
+        } catch (error) {
+          console.error("AUTH: database error during authorize", error);
+          // Return null gracefully instead of throwing
           return null;
         }
-
-        const bcryptMatch = await bcrypt.compare(password, user.password).catch(() => false);
-        const normalizedPassword = password.trim();
-        const normalizedStoredPassword = user.password?.trim() ?? "";
-        const plainTextMatch = normalizedPassword === normalizedStoredPassword || normalizedPassword.toLowerCase() === normalizedStoredPassword.toLowerCase();
-        const passwordMatches = bcryptMatch || plainTextMatch;
-        console.log("AUTH: password match", passwordMatches);
-
-        if (!passwordMatches) {
-          console.log("AUTH: authorize failed - bad password");
-          return null;
-        }
-
-        const rawRole = typeof user.role === "string" ? user.role.toUpperCase() : "CUSTOMER";
-        const normalizedRole = rawRole === "ADMIN" || rawRole === "EDITOR" || rawRole === "CUSTOMER" ? (rawRole as Role) : "CUSTOMER";
-        console.log("AUTH: normalized role", rawRole, normalizedRole);
-
-        const result = {
-          id: String(user.id),
-          email: user.email ?? undefined,
-          name: user.name ?? undefined,
-          role: normalizedRole,
-        };
-
-        console.log("AUTH: authorize success role", result.role);
-        return result;
       },
     }),
   ],
@@ -138,15 +149,18 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
+      // If the URL is relative, prepend the base URL
       if (url.startsWith("/")) {
         return `${baseUrl}${url}`;
       }
 
+      // If the URL is on the same origin, allow it
       if (new URL(url).origin === baseUrl) {
         return url;
       }
 
-      return baseUrl;
+      // Default to admin dashboard
+      return `${baseUrl}/fr/admin`;
     },
   },
 };

@@ -48,7 +48,7 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
   const dbItems = rows.map((p: ProjectListRow) => {
     const tr =
       p.translations.find((x: ProjectTranslation) => x.locale === locale) ??
-      p.translations.find((x: ProjectTranslation) => x.locale === "en") ??
+      p.translations.find((x: ProjectTranslation) => x.locale === "fr") ??
       null;
 
     // تحويل البيانات من DB لتتطابق مع هيكل Localized

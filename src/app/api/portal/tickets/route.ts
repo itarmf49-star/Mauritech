@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
+import { notifyTicketCreated } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -59,6 +60,15 @@ export async function POST(req: Request) {
       },
       include: { updates: true },
     });
+
+    // Send notification to user about ticket creation
+    try {
+      await notifyTicketCreated(uid, ticket.id, ticket.title);
+    } catch (notificationError) {
+      console.error("[api/portal/tickets] Notification failed:", notificationError);
+      // Don't fail the request if notification fails
+    }
+
     return NextResponse.json({ ticket }, { status: 201 });
   } catch (e) {
     console.error("[api/portal/tickets POST]", e);

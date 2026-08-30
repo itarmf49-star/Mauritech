@@ -104,7 +104,7 @@ export function SiteFooter({
 
 
             <li>
-              <Link href={`/${locale}/services`}>
+              <Link href={`/${locale}/services`} prefetch={true}>
                 {t(locale,"navServices")}
               </Link>
             </li>
@@ -112,15 +112,15 @@ export function SiteFooter({
 
 
             <li>
-              <Link href={`/${locale}/projects`}>
-                {t(locale,"navProjects")}
+              <Link href={`/${locale}/shop`} prefetch={true}>
+                {t(locale,"navShop")}
               </Link>
             </li>
 
 
 
             <li>
-              <Link href={`/${locale}/portal-access`}>
+              <Link href={`/${locale}/portal`} prefetch={true}>
                 {t(locale,"navPortal")}
               </Link>
             </li>
@@ -128,7 +128,7 @@ export function SiteFooter({
 
 
             <li>
-              <Link href={`/${locale}/contact`}>
+              <Link href={`/${locale}/contact`} prefetch={true}>
                 {t(locale,"navContactLink")}
               </Link>
             </li>

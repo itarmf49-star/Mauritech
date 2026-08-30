@@ -1,20 +1,18 @@
-import en from "../../messages/en.json";
 import fr from "../../messages/fr.json";
 import ar from "../../messages/ar.json";
 import type { Localized } from "@/types/content";
 
-export type Locale = "en" | "fr" | "ar";
+export type Locale = "fr" | "ar";
 
-export const locales: Locale[] = ["en", "fr", "ar"];
-export const defaultLocale: Locale = "en";
+export const locales: Locale[] = ["fr", "ar"];
+export const defaultLocale: Locale = "fr";
 
-export type Messages = typeof en;
+export type Messages = typeof fr;
 export type MessageKey = keyof Messages;
 
 // تم التعديل هنا: استخدام any لتجنب خطأ التضارب في مفاتيح ملفات الترجمة (JSON)
 const dict: Record<Locale, any> = { 
-  en: en as Messages, 
-  fr: fr as any, 
+  fr: fr as Messages, 
   ar: ar as any 
 };
 
@@ -27,7 +25,7 @@ export function getDirection(locale: Locale) {
 }
 
 export function getMessages(locale: Locale): Messages {
-  return dict[locale] ?? dict.en;
+  return dict[locale] ?? dict.fr;
 }
 
 export function t(
@@ -36,7 +34,7 @@ export function t(
   vars?: Record<string, string | number | null | undefined>,
 ) {
   const messages = getMessages(locale);
-  const raw = messages[key] ?? dict.en[key] ?? "";
+  const raw = messages[key] ?? dict.fr[key] ?? "";
   if (!vars) return raw;
   return raw.replace(/\{(\w+)\}/g, (_: string, k: string) => {
     const v = vars[k];
@@ -92,7 +90,7 @@ export const NAV_LINK_KEYS = [
   "navHome",
   "navServices",
   "navCoverage",
-  "navProjects",
+  "navShop",
   "navAbout",
   "navContactLink",
 ] as const satisfies readonly MessageKey[];

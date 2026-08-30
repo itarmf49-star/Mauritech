@@ -61,8 +61,8 @@ export function ShopCta({
           max-w-6xl
           mx-auto
           rounded-3xl
-          bg-[#0B1220]
-          text-white
+          bg-white
+          text-gray-900
           p-10
           text-center
         "
@@ -81,7 +81,7 @@ export function ShopCta({
 
         <p
           className="
-            text-gray-300
+            text-gray-600
             mb-8
           "
         >

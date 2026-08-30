@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { prisma } from "@/lib/prisma";
+import { notifyInvoiceCreated } from "@/lib/notifications";
 import type { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -136,6 +137,14 @@ export async function POST(req: Request) {
           isAdmin: true,
         },
       });
+    }
+
+    // Send notification to user about new invoice
+    try {
+      await notifyInvoiceCreated(Number(userId), invoice.id, invoice.amount);
+    } catch (notificationError) {
+      console.error("[api/invoices] Notification failed:", notificationError);
+      // Don't fail the request if notification fails
     }
 
     return Response.json(invoice, { status: 201 });

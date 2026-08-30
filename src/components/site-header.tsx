@@ -9,7 +9,7 @@ import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/
 type SiteHeaderProps = { locale?: Locale };
 
 function stripLocaleFromPathname(pathname: string) {
-  // pathname examples: "/en", "/en/projects", "/fr#hash" (hash not included), "/"
+  // pathname examples: "/fr", "/fr/shop", "/ar#hash" (hash not included), "/"
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 0) return "/";
   const first = parts[0];
@@ -61,7 +61,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
       { key: "navHome" as const, href: localePath(locale, "/") },
       { key: "navServices" as const, href: localePath(locale, "/services") },
       { key: "navCoverage" as const, href: localePath(locale, "/coverage") },
-      { key: "navProjects" as const, href: localePath(locale, "/projects") },
+      { key: "navShop" as const, href: localePath(locale, "/shop") },
       { key: "navAbout" as const, href: localePath(locale, "/about") },
       { key: "navContactLink" as const, href: localePath(locale, "/contact") },
     ],
@@ -93,17 +93,18 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
     <header
       className={[
         "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled ? "bg-[#0B0F14]/80 backdrop-blur-md border-b border-white/10" : "bg-transparent",
+        scrolled ? "bg-white/80 backdrop-blur-md border-b border-gray-200" : "bg-transparent",
       ].join(" ")}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className={["flex h-16 items-center justify-between", isRtl ? "flex-row-reverse" : ""].join(" ")}>
           <Link
             href={localePath(locale, "/")}
+            prefetch={true}
             className="inline-flex items-baseline gap-0.5 font-extrabold tracking-tight"
             aria-label="MauriTech home"
           >
-            <span className="text-white">Mauri</span>
+            <span className="text-gray-900">Mauri</span>
             <span className="text-[#F5C542]">Tech</span>
           </Link>
 
@@ -114,6 +115,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                 <Link
                   key={l.key}
                   href={l.href}
+                  prefetch={true}
                 className={[
                     "text-sm font-semibold transition-all pb-1 border-b-2",
                     isActiveLink(l.href)
@@ -151,12 +153,14 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                 <>
                   <Link
                     href={localePath(locale, "/login")}
+                    prefetch={true}
                     className="text-sm font-semibold text-white/85 hover:text-white transition-colors"
                   >
                     {t(locale, "navLogin")}
                   </Link>
                   <Link
                     href={localePath(locale, "/register")}
+                    prefetch={true}
                     className="text-sm font-semibold text-[#F5C542] hover:text-[#FFD25A] transition-colors"
                   >
                     {t(locale, "authCreateAccount")}
@@ -164,7 +168,8 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                 </>
               ) : null}
               <Link
-                href={localePath(locale, "/portal-access")}
+                href={localePath(locale, "/portal")}
+                prefetch={true}
                 className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
               >
                 {t(locale, "navPortal")}
@@ -200,15 +205,16 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
         ].join(" ")}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-4">
-          <div className="rounded-2xl border border-white/10 bg-[#0B0F14]/85 backdrop-blur-md p-4">
+          <div className="rounded-2xl border border-gray-200 bg-white/85 backdrop-blur-md p-4">
             <div className="grid gap-2">
               {navLinks.map((l) => (
                 <Link
                   key={l.key}
                   href={l.href}
+                  prefetch={true}
                   className={[
                     "rounded-xl px-3 py-2 text-sm font-semibold transition flex items-center justify-between",
-                    isActiveLink(l.href) ? "text-[#F5C542] bg-white/5" : "text-white/85 hover:text-white hover:bg-white/5",
+                    isActiveLink(l.href) ? "text-[#F5C542] bg-gray-100" : "text-gray-900 hover:text-gray-900 hover:bg-gray-100",
                   ].join(" ")}
                 >
                   {t(locale, l.key)}
@@ -242,12 +248,14 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                   <div className="flex gap-2 justify-end">
                     <Link
                       href={localePath(locale, "/login")}
+                      prefetch={true}
                       className="rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-white/90 hover:bg-white/10"
                     >
                       {t(locale, "navLogin")}
                     </Link>
                     <Link
                       href={localePath(locale, "/register")}
+                      prefetch={true}
                       className="rounded-xl border border-[#F5C542]/40 px-3 py-2 text-sm font-semibold text-[#F5C542]"
                     >
                       {t(locale, "authCreateAccount")}
@@ -255,7 +263,8 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
                   </div>
                 ) : null}
                 <Link
-                  href={localePath(locale, "/portal-access")}
+                  href={localePath(locale, "/portal")}
+                  prefetch={true}
                   className="inline-flex items-center justify-center rounded-xl bg-[#F5C542] px-4 py-2 text-sm font-bold text-black hover:bg-[#FFD25A] transition-colors"
                 >
                   {t(locale, "navPortal")}
