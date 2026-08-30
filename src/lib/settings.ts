@@ -1,23 +1,24 @@
 import { prisma } from "@/lib/prisma";
+import type { SiteSettings } from "@prisma/client";
 
-export async function getGlobalSettings() {
+export type GlobalSettings = Partial<SiteSettings> & {
+  primaryColor: string;
+  cardRadius: number;
+  glassOpacity: number;
+};
+
+const defaultSettings: GlobalSettings = {
+  primaryColor: "#F5C542",
+  cardRadius: 16,
+  glassOpacity: 0.15,
+};
+
+export async function getGlobalSettings(): Promise<GlobalSettings> {
   try {
-    // Try to fetch settings from database using correct model name
     const settings = await prisma.siteSettings.findFirst();
-    
-    // Return values or defaults if database is empty
-    return settings || {
-      primaryColor: "#F5C542",
-      cardRadius: 16,
-      glassOpacity: 0.15
-    };
-  } catch (error) {
-    // Silently return defaults if database is not connected
-    // This is expected in development without database setup
-    return {
-      primaryColor: "#F5C542",
-      cardRadius: 16,
-      glassOpacity: 0.15
-    };
+    return settings ? { ...defaultSettings, ...settings } : defaultSettings;
+  } catch {
+    // Database not reachable (expected in local development without a database)
+    return defaultSettings;
   }
 }

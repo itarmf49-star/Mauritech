@@ -25,7 +25,7 @@ export function WhatsAppQRPairing({ locale }: WhatsAppQRPairingProps) {
   };
 
   const removeDevice = (id: number) => {
-    setLinkedDevices(devices.filter(d => d.id !== id));
+    setLinkedDevices((devices) => devices.filter((d) => d.id !== id));
   };
 
   const copyQr = () => {

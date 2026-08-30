@@ -28,7 +28,7 @@ export function SimplifiedPortalLayout({ locale, email, userName, children }: Si
     { href: `/${locale}/portal/messages`, icon: MessageSquare, label: locale === "fr" ? "Messages" : "الرسائل" },
   ];
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const isActive = (href: string) => pathname === href || (pathname?.startsWith(href + "/") ?? false);
 
   return (
     <LightBeamBackground>

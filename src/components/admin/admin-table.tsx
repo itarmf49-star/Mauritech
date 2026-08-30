@@ -45,8 +45,9 @@ export function AdminTableRow({ children, className = "", onClick }: AdminTableR
 interface AdminTableCellProps {
   children: ReactNode;
   className?: string;
+  colSpan?: number;
 }
 
-export function AdminTableCell({ children, className = "" }: AdminTableCellProps) {
-  return <td className={`px-6 py-4 ${className}`}>{children}</td>;
+export function AdminTableCell({ children, className = "", colSpan }: AdminTableCellProps) {
+  return <td className={`px-6 py-4 ${className}`} colSpan={colSpan}>{children}</td>;
 }
