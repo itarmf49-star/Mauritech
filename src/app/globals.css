@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* شبكة أمان: يمنع أي عنصر يتجاوز عرض الصفحة (خصوصاً في اتجاه RTL) من توليد
+   تمرير أفقي يُزيح كامل المحتوى المرئي جانبياً. */
+html, body {
+  overflow-x: hidden;
+}
+
 :root {
   --bg: #0b0f14;
   --surface: rgba(255, 255, 255, 0.04);
@@ -33,6 +39,117 @@ html[lang="ar"] body {
   font-family: var(--font-arabic), Arial, Helvetica, sans-serif;
 }
 
+/* صفحات المتجر (الرئيسية، المنتج، السلة، الدفع) بطابع فاتح على غرار أمازون */
+body.theme-light-market {
+  background: #eaeded;
+  color: #111827;
+}
+
+/* شرائط أقسام المنتجات في الصفحة الرئيسية — خلفية زجاجية متحركة بألوان مختلفة
+   لكل قسم (فقاعات ملونة ضبابية تتحرك ببطء خلف لوحة زجاجية شفافة تحمل البطاقات). */
+@keyframes category-blob-float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(var(--blob-x, 30px), var(--blob-y, -20px)) scale(1.15);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.category-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  animation: category-blob-float 14s ease-in-out infinite;
+  will-change: transform;
+}
+
+.category-blob-delay-1 {
+  animation-delay: -3s;
+}
+
+.category-blob-delay-2 {
+  animation-delay: -7s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-blob {
+    animation: none;
+  }
+}
+
+/* لوحة الأدمن فاتحة بالكامل — نفس الأصناف القديمة (admin-table, pill, input, btn...)
+   مصمّمة أصلاً للطابع الداكن العام؛ هذا النطاق يعيد تلوينها هنا فقط دون المساس
+   باستخدامها في صفحات الموقع العامة الداكنة. */
+.admin-content-light {
+  color: #111827;
+}
+
+.admin-content-light .admin-table-wrap {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.admin-content-light .admin-table th {
+  color: #6b7280;
+}
+
+.admin-content-light .admin-table th,
+.admin-content-light .admin-table td {
+  border-color: #f3f4f6;
+  color: #111827;
+}
+
+.admin-content-light .admin-table tr:hover td {
+  background: #f9fafb;
+}
+
+.admin-content-light .admin-page-title,
+.admin-content-light h1,
+.admin-content-light h2,
+.admin-content-light h3 {
+  color: #111827;
+}
+
+.admin-content-light .muted {
+  color: #6b7280;
+}
+
+.admin-content-light .pill {
+  border-color: #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+}
+
+.admin-content-light .pill-active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.admin-content-light .input {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #111827;
+}
+
+.admin-content-light .input::placeholder {
+  color: #9ca3af;
+}
+
+.admin-content-light .btn-ghost {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+.admin-content-light .status-badge {
+  color: #111827;
+}
+
 .fiber-bg {
   position: fixed;
   inset: 0;
@@ -48,9 +165,13 @@ html[lang="ar"] body {
     linear-gradient(180deg, rgba(11, 15, 20, 0.5), rgba(11, 15, 20, 0.92));
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* @layer base لنفس السبب أعلاه: لا يجب أن يمنع هذا أصناف Tailwind اللونية
+   الصريحة (مثل text-white على أزرار الفلترة النشطة) من الظهور. */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 .container {
@@ -158,9 +279,14 @@ a {
   letter-spacing: -0.01em;
 }
 
-p {
-  color: var(--muted);
-  line-height: 1.7;
+/* في @layer base حتى تستطيع أصناف Tailwind اللونية (مثل text-gray-500 المستخدمة
+   في لوحة الأدمن الفاتحة) أن تجاوز هذا اللون الافتراضي؛ بدون هذا كان أي <p>
+   يفرض اللون الداكن الشفاف حتى لو حمل صنف Tailwind لوني صريح. */
+@layer base {
+  p {
+    color: var(--muted);
+    line-height: 1.7;
+  }
 }
 
 .muted {
@@ -633,13 +759,29 @@ p {
   padding: 0;
 }
 
+/* إخفاء مرئي بطريقة آمنة (لا تُوسّع عرض الصفحة القابل للتمرير كما كان يحدث سابقاً
+   مع left: -999px — وهو ما كان يُزيح كل محتوى الصفحات ذات الاتجاه RTL جانبياً). */
 .skip-link {
   position: absolute;
-  left: -999px;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
   top: 0;
 }
 
 .skip-link:focus {
+  position: fixed;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
   left: 1rem;
   top: 1rem;
   z-index: 100;
@@ -785,6 +927,76 @@ p {
 .input:focus-visible {
   outline: 3px solid rgba(212, 175, 55, 0.9);
   outline-offset: 2px;
+}
+
+/* حقول ولوحة الأدمن ذات الطابع الفاتح (Zenith-style) */
+.input-light {
+  height: 40px;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.input-light::placeholder {
+  color: #9ca3af;
+}
+
+.input-light:focus-visible {
+  outline: none;
+  border-color: #9ca3af;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+textarea.input-light {
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.btn-light-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  transition: background 150ms ease;
+}
+
+.btn-light-secondary:hover {
+  background: #f9fafb;
+}
+
+.btn-light-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background: #111827;
+  color: #ffffff;
+  transition: background 150ms ease;
+}
+
+.btn-light-primary:hover {
+  background: #1f2937;
+}
+
+.btn-light-primary:disabled,
+.btn-light-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .auth-error {
@@ -1479,6 +1691,12 @@ p {
   border: 1px solid rgba(51, 184, 255, 0.18);
   background: rgba(255, 255, 255, 0.04);
   padding: 0.55rem 0.65rem;
+}
+
+.chat-bubble-agent {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(59, 130, 246, 0.08);
+  margin-inline-start: 1.5rem;
 }
 
 .chat-bubble-meta {

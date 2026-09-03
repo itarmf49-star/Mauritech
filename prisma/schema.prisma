@@ -41,10 +41,60 @@ model User {
   customer Customer?
   chatSessions ChatSession[]
   aiAgentConversations AIAgentConversation[]
+  storeUsers StoreUser[]
 
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("users")
+}
+
+enum StoreRole {
+  OWNER
+  MANAGER
+  STAFF
+}
+
+/** متجر ضمن المنصة (نموذج سوق متعدد المتاجر — Marketplace). ينشئه السوبر أدمن. */
+model Store {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  nameFr        String
+  nameAr        String
+  descriptionFr String?
+  descriptionAr String?
+  logoUrl       String?
+  bannerUrl     String?
+  currency      String   @default("MRU")
+  isActive      Boolean  @default(true)
+
+  storeUsers StoreUser[]
+  products   Product[]
+  orders     Order[]
+  offers     Offer[]
+  stories    Story[]
+  chatSessions ChatSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("stores")
+}
+
+/** ربط مستخدم بمتجر مع دور إداري (مالك/مدير/موظف) — لإدارة المتاجر من لوحة السوبر أدمن. */
+model StoreUser {
+  id      String    @id @default(cuid())
+  storeId String
+  store   Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  userId  Int
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    StoreRole @default(STAFF)
+
+  createdAt DateTime @default(now())
+
+  @@unique([storeId, userId])
+  @@index([userId])
+  @@map("store_users")
 }
 
 model Account {
@@ -146,25 +196,44 @@ model ContactMessage {
   @@map("Message")
 }
 
+/** إعدادات الهوية البصرية (MauriStudio) — صف واحد فقط يُحدَّث دوماً. */
+model DesignSettings {
+  id                String  @id @default(cuid())
+  primaryColor      String  @default("#F5C542")
+  cardRadius        Int     @default(16)
+  glassOpacity      Float   @default(0.15)
+  fontFamily        String  @default("Cairo")
+  isMaintenanceMode Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+}
+
 model SiteSettings {
-  id        String  @id @default(cuid())
-  siteName  String  @default("MauriTech")
-  seoTitle  String?
-  seoDesc   String?
-  ogImage   String?
-  facebook  String?
-  instagram String?
-  x         String?
-  youtube   String?
+  id          String  @id @default(cuid())
+  siteName    String  @default("MauriTech")
+  logoUrl     String?
+  logoDarkUrl String?
+  faviconUrl  String?
+  seoTitle    String?
+  seoDesc     String?
+  ogImage     String?
+  facebook    String?
+  instagram   String?
+  x           String?
+  youtube     String?
 
   updatedAt DateTime @updatedAt
 }
 
 model Product {
   id          String   @id @default(cuid())
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
   name        String
+  nameAr      String?
   slug        String   @unique
   description String?
+  descriptionAr String?
   price       Int      @default(0)
   comparePrice Int?
   cost        Int?
@@ -180,21 +249,48 @@ model Product {
   metaTitle   String?
   metaDesc    String?
   tags        String[]
-  
+
   inventory   Inventory?
   cartItems   CartItem[]
   orderItems  OrderItem[]
   reviews     Review[]
   wishlistItems WishlistItem[]
-  
+  offerProducts OfferProduct[]
+  stories     Story[]
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   @@index([slug])
+  @@index([storeId])
   @@index([categoryId])
   @@index([isActive])
   @@index([isFeatured])
   @@map("products")
+}
+
+/** خدمات الشركة المعروضة في صفحة /services — تُدار بالكامل من لوحة التحكم (نص، صورة، فيديوهات). */
+model Service {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  titleFr       String
+  titleAr       String
+  descriptionFr String?
+  descriptionAr String?
+  icon          String?
+  image         String?
+  videos        Json?
+  featuresFr    String[]
+  featuresAr    String[]
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("services")
 }
 
 model Category {
@@ -267,6 +363,8 @@ model CartItem {
 model Order {
   id              String        @id @default(cuid())
   orderNumber     String        @unique
+  storeId         String
+  store           Store         @relation(fields: [storeId], references: [id])
   userId          Int?
   user            User?         @relation(fields: [userId], references: [id])
   customerName    String
@@ -295,6 +393,7 @@ model Order {
   updatedAt       DateTime      @updatedAt
   
   @@index([orderNumber])
+  @@index([storeId])
   @@index([userId])
   @@index([status])
   @@index([paymentStatus])
@@ -418,6 +517,8 @@ model Requirement {
 model ChatSession {
   id          String   @id @default(cuid())
   sessionId   String   @unique
+  storeId     String?
+  store       Store?   @relation(fields: [storeId], references: [id])
   userId      Int?
   user        User?    @relation(fields: [userId], references: [id])
   customerName String?
@@ -603,6 +704,83 @@ model AnalyticsEvent {
   @@index([sessionId])
   @@index([createdAt])
   @@map("analytics_events")
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
+  NONE
+}
+
+/** عرض/تخفيض يكتبه الأدمن أو مدير المتجر — يمكن أن يكون عاماً للمنصة (storeId = null) أو خاصاً بمتجر. */
+model Offer {
+  id            String       @id @default(cuid())
+  storeId       String?
+  store         Store?       @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  titleFr       String
+  titleAr       String
+  bodyFr        String?
+  bodyAr        String?
+  bannerImage   String?
+  discountType  DiscountType @default(NONE)
+  discountValue Int?
+  code          String?      @unique
+  startsAt      DateTime?
+  endsAt        DateTime?
+  isActive      Boolean      @default(true)
+
+  products OfferProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([isActive])
+  @@map("offers")
+}
+
+model OfferProduct {
+  id        String  @id @default(cuid())
+  offerId   String
+  offer     Offer   @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([offerId, productId])
+  @@index([productId])
+  @@map("offer_products")
+}
+
+enum ContentType {
+  STORY
+  ARTICLE
+  PRODUCT_STORY
+}
+
+/** محتوى تحريري: روايات/قصص العلامة، مقالات، أو محتوى سردي لمنتج معيّن. */
+model Story {
+  id          String      @id @default(cuid())
+  storeId     String?
+  store       Store?      @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?    @relation(fields: [productId], references: [id], onDelete: SetNull)
+  type        ContentType @default(STORY)
+  slug        String      @unique
+  titleFr     String
+  titleAr     String
+  coverImage  String?
+  bodyFr      String
+  bodyAr      String
+  isPublished Boolean     @default(true)
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([productId])
+  @@index([isPublished])
+  @@map("stories")
 }
 
 enum OrderStatus {

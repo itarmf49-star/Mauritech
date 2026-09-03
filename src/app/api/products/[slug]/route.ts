@@ -14,6 +14,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
       include: {
         category: { select: { id: true, name: true, slug: true } },
         inventory: true,
+        store: { select: { id: true, slug: true, nameFr: true, nameAr: true, logoUrl: true } },
+        offerProducts: {
+          where: { offer: { isActive: true } },
+          include: { offer: { select: { discountType: true, discountValue: true, titleFr: true, titleAr: true, code: true } } },
+        },
         reviews: { where: { isApproved: true }, include: { user: { select: { id: true, name: true } } }, orderBy: { createdAt: "desc" } },
       },
     });

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { AdminShell } from "@/components/admin-ui/admin-shell";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 
 type Requirement = {
@@ -40,16 +39,40 @@ const PRIORITY_COLORS: Record<string, string> = {
   LOW: "border-blue-500/25 text-blue-400 bg-blue-400/5",
   MEDIUM: "border-yellow-500/25 text-yellow-400 bg-yellow-400/5",
   HIGH: "border-orange-500/25 text-orange-400 bg-orange-400/5",
-  URGENT: "border-red-500/25 text-red-400 bg-red-400/5",
+  URGENT: "border-red-500/25 text-red-600 bg-red-400/5",
 };
 
 const STATUS_COLORS: Record<string, string> = {
   OPEN: "border-blue-500/25 text-blue-400 bg-blue-400/5",
   IN_PROGRESS: "border-indigo-500/25 text-indigo-400 bg-indigo-400/5",
   QUOTED: "border-purple-500/25 text-purple-400 bg-purple-400/5",
-  ACCEPTED: "border-green-500/25 text-green-400 bg-green-400/5",
+  ACCEPTED: "border-green-500/25 text-emerald-600 bg-green-400/5",
   COMPLETED: "border-emerald-500/25 text-emerald-400 bg-emerald-400/5",
-  CANCELLED: "border-red-500/25 text-red-400 bg-red-400/5",
+  CANCELLED: "border-red-500/25 text-red-600 bg-red-400/5",
+};
+
+const PRIORITY_LABEL_KEYS: Record<string, any> = {
+  LOW: "reqPriorityLow",
+  MEDIUM: "reqPriorityMedium",
+  HIGH: "reqPriorityHigh",
+  URGENT: "reqPriorityUrgent",
+};
+
+const STATUS_LABEL_KEYS: Record<string, any> = {
+  OPEN: "reqStatusOpen",
+  IN_PROGRESS: "reqStatusInProgress",
+  QUOTED: "reqStatusQuoted",
+  ACCEPTED: "reqStatusAccepted",
+  COMPLETED: "reqStatusCompleted",
+  CANCELLED: "reqStatusCancelled",
+};
+
+const CATEGORY_LABEL_KEYS: Record<string, any> = {
+  PRODUCT: "reqCategoryProduct",
+  SERVICE: "reqCategoryService",
+  SUPPORT: "reqCategorySupport",
+  CONSULTATION: "reqCategoryConsultation",
+  CUSTOM: "reqCategoryCustom",
 };
 
 export default function AdminRequirementsPage() {
@@ -65,14 +88,17 @@ export default function AdminRequirementsPage() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("");
 
   async function load() {
     setLoading(true);
     setError(null);
     try {
-      const qs = statusFilter ? `?status=${statusFilter}` : "";
-      const res = await fetch(`/api/admin/requirements${qs}`, { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to load requirements");
+      const qs = new URLSearchParams();
+      if (statusFilter) qs.set("status", statusFilter);
+      if (priorityFilter) qs.set("priority", priorityFilter);
+      const res = await fetch(`/api/admin/requirements?${qs.toString()}`, { cache: "no-store" });
+      if (!res.ok) throw new Error(t(locale, "adminSettingsError"));
       const data = await res.json();
       setRequirements(data.requirements || []);
     } catch (e) {
@@ -84,7 +110,7 @@ export default function AdminRequirementsPage() {
 
   useEffect(() => {
     void load();
-  }, [statusFilter]);
+  }, [statusFilter, priorityFilter]);
 
   const stats = useMemo(() => {
     const total = requirements.length;
@@ -157,7 +183,7 @@ export default function AdminRequirementsPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Failed to save requirement");
+        throw new Error(err.error || t(locale, "adminSettingsError"));
       }
 
       setShowDialog(false);
@@ -178,7 +204,7 @@ export default function AdminRequirementsPage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      if (!res.ok) throw new Error("Failed to update status");
+      if (!res.ok) throw new Error(t(locale, "adminSettingsError"));
       await load();
     } catch (e) {
       setError((e as Error).message);
@@ -186,97 +212,116 @@ export default function AdminRequirementsPage() {
   }
 
   return (
-    <AdminShell locale={locale}>
+    <>
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">إدارة المتطلبات</h1>
-            <p className="text-white/50 text-sm mt-1">تتبع متطلبات العملاء والطلبات.</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t(locale, "adminRequirementsManagement")}</h1>
+            <p className="text-gray-500 text-sm mt-1">{t(locale, "adminRequirementsHint")}</p>
           </div>
-          <button className="btn btn-primary" onClick={openAdd}>+ إضافة متطلب</button>
+          <button className="btn-light-primary" onClick={openAdd}>+ {t(locale, "adminAddRequirement")}</button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">إجمالي المتطلبات</p>
-            <p className="text-3xl font-black text-white mt-2">{stats.total}</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "adminTotalRequirements")}</p>
+            <p className="text-3xl font-black text-gray-900 mt-2">{stats.total}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مفتوح</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "reqStatusOpen")}</p>
             <p className="text-3xl font-black text-[#3b82f6] mt-2">{stats.open}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">قيد التنفيذ</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "reqStatusInProgress")}</p>
             <p className="text-3xl font-black text-indigo-400 mt-2">{stats.inProgress}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مقدر</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "reqStatusQuoted")}</p>
             <p className="text-3xl font-black text-purple-400 mt-2">{stats.quoted}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مكتمل</p>
-            <p className="text-3xl font-black text-green-400 mt-2">{stats.completed}</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "reqStatusCompleted")}</p>
+            <p className="text-3xl font-black text-emerald-600 mt-2">{stats.completed}</p>
           </div>
         </div>
 
-        <div className="flex gap-3">
-          <select className="input" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="">جميع الحالات</option>
-            <option value="OPEN">مفتوح</option>
-            <option value="IN_PROGRESS">قيد التنفيذ</option>
-            <option value="QUOTED">مقدر</option>
-            <option value="ACCEPTED">مقبول</option>
-            <option value="COMPLETED">مكتمل</option>
-            <option value="CANCELLED">ملغى</option>
-          </select>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">{t(locale, "adminStatusLabelColon")}</span>
+            {[["", t(locale, "portalFilterAll")], ...Object.entries(STATUS_LABEL_KEYS).map(([k, key]) => [k, t(locale, key)])].map(([key, label]) => (
+              <button
+                key={"status-" + (key || "all")}
+                onClick={() => setStatusFilter(key)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                  statusFilter === key ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">{t(locale, "adminPriorityLabelColon")}</span>
+            {[["", t(locale, "portalFilterAll")], ...Object.entries(PRIORITY_LABEL_KEYS).map(([k, key]) => [k, t(locale, key)])].map(([key, label]) => (
+              <button
+                key={"priority-" + (key || "all")}
+                onClick={() => setPriorityFilter(key)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                  priorityFilter === key ? "bg-[#3b82f6] text-white border-[#3b82f6]" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-        {loading && <p className="text-white/60">جارٍ تحميل المتطلبات...</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {loading && <p className="text-gray-500">{t(locale, "adminLoadingRequirements")}</p>}
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
+        <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10">
-                  <th className="px-4 py-3 text-left font-bold text-white/70">العنوان</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">الفئة</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">الأولوية</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">الحالة</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">جهة الاتصال</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">التاريخ</th>
-                  <th className="px-4 py-3 text-left font-bold text-white/70">إجراءات</th>
+                <tr className="border-b border-gray-200">
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminReqTitle")}</th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminProductCategory")}</th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminPriority")}</th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminStatus")}</th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminContactPerson")}</th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminDate")}</th>
+                  <th className="px-4 py-3 text-left font-bold text-gray-600">{t(locale, "adminActionsCol")}</th>
                 </tr>
               </thead>
               <tbody>
                 {requirements.map((r) => (
-                  <tr key={r.id} className="border-b border-white/5 hover:bg-white/[0.02]">
-                    <td className="px-4 py-3 text-white/90 font-medium">{r.title}</td>
-                    <td className="px-4 py-3 text-white/70">{r.category}</td>
+                  <tr key={r.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="px-4 py-3 text-gray-900 font-medium">{r.title}</td>
+                    <td className="px-4 py-3 text-gray-600">{CATEGORY_LABEL_KEYS[r.category] ? t(locale, CATEGORY_LABEL_KEYS[r.category]) : r.category}</td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex px-2.5 py-1 rounded-lg border text-xs font-medium ${PRIORITY_COLORS[r.priority] || ""}`}>
-                        {r.priority}
+                        {PRIORITY_LABEL_KEYS[r.priority] ? t(locale, PRIORITY_LABEL_KEYS[r.priority]) : r.priority}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex px-2.5 py-1 rounded-lg border text-xs font-medium ${STATUS_COLORS[r.status] || ""}`}>
-                        {r.status}
+                        {STATUS_LABEL_KEYS[r.status] ? t(locale, STATUS_LABEL_KEYS[r.status]) : r.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-white/70">
+                    <td className="px-4 py-3 text-gray-600">
                       {r.contactName || r.contactEmail || "-"}
                     </td>
-                    <td className="px-4 py-3 text-white/60 text-xs">{new Date(r.createdAt).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 text-gray-500 text-xs">{new Date(r.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <button className="text-[#3b82f6] hover:underline text-xs" onClick={() => openEdit(r)}>تعديل</button>
+                        <button className="text-[#3b82f6] hover:underline text-xs" onClick={() => openEdit(r)}>{t(locale, "adminEdit")}</button>
                         <select
-                          className="input text-xs py-1 px-2"
+                          className="input-light text-xs py-1 px-2"
                           value={r.status}
                           onChange={(e) => void updateStatus(r.id, e.target.value)}
                         >
-                          {["OPEN", "IN_PROGRESS", "QUOTED", "ACCEPTED", "COMPLETED", "CANCELLED"].map((s) => (
-                            <option key={s} value={s}>{s}</option>
+                          {Object.entries(STATUS_LABEL_KEYS).map(([s, key]) => (
+                            <option key={s} value={s}>{t(locale, key)}</option>
                           ))}
                         </select>
                       </div>
@@ -284,7 +329,7 @@ export default function AdminRequirementsPage() {
                   </tr>
                 ))}
                 {requirements.length === 0 && !loading && (
-                  <tr><td colSpan={7} className="px-4 py-8 text-center text-white/40">لا توجد متطلبات</td></tr>
+                  <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-400">{t(locale, "adminNoRequirements")}</td></tr>
                 )}
               </tbody>
             </table>
@@ -293,83 +338,83 @@ export default function AdminRequirementsPage() {
 
         {showDialog && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowDialog(false)}>
-            <div className="bg-[#111827] border border-white/10 rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-              <h2 className="text-xl font-bold text-white mb-4">{editingReq ? "تعديل متطلب" : "إضافة متطلب"}</h2>
-              {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">{editingReq ? t(locale, "adminEditRequirement") : t(locale, "adminAddRequirement")}</h2>
+              {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">العنوان</label>
-                  <input className="input w-full" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+                  <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminReqTitle")}</label>
+                  <input className="input-light w-full" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">الوصف</label>
-                  <textarea className="input w-full h-20" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                  <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminReqDescription")}</label>
+                  <textarea className="input-light w-full h-20" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">الفئة</label>
-                    <select className="input w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-                      {["PRODUCT", "SERVICE", "SUPPORT", "CONSULTATION", "CUSTOM"].map((c) => (
-                        <option key={c} value={c}>{c}</option>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminProductCategory")}</label>
+                    <select className="input-light w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                      {Object.entries(CATEGORY_LABEL_KEYS).map(([c, key]) => (
+                        <option key={c} value={c}>{t(locale, key)}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">الأولوية</label>
-                    <select className="input w-full" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>
-                      {["LOW", "MEDIUM", "HIGH", "URGENT"].map((p) => (
-                        <option key={p} value={p}>{p}</option>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminPriority")}</label>
+                    <select className="input-light w-full" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })}>
+                      {Object.entries(PRIORITY_LABEL_KEYS).map(([p, key]) => (
+                        <option key={p} value={p}>{t(locale, key)}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">الحالة</label>
-                    <select className="input w-full" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
-                      {["OPEN", "IN_PROGRESS", "QUOTED", "ACCEPTED", "COMPLETED", "CANCELLED"].map((s) => (
-                        <option key={s} value={s}>{s}</option>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminStatus")}</label>
+                    <select className="input-light w-full" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
+                      {Object.entries(STATUS_LABEL_KEYS).map(([s, key]) => (
+                        <option key={s} value={s}>{t(locale, key)}</option>
                       ))}
                     </select>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">اسم جهة الاتصال</label>
-                    <input className="input w-full" value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminContactName")}</label>
+                    <input className="input-light w-full" value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">البريد الإلكتروني</label>
-                    <input className="input w-full" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} />
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "contactFormEmail")}</label>
+                    <input className="input-light w-full" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">الهاتف</label>
-                    <input className="input w-full" value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} />
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "orderCustomerPhone")}</label>
+                    <input className="input-light w-full" value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">الميزانية (MRU)</label>
-                    <input className="input w-full" type="number" value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} />
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminBudgetMRU")}</label>
+                    <input className="input-light w-full" type="number" value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-white/60 mb-1">الموعد النهائي</label>
-                    <input className="input w-full" type="date" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} />
+                    <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminDeadline")}</label>
+                    <input className="input-light w-full" type="date" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-white/60 mb-1">معين إلى</label>
-                  <input className="input w-full" value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} />
+                  <label className="block text-xs font-bold text-gray-500 mb-1">{t(locale, "adminAssignedTo")}</label>
+                  <input className="input-light w-full" value={form.assignedTo} onChange={(e) => setForm({ ...form, assignedTo: e.target.value })} />
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <button type="submit" className="btn btn-primary" disabled={saving}>
-                    {saving ? "جارٍ الحفظ..." : editingReq ? "تحديث المتطلب" : "إنشاء متطلب"}
+                  <button type="submit" className="btn-light-primary" disabled={saving}>
+                    {saving ? t(locale, "adminSavingEllipsis") : editingReq ? t(locale, "adminUpdateRequirement") : t(locale, "adminCreateRequirement")}
                   </button>
-                  <button type="button" className="btn" onClick={() => setShowDialog(false)}>إلغاء</button>
+                  <button type="button" className="btn-light-secondary" onClick={() => setShowDialog(false)}>{t(locale, "adminCancel")}</button>
                 </div>
               </form>
             </div>
           </div>
         )}
       </div>
-    </AdminShell>
+    </>
   );
 }

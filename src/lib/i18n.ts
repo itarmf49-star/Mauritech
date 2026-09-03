@@ -88,8 +88,6 @@ export const HOW_IT_WORKS_STEPS: ReadonlyArray<{ title: MessageKey; description:
 export const NAV_LINK_KEYS = [
   "navHome",
   "navServices",
-  "navCoverage",
-  "navProjects",
   "navAbout",
   "navContactLink",
 ] as const satisfies readonly MessageKey[];

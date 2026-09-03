@@ -36,8 +36,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+# supabase CLI
+supabase/.temp/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
 /src/generated/prisma
+
+# ملفات الصور المرفوعة محلياً عبر /api/upload (لا تُخزَّن في قاعدة الكود)
+/public/uploads/

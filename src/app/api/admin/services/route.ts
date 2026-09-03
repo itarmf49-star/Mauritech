@@ -1,35 +1,18 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
+import { prisma } from "@/lib/prisma";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
-import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-
-const CreateProductSchema = z.object({
-  slug: z.string().trim().min(1).max(120),
-  title: z.string().trim().min(1).max(200),
-  description: z.string().trim().min(1).max(20_000),
-  basePrice: z.number().int().nonnegative().max(100_000_000),
-  currency: z.string().trim().min(1).max(8).optional(),
-  postsIncluded: z.number().int().nonnegative().max(1_000_000).optional(),
-  color: z.string().trim().max(60).nullable().optional(),
-  location: z.string().trim().max(120).nullable().optional(),
-  isActive: z.boolean().optional(),
-});
 
 export async function GET() {
   const staff = await getStaffSession();
   if (!staff.ok) return staff.response;
 
   try {
-    const [products, rules] = await Promise.all([
-      prisma.serviceProduct.findMany({ orderBy: { title: "asc" }, take: 500 }),
-      prisma.pricingRule.findMany({ orderBy: [{ priority: "desc" }, { name: "asc" }], take: 500 }),
-    ]);
-
-    return NextResponse.json({ products, rules });
+    const services = await prisma.service.findMany({ orderBy: { order: "asc" } });
+    return NextResponse.json({ services });
   } catch (e) {
     console.error("[api/admin/services GET]", e);
     return databaseUnavailableResponse();
@@ -40,32 +23,44 @@ export async function POST(req: Request) {
   const staff = await getStaffSession();
   if (!staff.ok) return staff.response;
 
-  const json = await req.json().catch(() => null);
-  const parsed = CreateProductSchema.safeParse(json);
-  if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
-
   try {
-    const created = await prisma.serviceProduct.create({
+    const body = await req.json().catch(() => null);
+    if (!body) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+
+    if (!isNonEmptyString(body.titleFr) || !isNonEmptyString(body.titleAr)) {
+      return NextResponse.json({ error: "العنوان مطلوب بالفرنسية والعربية" }, { status: 400 });
+    }
+    if (!isNonEmptyString(body.slug)) {
+      return NextResponse.json({ error: "الرابط (slug) مطلوب" }, { status: 400 });
+    }
+
+    const service = await prisma.service.create({
       data: {
-        slug: parsed.data.slug,
-        title: parsed.data.title,
-        description: parsed.data.description,
-        basePrice: parsed.data.basePrice,
-        currency: parsed.data.currency ?? "MRU",
-        postsIncluded: parsed.data.postsIncluded ?? 0,
-        color: parsed.data.color ?? null,
-        location: parsed.data.location ?? null,
-        isActive: parsed.data.isActive ?? true,
+        slug: body.slug.trim(),
+        titleFr: body.titleFr.trim(),
+        titleAr: body.titleAr.trim(),
+        descriptionFr: body.descriptionFr?.trim() || null,
+        descriptionAr: body.descriptionAr?.trim() || null,
+        icon: body.icon?.trim() || null,
+        image: body.image?.trim() || null,
+        videos: Array.isArray(body.videos) ? body.videos : [],
+        featuresFr: Array.isArray(body.featuresFr) ? body.featuresFr : [],
+        featuresAr: Array.isArray(body.featuresAr) ? body.featuresAr : [],
+        order: Number.isFinite(body.order) ? Number(body.order) : 0,
+        isActive: typeof body.isActive === "boolean" ? body.isActive : true,
       },
     });
 
-    await prisma.auditLog.create({
-      data: { actorId: Number(staff.session.user.id), action: "serviceProduct.create", metadata: { id: created.id } },
-    });
-
-    return NextResponse.json({ product: created }, { status: 201 });
-  } catch (e) {
+    return NextResponse.json({ service }, { status: 201 });
+  } catch (e: any) {
+    if (e?.code === "P2002") {
+      return NextResponse.json({ error: "هذا الرابط (slug) مستخدم بالفعل" }, { status: 409 });
+    }
     console.error("[api/admin/services POST]", e);
     return databaseUnavailableResponse();
   }
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
 }

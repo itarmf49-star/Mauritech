@@ -16,10 +16,10 @@ const REMOVE = [
   "coverageRecommendedSwitchesText",
 ];
 
-for (const file of ["messages/en.json", "messages/fr.json", "messages/ar.json"]) {
+for (const file of ["messages/fr.json", "messages/ar.json"]) {
   const data = JSON.parse(fs.readFileSync(file, "utf8"));
   for (const key of REMOVE) delete data[key];
   fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`);
 }
 
-console.log(`Removed ${REMOVE.length} obsolete keys from en/fr/ar.`);
+console.log(`Removed ${REMOVE.length} obsolete keys from fr/ar.`);

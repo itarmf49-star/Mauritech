@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
   },
   poweredByHeader: false,
   compress: true,
+  // يمنع استيراد حزمة الأيقونات/الرسوم البيانية كاملة في كل صفحة تستخدم أيقونة أو
+  // رسماً بيانياً واحداً فقط — يقلّل حجم الـ JS المُحمَّل لكل تنقّل بشكل ملموس.
+  experimental: {
+    optimizePackageImports: ["lucide-react", "recharts"],
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

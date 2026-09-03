@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { AdminShell } from "@/components/admin-ui/admin-shell";
 import { defaultLocale, isLocale, t, type Locale } from "@/lib/i18n";
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -13,6 +12,16 @@ type DailyView = { day: string; views: number };
 type OrderSummary = { status: string; _count: { status: number }; _sum: { total: number | null } };
 
 const COLORS = ["#3b82f6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444", "#F97316"];
+
+const STATUS_LABEL_KEYS: Record<string, any> = {
+  PENDING: "adminPending",
+  CONFIRMED: "adminConfirmed",
+  PROCESSING: "adminProcessed",
+  SHIPPED: "adminShipped",
+  DELIVERED: "adminDelivered",
+  CANCELLED: "adminCancelled",
+  REFUNDED: "adminRefunded",
+};
 
 export default function AdminAnalyticsPage() {
   const params = useParams();
@@ -84,10 +93,10 @@ export default function AdminAnalyticsPage() {
   const statusChart = useMemo(() => {
     if (!data?.orders?.statusCounts) return [];
     return data.orders.statusCounts.map((s: any) => ({
-      name: s.status,
+      name: STATUS_LABEL_KEYS[s.status] ? t(locale, STATUS_LABEL_KEYS[s.status]) : s.status,
       value: s._count?.status || 0,
     }));
-  }, [data]);
+  }, [data, locale]);
 
   const categoryChart = useMemo(() => {
     if (!topProducts.length) return [];
@@ -95,37 +104,37 @@ export default function AdminAnalyticsPage() {
   }, [topProducts]);
 
   return (
-    <AdminShell locale={locale}>
+    <>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">التحليلات</h1>
-          <p className="text-white/50 text-sm mt-1">نظرة عامة على الإيرادات والزيارات والأداء.</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t(locale, "adminAnalytics")}</h1>
+          <p className="text-gray-500 text-sm mt-1">{t(locale, "adminAnalyticsHint")}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">مشاهدات الصفحات (30 يوم)</p>
-            <p className="text-3xl font-black text-white mt-2">{data?.pageViews?.length || 0}</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "adminPageViews30d")}</p>
+            <p className="text-3xl font-black text-gray-900 mt-2">{data?.pageViews?.length || 0}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">استدعاءات الذكاء (7 أيام)</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "adminAiCalls7d")}</p>
             <p className="text-3xl font-black text-[#3b82f6] mt-2">{data?.aiUsage7d || 0}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">رسائل الدردشة (7 أيام)</p>
-            <p className="text-3xl font-black text-green-400 mt-2">{data?.chatMessages7d || 0}</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "adminChatMessages7d")}</p>
+            <p className="text-3xl font-black text-emerald-600 mt-2">{data?.chatMessages7d || 0}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-white/50 text-xs font-bold uppercase tracking-wider">العملاء</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{t(locale, "adminCustomersLabel")}</p>
             <p className="text-3xl font-black text-[#3b82f6] mt-2">{data?.customers || 0}</p>
           </div>
         </div>
 
-        {loading && <p className="text-white/60">Loading analytics...</p>}
+        {loading && <p className="text-gray-500">{t(locale, "adminLoadingAnalytics")}</p>}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-4">الإيرادات (30 يوم)</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t(locale, "adminRevenue30d")}</h3>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={dailyViews}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -137,8 +146,8 @@ export default function AdminAnalyticsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-4">الطلبات حسب الحالة</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t(locale, "adminOrdersByStatus")}</h3>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={statusChart}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -152,21 +161,21 @@ export default function AdminAnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 lg:col-span-1">
-            <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-4">أفضل المنتجات</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 lg:col-span-1">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t(locale, "adminTopProducts")}</h3>
             <div className="space-y-3">
               {topProducts.map((p, i) => (
                 <div key={i} className="flex items-center justify-between">
-                  <div className="text-white/80 text-sm truncate">{p.name}</div>
+                  <div className="text-gray-700 text-sm truncate">{p.name}</div>
                   <div className="text-[#F5C542] text-sm font-bold">{p.revenue.toLocaleString()} MRU</div>
                 </div>
               ))}
-              {topProducts.length === 0 && <p className="text-white/40 text-sm">No data</p>}
+              {topProducts.length === 0 && <p className="text-gray-400 text-sm">{t(locale, "adminNoData")}</p>}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 lg:col-span-1">
-            <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-4">المبيعات حسب الفئة</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 lg:col-span-1">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t(locale, "adminSalesByCategory")}</h3>
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie data={categoryChart} cx="50%" cy="50%" outerRadius={70} dataKey="value" label>
@@ -179,26 +188,26 @@ export default function AdminAnalyticsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 lg:col-span-1">
-            <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-4">الطلبات الأخيرة</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 lg:col-span-1">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">{t(locale, "adminRecentOrders")}</h3>
             <div className="space-y-3">
               {recentOrders.map((o) => (
                 <div key={o.id} className="flex items-center justify-between">
                   <div>
-                    <div className="text-white/80 text-sm font-medium">{o.orderNumber}</div>
-                    <div className="text-white/40 text-xs">{o.customerName}</div>
+                    <div className="text-gray-700 text-sm font-medium">{o.orderNumber}</div>
+                    <div className="text-gray-400 text-xs">{o.customerName}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-white/80 text-sm font-bold">{o.total.toLocaleString()} MRU</div>
-                    <div className="text-white/40 text-xs">{o.status}</div>
+                    <div className="text-gray-700 text-sm font-bold">{o.total.toLocaleString()} MRU</div>
+                    <div className="text-gray-400 text-xs">{STATUS_LABEL_KEYS[o.status] ? t(locale, STATUS_LABEL_KEYS[o.status]) : o.status}</div>
                   </div>
                 </div>
               ))}
-              {recentOrders.length === 0 && <p className="text-white/40 text-sm">No recent orders</p>}
+              {recentOrders.length === 0 && <p className="text-gray-400 text-sm">{t(locale, "adminNoRecentOrders")}</p>}
             </div>
           </div>
         </div>
       </div>
-    </AdminShell>
+    </>
   );
 }

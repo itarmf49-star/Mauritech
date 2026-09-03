@@ -2,124 +2,134 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
-  LayoutDashboard, FolderKanban, MessageSquare, Receipt, Users, 
-  Settings, Router, BarChart3, ClipboardList, DollarSign, 
-  Palette, Package, ShoppingCart, Truck, ShieldCheck, 
-  ChevronRight, LayoutGrid, FileText
+  LayoutDashboard, MessageSquare, Users,
+  Settings, BarChart3, ClipboardList,
+  Palette, Package, ShoppingCart, Truck, LogOut,
+  ChevronRight, LayoutGrid, FileText, Store, Tag, BookOpen, X, Layers, Wrench,
 } from "lucide-react";
 import { localePath, t, type Locale } from "@/lib/i18n";
 
-// مكون أيقونة محسّن
 const NavIcon = ({ Icon, active }: { Icon: any; active: boolean }) => (
-  <div className={`p-2 rounded-lg transition-all duration-300 ${
-    active ? "bg-[#3b82f6]/10 text-[#3b82f6]" : "text-white/40 group-hover:text-white/80"
-  }`}>
-    <Icon className="h-4 w-4" strokeWidth={2.5} />
-  </div>
+  <Icon className={`h-[18px] w-[18px] shrink-0 ${active ? "text-gray-900" : "text-gray-400 group-hover:text-gray-600"}`} strokeWidth={2} />
 );
 
 export function AdminSidebar({ locale, open, onClose }: { locale: Locale; open: boolean; onClose: () => void }) {
   const pathname = usePathname() ?? "/";
-  const isActive = (href: string) => pathname.startsWith(href);
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
-  // هيكلية النظام: مقسمة حسب الوظيفة (موقع، متجر، تواصل، أدوات)
   const menuGroups = [
     {
-      title: "GÉNÉRAL",
+      title: t(locale, "adminNavGeneral"),
       items: [
-        { key: "dashboard", href: localePath(locale, "/admin"), label: "Tableau de bord", Icon: LayoutDashboard },
-        { key: "analytics", href: localePath(locale, "/admin/analytics"), label: "Statistiques", Icon: BarChart3 },
-      ]
+        { key: "dashboard", href: localePath(locale, "/admin"), label: t(locale, "adminOverview"), Icon: LayoutDashboard },
+        { key: "analytics", href: localePath(locale, "/admin/analytics"), label: t(locale, "adminAnalytics"), Icon: BarChart3 },
+      ],
     },
     {
-      title: "CONTENU & DESIGN",
+      title: t(locale, "adminNavContent"),
       items: [
-        { key: "studio", href: localePath(locale, "/admin/studio"), label: "MauriStudio Pro", Icon: Palette },
-        { key: "projects", href: localePath(locale, "/admin/projects"), label: "Projets (CMS)", Icon: FolderKanban },
-      ]
+        { key: "studio", href: localePath(locale, "/admin/studio"), label: t(locale, "adminStudio"), Icon: Palette },
+        { key: "services", href: localePath(locale, "/admin/services"), label: t(locale, "adminServices"), Icon: Wrench },
+      ],
     },
     {
-      title: "BOUTIQUE",
+      title: t(locale, "adminNavShop"),
       items: [
-        { key: "products", href: localePath(locale, "/admin/products"), label: "Produits", Icon: Package },
-        { key: "orders", href: localePath(locale, "/admin/orders"), label: "Commandes", Icon: ShoppingCart },
-        { key: "inventory", href: localePath(locale, "/admin/inventory"), label: "Inventaire", Icon: ClipboardList },
-        { key: "shipping", href: localePath(locale, "/admin/shipping"), label: "Livraisons", Icon: Truck },
-      ]
+        { key: "stores", href: localePath(locale, "/admin/stores"), label: t(locale, "adminStores"), Icon: Store },
+        { key: "products", href: localePath(locale, "/admin/products"), label: t(locale, "adminProducts"), Icon: Package },
+        { key: "categories", href: localePath(locale, "/admin/categories"), label: t(locale, "adminCategories"), Icon: Layers },
+        { key: "orders", href: localePath(locale, "/admin/orders"), label: t(locale, "adminOrders"), Icon: ShoppingCart },
+        { key: "offers", href: localePath(locale, "/admin/offers"), label: t(locale, "adminOffers"), Icon: Tag },
+        { key: "stories", href: localePath(locale, "/admin/stories"), label: t(locale, "adminStories"), Icon: BookOpen },
+        { key: "inventory", href: localePath(locale, "/admin/inventory"), label: t(locale, "adminInventory"), Icon: ClipboardList },
+        { key: "shipping", href: localePath(locale, "/admin/shipping"), label: t(locale, "adminShipping"), Icon: Truck },
+      ],
     },
     {
-      title: "ADMINISTRATION",
+      title: t(locale, "adminNavAdministration"),
       items: [
-        { key: "requests", href: localePath(locale, "/admin/requests"), label: "Demandes", Icon: ClipboardList },
-        { key: "requirements", href: localePath(locale, "/admin/requirements"), label: "Requirements", Icon: FileText },
-        { key: "chat", href: localePath(locale, "/admin/chat"), label: "Live Chat", Icon: MessageSquare },
-        { key: "customers", href: localePath(locale, "/admin/customers"), label: "Clients", Icon: Users },
-        { key: "settings", href: localePath(locale, "/admin/settings"), label: "Paramètres", Icon: Settings },
-      ]
-    }
+        { key: "requests", href: localePath(locale, "/admin/requests"), label: t(locale, "adminRequests"), Icon: ClipboardList },
+        { key: "requirements", href: localePath(locale, "/admin/requirements"), label: t(locale, "adminRequirements"), Icon: FileText },
+        { key: "chat", href: localePath(locale, "/admin/chat"), label: t(locale, "adminChat"), Icon: MessageSquare },
+        { key: "customers", href: localePath(locale, "/admin/customers"), label: t(locale, "adminCustomers"), Icon: Users },
+        { key: "settings", href: localePath(locale, "/admin/settings"), label: t(locale, "adminSettings"), Icon: Settings },
+      ],
+    },
   ];
 
   return (
-    <aside className={`fixed md:sticky top-0 left-0 z-50 h-dvh w-[280px] bg-[#0B0F14] border-r border-white/10 flex flex-col transition-all duration-300 ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
-      
-      {/* هيدر الاستوديو */}
-      <div className="h-20 px-8 flex items-center border-b border-white/5 bg-[#0B0F14]/50 backdrop-blur-xl">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#2563eb] rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <LayoutGrid className="text-white h-6 w-6" />
-          </div>
-          <div>
-            <div className="text-[15px] font-bold text-white tracking-tight">Mauritech</div>
-            <div className="text-[10px] font-medium text-white/50 uppercase tracking-widest">Dashboard Studio</div>
-          </div>
-        </div>
-      </div>
-
-      {/* قائمة الروابط بنظام المجموعات */}
-      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-8 scrollbar-hide">
-        {menuGroups.map((group, idx) => (
-          <div key={idx}>
-            <p className="px-4 text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3">{group.title}</p>
-            <div className="space-y-0.5">
-              {group.items.map((it) => {
-                const active = isActive(it.href);
-                return (
-                  <Link 
-                    key={it.key} 
-                    href={it.href} 
-                    className={`group flex items-center justify-between px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 ${
-                      active 
-                        ? "bg-[#1C2128] text-white shadow-sm border border-white/5" 
-                        : "text-white/50 hover:text-white hover:bg-white/[0.03]"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <NavIcon Icon={it.Icon} active={active} />
-                      {it.label}
-                    </div>
-                    {active && <ChevronRight className="h-3 w-3 text-[#3b82f6]" />}
-                  </Link>
-                );
-              })}
+    <>
+      {open && <div className="fixed inset-0 z-40 bg-black/30 md:hidden" onClick={onClose} />}
+      <aside
+        className={`fixed md:sticky top-0 z-50 h-dvh w-[264px] bg-white border-e border-gray-100 flex flex-col transition-transform duration-300 ${
+          open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+        style={{ insetInlineStart: 0 }}
+      >
+        <div className="h-16 px-5 flex items-center justify-between border-b border-gray-100 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center shrink-0">
+              <LayoutGrid className="text-white h-4 w-4" />
+            </div>
+            <div>
+              <div className="text-[14px] font-bold text-gray-900 leading-tight">MauriTech</div>
+              <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">{t(locale, "adminStudio")}</div>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* تذييل احترافي مع حالة النظام */}
-      <div className="p-6 border-t border-white/5 bg-[#0B0F14]">
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-600 flex items-center justify-center text-[10px] font-bold text-black">
-            AD
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold truncate">Admin Manager</p>
-            <p className="text-[10px] text-white/40 truncate">System v1.0.0</p>
-          </div>
-          <ShieldCheck className="h-4 w-4 text-green-500" />
+          <button onClick={onClose} className="md:hidden text-gray-400 hover:text-gray-700">
+            <X className="h-5 w-5" />
+          </button>
         </div>
-      </div>
-    </aside>
+
+        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+          {menuGroups.map((group, idx) => (
+            <div key={idx}>
+              <p className="px-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">{group.title}</p>
+              <div className="space-y-0.5">
+                {group.items.map((it) => {
+                  const active = isActive(it.href);
+                  return (
+                    <Link
+                      key={it.key}
+                      href={it.href}
+                      className={`group flex items-center justify-between px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+                        active ? "bg-gray-100 text-gray-900 font-semibold" : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <NavIcon Icon={it.Icon} active={active} />
+                        {it.label}
+                      </div>
+                      {active && <ChevronRight className="h-3.5 w-3.5 text-gray-400" />}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="p-3 border-t border-gray-100 shrink-0">
+          <div className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gray-50">
+            <div className="w-9 h-9 rounded-full bg-gray-900 flex items-center justify-center text-[11px] font-bold text-white shrink-0">
+              AD
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-semibold text-gray-900 truncate">{t(locale, "adminManagerRole")}</p>
+              <p className="text-[11px] text-gray-400 truncate">{t(locale, "adminSystemVersion")}</p>
+            </div>
+            <button
+              onClick={() => void signOut({ callbackUrl: localePath(locale, "/") })}
+              className="text-gray-400 hover:text-gray-700"
+              aria-label={t(locale, "portalLogout")}
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }

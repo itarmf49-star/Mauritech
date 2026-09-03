@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
+import { getStoreScope, storeWhereFilter } from "@/lib/store-scope";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -13,8 +14,10 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const status = url.searchParams.get("status") || "";
+    const storeIdParam = url.searchParams.get("storeId");
 
-    const where: any = {};
+    const scope = await getStoreScope(staff.session.user.id, staff.session.user.role);
+    const where: any = { ...storeWhereFilter(scope, storeIdParam) };
     if (status) where.status = status;
 
     const orders = await prisma.order.findMany({
@@ -31,15 +34,17 @@ export async function GET(req: Request) {
       },
     });
 
+    const scopedWhere = storeWhereFilter(scope, storeIdParam);
     const statusCounts = await prisma.order.groupBy({
       by: ["status"],
       _count: { status: true },
       _sum: { total: true },
+      where: scopedWhere,
     });
 
     const totalRevenue = await prisma.order.aggregate({
       _sum: { total: true },
-      where: { status: { in: ["CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED"] } },
+      where: { ...scopedWhere, status: { in: ["CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED"] } },
     });
 
     return NextResponse.json({ orders, statusCounts, totalRevenue: totalRevenue._sum.total || 0 });

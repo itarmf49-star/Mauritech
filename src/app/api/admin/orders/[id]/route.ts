@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
+import { getStoreScope, canAccessStore } from "@/lib/store-scope";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -16,6 +17,8 @@ const ALLOWED_TRANSITIONS: Record<string, string[]> = {
   REFUNDED: [],
 };
 
+const VALID_PAYMENT_STATUSES = ["PENDING", "PAID", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED"];
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -26,11 +29,20 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await req.json();
-    const { status, notes } = body;
+    const { status, notes, paymentStatus, paymentReference } = body;
+
+    if (paymentStatus && !VALID_PAYMENT_STATUSES.includes(paymentStatus)) {
+      return NextResponse.json({ error: "Invalid paymentStatus" }, { status: 400 });
+    }
 
     const order = await prisma.order.findUnique({ where: { id } });
     if (!order) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    const scope = await getStoreScope(staff.session.user.id, staff.session.user.role);
+    if (!canAccessStore(scope, order.storeId)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const allowed = ALLOWED_TRANSITIONS[order.status] || [];
@@ -44,6 +56,8 @@ export async function PATCH(
     const data: any = {};
     if (status) data.status = status;
     if (notes !== undefined) data.notes = notes;
+    if (paymentStatus) data.paymentStatus = paymentStatus;
+    if (paymentReference !== undefined) data.paymentIntentId = paymentReference?.trim() || null;
 
     const updated = await prisma.order.update({
       where: { id },

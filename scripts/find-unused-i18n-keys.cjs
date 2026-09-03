@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const en = JSON.parse(fs.readFileSync("messages/en.json", "utf8"));
+const ar = JSON.parse(fs.readFileSync("messages/ar.json", "utf8"));
 
 function walk(dir, acc = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -13,5 +13,5 @@ function walk(dir, acc = []) {
 }
 
 const src = walk("src").join("\n");
-const unused = Object.keys(en).filter((k) => !src.includes(`"${k}"`) && !src.includes(`'${k}'`));
+const unused = Object.keys(ar).filter((k) => !src.includes(`"${k}"`) && !src.includes(`'${k}'`));
 console.log(unused.join("\n"));

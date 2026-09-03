@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStaffSession } from "@/lib/staff-api";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { prisma } from "@/lib/prisma";
+import { getStoreScope, canAccessStore } from "@/lib/store-scope";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -28,6 +29,14 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   try {
     const { id } = await params;
+    const existing = await prisma.order.findUnique({ where: { id }, select: { storeId: true } });
+    if (!existing) return NextResponse.json({ error: "Order not found" }, { status: 404 });
+
+    const scope = await getStoreScope(staff.session.user.id, staff.session.user.role);
+    if (!canAccessStore(scope, existing.storeId)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const body = await req.json().catch(() => null);
     if (!body) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 

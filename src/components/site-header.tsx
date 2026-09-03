@@ -9,7 +9,6 @@ import { defaultLocale, isLocale, localePath, locales, t, type Locale } from "@/
 type SiteHeaderProps = { locale?: Locale };
 
 function stripLocaleFromPathname(pathname: string) {
-  // pathname examples: "/en", "/en/projects", "/fr#hash" (hash not included), "/"
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 0) return "/";
   const first = parts[0];
@@ -26,17 +25,33 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hash, setHash] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 8);
+    setSearchTerm(searchParams?.get("q") || "");
+    setSearchCategory(searchParams?.get("categoryId") || "");
+  }, [searchParams]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadCategories() {
+      try {
+        const res = await fetch("/api/categories");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setCategories(data.categories || []);
+      } catch {
+        // تجاهل — القائمة المنسدلة تبقى فارغة إن تعذر التحميل
+      }
     }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    void loadCategories();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -49,7 +64,6 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
   }, []);
 
   useEffect(() => {
-    // close mobile menu on route change
     startTransition(() => setOpen(false));
   }, [pathname]);
 
@@ -58,10 +72,7 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
 
   const navLinks = useMemo(
     () => [
-      { key: "navHome" as const, href: localePath(locale, "/") },
       { key: "navServices" as const, href: localePath(locale, "/services") },
-      { key: "navCoverage" as const, href: localePath(locale, "/coverage") },
-      { key: "navProjects" as const, href: localePath(locale, "/projects") },
       { key: "navAbout" as const, href: localePath(locale, "/about") },
       { key: "navContactLink" as const, href: localePath(locale, "/contact") },
     ],
@@ -69,11 +80,9 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
   );
 
   function isActiveLink(href: string) {
-    // Normalize locale-aware href into base path + optional hash
     const raw = href.replace(/^\/(en|fr|ar)(?=\/|$)/, "") || "/";
     const [pathPart, hashPart] = raw.split("#");
     const path = pathPart?.length ? pathPart : "/";
-
     if (path === "/") {
       if (hashPart) return basePath === "/" && hash === `#${hashPart}`;
       return basePath === "/";
@@ -89,7 +98,36 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
     router.push(nextHref);
   }
 
+  function submitSearch(e: React.FormEvent) {
+    e.preventDefault();
+    const term = searchTerm.trim();
+    const qs = new URLSearchParams();
+    if (term) qs.set("q", term);
+    if (searchCategory) qs.set("categoryId", searchCategory);
+    const query = qs.toString();
+    router.push(query ? `${localePath(locale, "/")}?${query}` : localePath(locale, "/"));
+  }
+
   const [cartCount, setCartCount] = useState(0);
+  const [siteLogo, setSiteLogo] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadSiteSettings() {
+      try {
+        const res = await fetch("/api/site-settings");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setSiteLogo(data.logoUrl || null);
+      } catch {
+        // تجاهل — يبقى الشعار النصي الافتراضي
+      }
+    }
+    void loadSiteSettings();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     async function loadCart() {
@@ -105,225 +143,248 @@ export function SiteHeader({ locale = defaultLocale }: SiteHeaderProps) {
       }
     }
     void loadCart();
+    window.addEventListener("cart:updated", loadCart);
+    return () => window.removeEventListener("cart:updated", loadCart);
   }, [pathname]);
 
   return (
-    <header
-      className={[
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled ? "bg-[#0B0F14]/80 backdrop-blur-md border-b border-white/10" : "bg-transparent",
-      ].join(" ")}
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className={["flex h-16 items-center justify-between", isRtl ? "flex-row-reverse" : ""].join(" ")}>
-          <Link
-            href={localePath(locale, "/")}
-            className="inline-flex items-baseline gap-0.5 font-extrabold tracking-tight"
-            aria-label="MauriTech home"
-          >
-            <span className="text-white">Mauri</span>
-            <span className="text-[#3b82f6]">Tech</span>
-          </Link>
+    <header className="sticky top-0 z-50 w-full shadow-md">
+      {/* الشريط الأساسي: الشعار + البحث + الحساب/السلة */}
+      <div className="bg-[#131921]">
+        <div className="mx-auto max-w-7xl px-3 sm:px-5">
+          <div className={["flex h-[64px] items-center gap-3 sm:gap-5", isRtl ? "flex-row-reverse" : ""].join(" ")}>
+            <Link
+              href={localePath(locale, "/")}
+              className="shrink-0 inline-flex items-center gap-0.5 font-extrabold tracking-tight text-lg border border-transparent hover:border-white/30 rounded p-1.5"
+              style={{ direction: "ltr" }}
+              aria-label="MauriTech home"
+            >
+              {siteLogo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={siteLogo} alt="MauriTech" className="h-8 w-auto max-w-[150px] object-contain" />
+              ) : (
+                <>
+                  <span className="text-white">Mauri</span>
+                  <span className="text-[#3b82f6]">Tech</span>
+                </>
+              )}
+            </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
-            <div className={["flex items-center gap-6", isRtl ? "flex-row-reverse" : ""].join(" ")}>
-              {navLinks.map((l) => (
-                <Link
-                  key={l.key}
-                  href={l.href}
-                className={[
-                    "text-sm font-semibold transition-all pb-1 border-b-2",
-                    isActiveLink(l.href)
-                      ? "text-[#3b82f6] border-[#3b82f6]/70"
-                      : "text-white/80 border-transparent hover:text-white hover:border-white/20",
-                  ].join(" ")}
-                >
-                  {t(locale, l.key)}
-                </Link>
-              ))}
-              <Link
-                href={localePath(locale, "/shop")}
-                className={[
-                  "text-sm font-semibold transition-all pb-1 border-b-2",
-                  isActiveLink(localePath(locale, "/shop"))
-                    ? "text-[#3b82f6] border-[#3b82f6]/70"
-                    : "text-white/80 border-transparent hover:text-white hover:border-white/20",
-                ].join(" ")}
+            {/* Search bar — Amazon-style, prominent, centered in the header, with category dropdown */}
+            <form onSubmit={submitSearch} className="hidden sm:flex flex-1 h-10 rounded-md overflow-hidden ring-1 ring-transparent focus-within:ring-2 focus-within:ring-[#FF9900]">
+              <select
+                value={searchCategory}
+                onChange={(e) => setSearchCategory(e.target.value)}
+                className="hidden lg:block shrink-0 max-w-[150px] bg-[#F3F3F3] text-gray-700 text-xs font-medium px-2 border-e border-gray-300 focus:outline-none"
+                aria-label={t(locale, "shopAllCategories")}
               >
-                {t(locale, "shopTitle")}
+                <option value="">{t(locale, "shopAllCategories")}</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={t(locale, "shopSearchPlaceholder")}
+                className="flex-1 min-w-0 px-3 text-gray-900 placeholder-gray-500 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="shrink-0 w-11 bg-[#FF9900] hover:bg-[#F3A847] flex items-center justify-center text-[#131921]"
+                aria-label={t(locale, "shopAddToCart")}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5">
+                  <circle cx="11" cy="11" r="7" />
+                  <path strokeLinecap="round" d="m20 20-3-3" />
+                </svg>
+              </button>
+            </form>
+
+            <div className={["hidden md:flex items-center gap-1", isRtl ? "flex-row-reverse" : ""].join(" ")}>
+              {locales.map((loc) => (
+                <button
+                  key={loc}
+                  type="button"
+                  onClick={() => onSwitchLocale(loc)}
+                  className={[
+                    "px-2.5 py-1 rounded text-xs font-extrabold tracking-widest border transition-colors",
+                    loc === locale ? "border-white/70 text-white" : "border-transparent text-white/60 hover:text-white",
+                  ].join(" ")}
+                  aria-current={loc === locale}
+                >
+                  {loc.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            <div className="hidden md:flex items-center gap-4">
+              {status === "unauthenticated" ? (
+                <Link href={localePath(locale, "/login")} className="text-sm font-semibold text-white/90 hover:text-white leading-tight">
+                  {t(locale, "navLogin")}
+                </Link>
+              ) : (
+                <Link href={localePath(locale, "/portal-access")} className="text-sm font-semibold text-white/90 hover:text-white leading-tight">
+                  {t(locale, "navPortal")}
+                </Link>
+              )}
+              <Link
+                href={localePath(locale, "/cart")}
+                className="relative inline-flex items-center gap-1.5 text-white hover:text-white/80 transition"
+                aria-label={t(locale, "cart")}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-7 w-7">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0 6 0m-6 0h6m-6 0H3.375" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.375 21h11.25A2.25 2.25 0 0 0 19.875 18.75V6.375A2.25 2.25 0 0 0 17.625 4.125H6.375A2.25 2.25 0 0 0 4.125 6.375v12.375A2.25 2.25 0 0 0 6.375 21Z" />
+                </svg>
+                {cartCount > 0 ? (
+                  <span className="absolute -top-1.5 -end-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#FF9900] text-[10px] font-black text-black">
+                    {cartCount}
+                  </span>
+                ) : null}
               </Link>
             </div>
 
-            {/* Cart + Language switcher */}
-            <div className={["flex items-center gap-4", isRtl ? "flex-row-reverse" : ""].join(" ")}>
-              <Link
-                href={localePath(locale, "/cart")}
-                className="relative inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 p-2 text-white hover:bg-white/10 transition"
-                aria-label={t(locale, "cart")}
-              >
+            {/* Mobile controls */}
+            <div className={["flex md:hidden items-center gap-2", isRtl ? "flex-row-reverse" : ""].join(" ")}>
+              <Link href={localePath(locale, "/cart")} className="relative inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/5 p-2 text-white" aria-label={t(locale, "cart")}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0 6 0m-6 0h6m-6 0H3.375" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.375 21h11.25A2.25 2.25 0 0 0 19.875 18.75V6.375A2.25 2.25 0 0 0 17.625 4.125H6.375A2.25 2.25 0 0 0 4.125 6.375v12.375A2.25 2.25 0 0 0 6.375 21Z" />
                 </svg>
                 {cartCount > 0 ? (
-                  <span className="absolute -top-1.5 -end-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#3b82f6] text-[10px] font-black text-white">
+                  <span className="absolute -top-1.5 -end-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#FF9900] text-[10px] font-black text-black">
                     {cartCount}
                   </span>
                 ) : null}
               </Link>
-
-              <div className={["flex items-center gap-2", isRtl ? "flex-row-reverse" : ""].join(" ")}>
-                {locales.map((loc) => (
-                  <button
-                    key={loc}
-                    type="button"
-                    onClick={() => onSwitchLocale(loc)}
-                    className={[
-                      "px-3 py-1 rounded-full text-xs font-extrabold tracking-widest border transition-colors",
-                      loc === locale
-                        ? "border-[#3b82f6]/70 text-[#3b82f6] bg-white/5"
-                        : "border-white/15 text-white/75 hover:text-white hover:border-white/30",
-                    ].join(" ")}
-                    aria-current={loc === locale}
-                  >
-                    {loc.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {status === "unauthenticated" ? (
-                <>
-                  <Link
-                    href={localePath(locale, "/login")}
-                    className="text-sm font-semibold text-white/85 hover:text-white transition-colors"
-                  >
-                    {t(locale, "navLogin")}
-                  </Link>
-                  <Link
-                    href={localePath(locale, "/register")}
-                    className="text-sm font-semibold text-[#3b82f6] hover:text-[#60a5fa] transition-colors"
-                  >
-                    {t(locale, "authCreateAccount")}
-                  </Link>
-                </>
-              ) : null}
-              <Link
-                href={localePath(locale, "/portal-access")}
-                className="inline-flex items-center justify-center rounded-xl bg-[#3b82f6] px-4 py-2 text-sm font-bold text-white hover:bg-[#2563eb] transition-colors"
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white"
+                aria-label="Toggle menu"
+                aria-expanded={open}
               >
-                {t(locale, "navPortal")}
-              </Link>
+                <div className="grid gap-1">
+                  <span className={["h-0.5 w-5 bg-current transition", open ? "translate-y-1.5 rotate-45" : ""].join(" ")} />
+                  <span className={["h-0.5 w-5 bg-current transition", open ? "opacity-0" : ""].join(" ")} />
+                  <span className={["h-0.5 w-5 bg-current transition", open ? "-translate-y-1.5 -rotate-45" : ""].join(" ")} />
+                </div>
+              </button>
             </div>
-          </nav>
-
-          {/* Mobile controls */}
-          <div className={["md:hidden flex items-center gap-2", isRtl ? "flex-row-reverse" : ""].join(" ")}>
-            <Link
-              href={localePath(locale, "/cart")}
-              className="relative inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 p-2 text-white"
-              aria-label={t(locale, "cart")}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0 6 0m-6 0h6m-6 0H3.375" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.375 21h11.25A2.25 2.25 0 0 0 19.875 18.75V6.375A2.25 2.25 0 0 0 17.625 4.125H6.375A2.25 2.25 0 0 0 4.125 6.375v12.375A2.25 2.25 0 0 0 6.375 21Z" />
-              </svg>
-              {cartCount > 0 ? (
-                <span className="absolute -top-1.5 -end-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#3b82f6] text-[10px] font-black text-white">
-                  {cartCount}
-                </span>
-              ) : null}
-            </Link>
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/90 hover:bg-white/10 transition"
-              aria-label="Toggle menu"
-              aria-expanded={open}
-            >
-              <span className="sr-only">Menu</span>
-              <div className="grid gap-1">
-                <span className={["h-0.5 w-5 bg-current transition", open ? "translate-y-1.5 rotate-45" : ""].join(" ")} />
-                <span className={["h-0.5 w-5 bg-current transition", open ? "opacity-0" : ""].join(" ")} />
-                <span className={["h-0.5 w-5 bg-current transition", open ? "-translate-y-1.5 -rotate-45" : ""].join(" ")} />
-              </div>
-            </button>
           </div>
+
+          {/* Mobile search */}
+          <form onSubmit={submitSearch} className="flex sm:hidden h-9 rounded-md overflow-hidden mb-2">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={t(locale, "shopSearchPlaceholder")}
+              className="flex-1 min-w-0 px-3 text-gray-900 placeholder-gray-500 focus:outline-none"
+            />
+            <button type="submit" className="shrink-0 w-11 bg-[#FF9900] flex items-center justify-center text-[#131921]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5">
+                <circle cx="11" cy="11" r="7" />
+                <path strokeLinecap="round" d="m20 20-3-3" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* الشريط الثانوي: روابط التصفح السريع */}
+      <div className="bg-[#232F3E] border-t border-white/5">
+        <div className="mx-auto max-w-7xl px-3 sm:px-5">
+          <nav className={["hidden md:flex items-center gap-1 h-10", isRtl ? "flex-row-reverse" : ""].join(" ")} aria-label="Main navigation">
+            <Link
+              href={localePath(locale, "/")}
+              className={[
+                "h-10 inline-flex items-center px-2.5 text-[13px] font-semibold transition-colors border-b-2",
+                isActiveLink(localePath(locale, "/"))
+                  ? "text-white border-[#FF9900]"
+                  : "text-white/75 hover:text-white border-transparent hover:border-white/30",
+              ].join(" ")}
+            >
+              {t(locale, "navHome")}
+            </Link>
+            {navLinks.map((l) => (
+              <Link
+                key={l.key}
+                href={l.href}
+                className={[
+                  "h-10 inline-flex items-center px-2.5 text-[13px] font-semibold transition-colors border-b-2",
+                  isActiveLink(l.href)
+                    ? "text-white border-[#FF9900]"
+                    : "text-white/75 hover:text-white border-transparent hover:border-white/30",
+                ].join(" ")}
+              >
+                {t(locale, l.key)}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
 
       {/* Mobile menu */}
       <div
         className={[
-          "md:hidden overflow-hidden transition-all duration-300",
+          "md:hidden overflow-hidden transition-all duration-300 bg-[#232F3E]",
           open ? "max-h-[520px] opacity-100" : "max-h-0 opacity-0",
         ].join(" ")}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-4">
-          <div className="rounded-2xl border border-white/10 bg-[#0B0F14]/85 backdrop-blur-md p-4">
-            <div className="grid gap-2">
-              {navLinks.map((l) => (
-                <Link
-                  key={l.key}
-                  href={l.href}
-                  className={[
-                    "rounded-xl px-3 py-2 text-sm font-semibold transition flex items-center justify-between",
-                    isActiveLink(l.href) ? "text-[#3b82f6] bg-white/5" : "text-white/85 hover:text-white hover:bg-white/5",
-                  ].join(" ")}
-                >
-                  {t(locale, l.key)}
-                  {isActiveLink(l.href) ? <span className="h-1.5 w-1.5 rounded-full bg-[#F5C542]" aria-hidden /> : null}
-                </Link>
-              ))}
-            </div>
+        <div className="mx-auto max-w-7xl px-4 pb-4">
+          <div className="grid gap-1 pt-3">
+            <Link
+              href={localePath(locale, "/")}
+              className={[
+                "rounded-lg px-3 py-2 text-sm font-semibold transition",
+                isActiveLink(localePath(locale, "/")) ? "text-white bg-white/10" : "text-white/85 hover:bg-white/5",
+              ].join(" ")}
+            >
+              {t(locale, "navHome")}
+            </Link>
+            {navLinks.map((l) => (
+              <Link
+                key={l.key}
+                href={l.href}
+                className={[
+                  "rounded-lg px-3 py-2 text-sm font-semibold transition",
+                  isActiveLink(l.href) ? "text-white bg-white/10" : "text-white/85 hover:bg-white/5",
+                ].join(" ")}
+              >
+                {t(locale, l.key)}
+              </Link>
+            ))}
+          </div>
 
-            <div className="mt-4 flex items-center justify-between gap-2">
-              <div className={["flex items-center gap-2", isRtl ? "flex-row-reverse" : ""].join(" ")}>
-                {locales.map((loc) => (
-                  <button
-                    key={loc}
-                    type="button"
-                    onClick={() => onSwitchLocale(loc)}
+          <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+            <div className={["flex items-center gap-2", isRtl ? "flex-row-reverse" : ""].join(" ")}>
+              {locales.map((loc) => (
+                <button
+                  key={loc}
+                  type="button"
+                  onClick={() => onSwitchLocale(loc)}
                   className={[
                     "px-3 py-1 rounded-full text-xs font-extrabold tracking-widest border transition-colors",
-                    loc === locale
-                      ? "border-[#3b82f6]/70 text-[#3b82f6] bg-white/5"
-                      : "border-white/15 text-white/75 hover:text-white hover:border-white/30",
+                    loc === locale ? "border-white/70 text-white" : "border-white/15 text-white/75",
                   ].join(" ")}
-                    aria-current={loc === locale}
-                  >
-                    {loc.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-2 items-stretch">
-                {status === "unauthenticated" ? (
-                  <div className="flex gap-2 justify-end">
-                    <Link
-                      href={localePath(locale, "/login")}
-                      className="rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-white/90 hover:bg-white/10"
-                    >
-                      {t(locale, "navLogin")}
-                    </Link>
-                    <Link
-                      href={localePath(locale, "/register")}
-                      className="rounded-xl border border-[#3b82f6]/40 px-3 py-2 text-sm font-semibold text-[#3b82f6]"
-                    >
-                      {t(locale, "authCreateAccount")}
-                    </Link>
-                  </div>
-                ) : null}
-                <Link
-                  href={localePath(locale, "/portal-access")}
-                  className="inline-flex items-center justify-center rounded-xl bg-[#3b82f6] px-4 py-2 text-sm font-bold text-white hover:bg-[#2563eb] transition-colors"
+                  aria-current={loc === locale}
                 >
-                  {t(locale, "navPortal")}
-                </Link>
-              </div>
+                  {loc.toUpperCase()}
+                </button>
+              ))}
             </div>
+            {status === "unauthenticated" ? (
+              <Link href={localePath(locale, "/login")} className="text-sm font-semibold text-white/90">
+                {t(locale, "navLogin")}
+              </Link>
+            ) : (
+              <Link href={localePath(locale, "/portal-access")} className="text-sm font-semibold text-white/90">
+                {t(locale, "navPortal")}
+              </Link>
+            )}
           </div>
         </div>
       </div>

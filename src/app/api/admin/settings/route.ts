@@ -18,6 +18,9 @@ export async function GET() {
     return NextResponse.json({
       siteSettings: siteSettings || {
         siteName: "MauriTech",
+        logoUrl: "",
+        logoDarkUrl: "",
+        faviconUrl: "",
         seoTitle: "",
         seoDesc: "",
         ogImage: "",
@@ -37,15 +40,36 @@ export async function GET() {
         capabilities: {},
         config: {},
       },
-      socialIntegrations: socialIntegrations.map((s) => ({
-        id: s.id,
-        platform: s.platform,
-        isActive: s.isActive,
-        webhookUrl: s.webhookUrl,
-        apiKey: s.apiKey,
-        phoneNumber: s.phoneNumber,
-        displayName: s.displayName,
-      })),
+      socialIntegrations: socialIntegrations.some((s) => s.platform === "WHATSAPP")
+        ? socialIntegrations.map((s) => ({
+            id: s.id,
+            platform: s.platform,
+            isActive: s.isActive,
+            webhookUrl: s.webhookUrl,
+            apiKey: s.apiKey,
+            phoneNumber: s.phoneNumber,
+            displayName: s.displayName,
+          }))
+        : [
+            {
+              id: "new-whatsapp",
+              platform: "WHATSAPP",
+              isActive: false,
+              webhookUrl: "",
+              apiKey: "",
+              phoneNumber: "",
+              displayName: "",
+            },
+            ...socialIntegrations.map((s) => ({
+              id: s.id,
+              platform: s.platform,
+              isActive: s.isActive,
+              webhookUrl: s.webhookUrl,
+              apiKey: s.apiKey,
+              phoneNumber: s.phoneNumber,
+              displayName: s.displayName,
+            })),
+          ],
     });
   } catch (e) {
     console.error("[api/admin/settings GET]", e);
@@ -67,6 +91,9 @@ export async function PATCH(req: Request) {
           where: { id: existing.id },
           data: {
             siteName: body.siteSettings.siteName ?? existing.siteName,
+            logoUrl: body.siteSettings.logoUrl ?? existing.logoUrl,
+            logoDarkUrl: body.siteSettings.logoDarkUrl ?? existing.logoDarkUrl,
+            faviconUrl: body.siteSettings.faviconUrl ?? existing.faviconUrl,
             seoTitle: body.siteSettings.seoTitle ?? existing.seoTitle,
             seoDesc: body.siteSettings.seoDesc ?? existing.seoDesc,
             ogImage: body.siteSettings.ogImage ?? existing.ogImage,
@@ -80,6 +107,9 @@ export async function PATCH(req: Request) {
         await prisma.siteSettings.create({
           data: {
             siteName: body.siteSettings.siteName || "MauriTech",
+            logoUrl: body.siteSettings.logoUrl || "",
+            logoDarkUrl: body.siteSettings.logoDarkUrl || "",
+            faviconUrl: body.siteSettings.faviconUrl || "",
             seoTitle: body.siteSettings.seoTitle || "",
             seoDesc: body.siteSettings.seoDesc || "",
             ogImage: body.siteSettings.ogImage || "",

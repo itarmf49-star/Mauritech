@@ -112,14 +112,6 @@ export function SiteFooter({
 
 
             <li>
-              <Link href={`/${locale}/projects`}>
-                {t(locale,"navProjects")}
-              </Link>
-            </li>
-
-
-
-            <li>
               <Link href={`/${locale}/portal-access`}>
                 {t(locale,"navPortal")}
               </Link>

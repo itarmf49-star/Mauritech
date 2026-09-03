@@ -43,9 +43,6 @@ export type Project = {
   location?: string;
   year?: string;
   services?: string[];
-  odooId?: string | null;
-  status?: string;
-  synced?: boolean;
 };
 
 export type Testimonial = {

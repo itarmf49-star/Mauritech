@@ -15,15 +15,17 @@ export async function GET(req: Request) {
     const sessionId = url.searchParams.get("sessionId");
 
     if (sessionId) {
-      const messages = await prisma.chatMessage.findMany({
-        where: { sessionId },
-        orderBy: { createdAt: "asc" },
-        take: 200,
-      });
-
       const session = await prisma.chatSession.findUnique({
         where: { sessionId },
         include: { user: { select: { name: true, email: true } } },
+      });
+
+      if (!session) return NextResponse.json({ session: null, messages: [] });
+
+      const messages = await prisma.chatMessage.findMany({
+        where: { sessionId: session.id },
+        orderBy: { createdAt: "asc" },
+        take: 200,
       });
 
       return NextResponse.json({ session, messages });
@@ -78,20 +80,22 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { sessionId, content, senderType = "AGENT", senderName = "Admin" } = body;
 
+    // sessionId القادم من الواجهة هو الحقل النصي (ChatSession.sessionId)، بينما
+    // ChatMessage.sessionId مفتاح أجنبي يشير إلى ChatSession.id — لازم نحل المرجع أولاً.
+    const chatSession = await prisma.chatSession.update({
+      where: { sessionId },
+      data: { updatedAt: new Date() },
+    });
+
     const message = await prisma.chatMessage.create({
       data: {
-        sessionId,
+        sessionId: chatSession.id,
         senderType,
         senderName,
         content,
         isAi: false,
         isRead: true,
       },
-    });
-
-    await prisma.chatSession.update({
-      where: { sessionId },
-      data: { updatedAt: new Date() },
     });
 
     return NextResponse.json({ message });

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { databaseUnavailableResponse } from "@/lib/api-db-response";
 import { getStaffSession } from "@/lib/staff-api";
 import { prisma } from "@/lib/prisma";
+import { getStoreScope, canAccessStore } from "@/lib/store-scope";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -27,6 +28,11 @@ export async function GET(
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
+    const scope = await getStoreScope(staff.session.user.id, staff.session.user.role);
+    if (!canAccessStore(scope, product.storeId)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     return NextResponse.json({ product });
   } catch (e) {
     console.error("[api/admin/products/[id] GET]", e);
@@ -43,12 +49,27 @@ export async function PATCH(
 
   try {
     const { id } = await params;
+
+    const existingProduct = await prisma.product.findUnique({ where: { id }, select: { storeId: true } });
+    if (!existingProduct) return NextResponse.json({ error: "Product not found" }, { status: 404 });
+
+    const scope = await getStoreScope(staff.session.user.id, staff.session.user.role);
+    if (!canAccessStore(scope, existingProduct.storeId)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const body = await req.json();
 
     const data: any = {};
     if (body.name !== undefined) data.name = body.name;
+    if (body.nameAr !== undefined) data.nameAr = body.nameAr || null;
     if (body.slug !== undefined) data.slug = body.slug;
     if (body.description !== undefined) data.description = body.description;
+    if (body.descriptionAr !== undefined) data.descriptionAr = body.descriptionAr || null;
+    // نقل منتج بين المتاجر مسموح فقط للسوبر أدمن، وللمتجر الهدف الذي يملك صلاحية عليه
+    if (body.storeId !== undefined && scope.isSuperAdmin && canAccessStore(scope, body.storeId)) {
+      data.storeId = body.storeId;
+    }
     if (body.price !== undefined) data.price = Number(body.price);
     if (body.comparePrice !== undefined) data.comparePrice = Number(body.comparePrice);
     if (body.cost !== undefined) data.cost = Number(body.cost);
@@ -111,6 +132,15 @@ export async function DELETE(
 
   try {
     const { id } = await params;
+
+    const existingProduct = await prisma.product.findUnique({ where: { id }, select: { storeId: true } });
+    if (!existingProduct) return NextResponse.json({ error: "Product not found" }, { status: 404 });
+
+    const scope = await getStoreScope(staff.session.user.id, staff.session.user.role);
+    if (!canAccessStore(scope, existingProduct.storeId)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     await prisma.inventory.deleteMany({ where: { productId: id } });
     await prisma.product.delete({ where: { id } });
     return NextResponse.json({ success: true });

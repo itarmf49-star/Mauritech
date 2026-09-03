@@ -45,30 +45,30 @@ export default function AdminEquipmentEditPage() {
     };
   }, [id]);
 
-  if (!item) return <p className="text-white/70">{error ?? t(locale, "portalProfileLoading")}</p>;
+  if (!item) return <p className="text-gray-600">{error ?? t(locale, "portalProfileLoading")}</p>;
 
   return (
     <div className="grid gap-4 max-w-xl">
-      <h1 className="text-2xl font-bold text-white">{t(locale, "adminEditEquipment")}</h1>
-      <input className="input" value={item.name} onChange={(e) => setItem({ ...item, name: e.target.value })} />
-      <input className="input" value={item.manufacturer} onChange={(e) => setItem({ ...item, manufacturer: e.target.value })} />
-      <select className="input" value={item.deviceType} onChange={(e) => setItem({ ...item, deviceType: e.target.value })}>
+      <h1 className="text-2xl font-bold text-gray-900">{t(locale, "adminEditEquipment")}</h1>
+      <input className="input-light" value={item.name} onChange={(e) => setItem({ ...item, name: e.target.value })} />
+      <input className="input-light" value={item.manufacturer} onChange={(e) => setItem({ ...item, manufacturer: e.target.value })} />
+      <select className="input-light" value={item.deviceType} onChange={(e) => setItem({ ...item, deviceType: e.target.value })}>
         <option value="ROUTER">Router</option>
         <option value="ACCESS_POINT">Access Point</option>
         <option value="MESH_NODE">Mesh Node</option>
       </select>
-      <input className="input" type="number" value={item.price} onChange={(e) => setItem({ ...item, price: Number(e.target.value) })} />
-      <input className="input" type="number" value={item.coverageRadiusM} onChange={(e) => setItem({ ...item, coverageRadiusM: Number(e.target.value) })} />
-      <input className="input" type="number" value={item.maxUsers} onChange={(e) => setItem({ ...item, maxUsers: Number(e.target.value) })} />
-      <input className="input" value={item.imageUrl ?? ""} onChange={(e) => setItem({ ...item, imageUrl: e.target.value || null })} />
-      <label className="flex items-center gap-2 text-white/80">
+      <input className="input-light" type="number" value={item.price} onChange={(e) => setItem({ ...item, price: Number(e.target.value) })} />
+      <input className="input-light" type="number" value={item.coverageRadiusM} onChange={(e) => setItem({ ...item, coverageRadiusM: Number(e.target.value) })} />
+      <input className="input-light" type="number" value={item.maxUsers} onChange={(e) => setItem({ ...item, maxUsers: Number(e.target.value) })} />
+      <input className="input-light" value={item.imageUrl ?? ""} onChange={(e) => setItem({ ...item, imageUrl: e.target.value || null })} />
+      <label className="flex items-center gap-2 text-gray-700">
         <input type="checkbox" checked={item.isActive} onChange={(e) => setItem({ ...item, isActive: e.target.checked })} />
         {t(locale, "adminActive")}
       </label>
       <div className="flex gap-2">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn-light-primary"
           onClick={async () => {
             const res = await fetch(`/api/admin/equipment/${id}`, {
               method: "PUT",
@@ -93,7 +93,7 @@ export default function AdminEquipmentEditPage() {
           {t(locale, "adminDelete")}
         </button>
       </div>
-      {error ? <p className="text-red-400 text-sm">{error}</p> : null}
+      {error ? <p className="text-red-600 text-sm">{error}</p> : null}
     </div>
   );
 }

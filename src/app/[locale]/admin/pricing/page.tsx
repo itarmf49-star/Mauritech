@@ -45,18 +45,18 @@ export default function AdminPricingPage() {
 
   return (
     <div className="grid gap-4">
-      <h1 className="text-2xl font-bold text-white">{t(locale, "adminPricing")}</h1>
-      <div className="rounded-xl border border-white/10 bg-white/5 p-4 grid gap-3 md:grid-cols-2">
-        <input className="input" placeholder="Rule name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-        <select className="input" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
+      <h1 className="text-2xl font-bold text-gray-900">{t(locale, "adminPricing")}</h1>
+      <div className="rounded-xl border border-gray-200 bg-white p-4 grid gap-3 md:grid-cols-2">
+        <input className="input-light" placeholder="Rule name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <select className="input-light" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
           <option value="ap">Per AP</option>
           <option value="router">Per router</option>
           <option value="outlet">Per outlet</option>
           <option value="sqm">Per m²</option>
           <option value="hour">Per hour</option>
         </select>
-        <input className="input" type="number" placeholder="Base price" value={form.basePrice} onChange={(e) => setForm({ ...form, basePrice: Number(e.target.value) })} />
-        <button type="button" className="btn btn-primary" onClick={() => void create()}>Add pricing rule</button>
+        <input className="input-light" type="number" placeholder="Base price" value={form.basePrice} onChange={(e) => setForm({ ...form, basePrice: Number(e.target.value) })} />
+        <button type="button" className="btn-light-primary" onClick={() => void create()}>Add pricing rule</button>
       </div>
       <div className="admin-table-wrap">
         <table className="admin-table">

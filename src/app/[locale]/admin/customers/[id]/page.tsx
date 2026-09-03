@@ -25,9 +25,9 @@ export default async function AdminCustomerDetailPage({ params }: Props) {
 
   return (
     <div className="grid gap-4">
-      <h1 className="text-2xl font-bold text-white">{user.name ?? user.email}</h1>
-      <p className="text-white/60">{user.email} · {user.role}</p>
-      {user.phone ? <p className="text-white/70">{user.phone}</p> : null}
+      <h1 className="text-2xl font-bold text-gray-900">{user.name ?? user.email}</h1>
+      <p className="text-gray-500">{user.email} · {user.role}</p>
+      {user.phone ? <p className="text-gray-600">{user.phone}</p> : null}
 
       <div className="card">
         <h2 className="h2">{t(locale, "coverageYourSavedPlans")}</h2>

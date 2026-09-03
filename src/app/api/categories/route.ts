@@ -14,7 +14,10 @@ export async function GET() {
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json({ categories });
+    return NextResponse.json(
+      { categories },
+      { headers: { "Cache-Control": "public, max-age=30, stale-while-revalidate=300" } },
+    );
   } catch (e) {
     console.error("[api/categories GET]", e);
     return databaseUnavailableResponse();
